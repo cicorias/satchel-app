@@ -1,0 +1,25 @@
+name: ci-apple
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apple:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+      - run: scripts/ci/select-xcode.sh
+      - uses: jdx/mise-action@v3
+      - run: pnpm install --frozen-lockfile
+      - run: mise run verify:apple
+      # Unsigned simulator build: no signing secrets in CI (ADR-0016).
+      - run: mise run build:ios

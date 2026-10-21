@@ -1,0 +1,31 @@
+name: ci-web
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # gitleaks scans history
+      - uses: jdx/mise-action@v3
+      - run: pnpm install --frozen-lockfile
+      - run: mise run verify:secrets
+      - run: mise run verify:web
+      - run: mise run deploy:extension-zips
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extension-zips
+          path: apps/extension/.output/*.zip
+          retention-days: 14
