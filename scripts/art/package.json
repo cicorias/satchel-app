@@ -1,0 +1,10 @@
+{
+  "name": "@satchel/art",
+  "version": "2026.10.0",
+  "private": true,
+  "type": "module",
+  "description": "Renders art/ SVG masters to every icon and store asset size.",
+  "devDependencies": {
+    "@resvg/resvg-js": "2.6.2"
+  }
+}
