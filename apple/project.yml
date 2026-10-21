@@ -1,0 +1,169 @@
+# XcodeGen definition (ADR-0008). Generate with `mise run apple:project`; the .xcodeproj is not committed.
+# All identifiers come from Config/Generated.xcconfig, which scripts/setup/gen-config.mjs derives
+# from config/app.config.json. iPhone only for now (ADR-0011); iPad/macOS get added here later.
+name: Satchel
+options:
+  bundleIdPrefix: com.cedarlogic
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+  generateEmptyDirectories: true
+
+configFiles:
+  Debug: Config/Generated.xcconfig
+  Release: Config/Generated.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    TARGETED_DEVICE_FAMILY: "1"
+    SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+    SUPPORTS_MACCATALYST: NO
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+    GENERATE_INFOPLIST_FILE: NO
+
+packages:
+  SatchelKit:
+    path: SatchelKit
+
+aggregateTargets:
+  WebAssets:
+    buildScripts:
+      - name: Build web assets (capture/render IIFEs, Safari extension)
+        script: '"$SRCROOT/../scripts/build/xcode-web-phase.sh"'
+        basedOnDependencyAnalysis: false
+
+targets:
+  Satchel:
+    type: application
+    platform: iOS
+    sources:
+      - path: Satchel
+    dependencies:
+      - target: WebAssets
+      - target: SatchelShare
+      - target: SatchelSafari
+      - package: SatchelKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(SATCHEL_BUNDLE_ID)
+        PRODUCT_NAME: Satchel
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+    info:
+      path: Satchel/Info.plist
+      properties:
+        CFBundleDisplayName: $(SATCHEL_APP_NAME)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleURLTypes:
+          - CFBundleURLName: $(SATCHEL_BUNDLE_ID)
+            CFBundleURLSchemes: [$(SATCHEL_URL_SCHEME)]
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIBackgroundModes: [fetch, remote-notification]
+        BGTaskSchedulerPermittedIdentifiers: [$(SATCHEL_BUNDLE_ID).sync]
+        ITSAppUsesNonExemptEncryption: false
+        SatchelAppGroup: $(SATCHEL_APP_GROUP)
+        SatchelICloudContainer: $(SATCHEL_ICLOUD_CONTAINER)
+        SatchelCloudKitZone: $(SATCHEL_CLOUDKIT_ZONE)
+    entitlements:
+      path: Satchel/Satchel.entitlements
+      properties:
+        aps-environment: development
+        com.apple.developer.icloud-services: [CloudKit]
+        com.apple.developer.icloud-container-identifiers: [$(SATCHEL_ICLOUD_CONTAINER)]
+        com.apple.security.application-groups: [$(SATCHEL_APP_GROUP)]
+        keychain-access-groups: [$(AppIdentifierPrefix)$(SATCHEL_KEYCHAIN_GROUP_SUFFIX)]
+
+  SatchelShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: SatchelShare
+    dependencies:
+      - target: WebAssets
+      - package: SatchelKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(SATCHEL_SHARE_BUNDLE_ID)
+        PRODUCT_NAME: SatchelShare
+    info:
+      path: SatchelShare/Info.plist
+      properties:
+        CFBundleDisplayName: $(SATCHEL_APP_NAME)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        SatchelAppGroup: $(SATCHEL_APP_GROUP)
+        SatchelICloudContainer: $(SATCHEL_ICLOUD_CONTAINER)
+        SatchelCloudKitZone: $(SATCHEL_CLOUDKIT_ZONE)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsWebURLWithMaxCount: 1
+              NSExtensionActivationSupportsWebPageWithMaxCount: 1
+            # Phase 3: NSExtensionJavaScriptPreprocessingFile wrapping the capture IIFE (spec §9.2.2).
+    entitlements:
+      path: SatchelShare/SatchelShare.entitlements
+      properties:
+        com.apple.developer.icloud-services: [CloudKit]
+        com.apple.developer.icloud-container-identifiers: [$(SATCHEL_ICLOUD_CONTAINER)]
+        com.apple.security.application-groups: [$(SATCHEL_APP_GROUP)]
+        keychain-access-groups: [$(AppIdentifierPrefix)$(SATCHEL_KEYCHAIN_GROUP_SUFFIX)]
+
+  SatchelSafari:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: SatchelSafari
+    # The staged WXT Safari build is copied to the appex root (where the packager puts it; ADR-0005 addendum),
+    # so the Safari extension can never drift from Chrome/Edge (spec §12.3).
+    postBuildScripts:
+      - name: Copy Safari web extension resources
+        script: rsync -a "$SRCROOT/Staged/safari-extension/" "$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/"
+        basedOnDependencyAnalysis: false
+    dependencies:
+      - target: WebAssets
+      - package: SatchelKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(SATCHEL_SAFARI_BUNDLE_ID)
+        PRODUCT_NAME: SatchelSafari
+    info:
+      path: SatchelSafari/Info.plist
+      properties:
+        CFBundleDisplayName: $(SATCHEL_APP_NAME)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        SatchelAppGroup: $(SATCHEL_APP_GROUP)
+        SatchelICloudContainer: $(SATCHEL_ICLOUD_CONTAINER)
+        SatchelCloudKitZone: $(SATCHEL_CLOUDKIT_ZONE)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.Safari.web-extension
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).SafariWebExtensionHandler
+    entitlements:
+      path: SatchelSafari/SatchelSafari.entitlements
+      properties:
+        com.apple.developer.icloud-services: [CloudKit]
+        com.apple.developer.icloud-container-identifiers: [$(SATCHEL_ICLOUD_CONTAINER)]
+        com.apple.security.application-groups: [$(SATCHEL_APP_GROUP)]
+        keychain-access-groups: [$(AppIdentifierPrefix)$(SATCHEL_KEYCHAIN_GROUP_SUFFIX)]
+
+schemes:
+  Satchel:
+    build:
+      targets:
+        Satchel: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    archive:
+      config: Release
