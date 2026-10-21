@@ -1,0 +1,14 @@
+{
+  "name": "@satchel/model",
+  "version": "2026.10.0",
+  "private": true,
+  "type": "module",
+  "description": "Item types, URL normalization, ID derivation, merge rules (spec §7).",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "test": "vitest run"
+  }
+}

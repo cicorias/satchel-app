@@ -1,0 +1,17 @@
+{
+  "name": "@satchel/storage",
+  "version": "2026.10.0",
+  "private": true,
+  "type": "module",
+  "description": "StorageProvider contract and the CloudKit Web Services adapter (spec §8).",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@satchel/model": "workspace:*"
+  }
+}

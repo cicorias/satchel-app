@@ -1,0 +1,19 @@
+{
+  "name": "@satchel/capture",
+  "version": "2026.10.0",
+  "private": true,
+  "type": "module",
+  "description": "Capture engine: DOM in, Markdown + metadata out (spec §4).",
+  "exports": {
+    ".": "./src/index.ts",
+    "./iife": "./dist/capture.iife.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@satchel/model": "workspace:*"
+  }
+}

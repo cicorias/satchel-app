@@ -1,0 +1,19 @@
+{
+  "name": "@satchel/render",
+  "version": "2026.10.0",
+  "private": true,
+  "type": "module",
+  "description": "Markdown renderer (markdown-it + DOMPurify), shared by the extension and the Apple app (spec §9.1.4).",
+  "exports": {
+    ".": "./src/index.ts",
+    "./iife": "./dist/render.iife.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@satchel/model": "workspace:*"
+  }
+}
