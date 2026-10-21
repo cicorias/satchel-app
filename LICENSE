@@ -1,0 +1,38 @@
+Satchel — Source-Available License
+
+Copyright (c) 2026 CedarLogic LLC. All rights reserved.
+
+This repository is published so its source code can be read and evaluated.
+No license is granted except as stated below.
+
+You MAY:
+  - view and read the source code in this repository;
+  - fork this repository on GitHub solely as permitted by GitHub's Terms of
+    Service, and build and run it locally for personal evaluation or to
+    propose changes back to this repository.
+
+You MAY NOT, without prior written permission from CedarLogic LLC:
+  - redistribute this software or any portion of it, in source or binary form;
+  - publish, sell, or distribute this software or any derivative work through
+    the Apple App Store, Chrome Web Store, Microsoft Edge Add-ons, or any other
+    store, marketplace, or distribution channel;
+  - use the name "Satchel", its icons, or its artwork to identify any other
+    product;
+  - sublicense any rights in this software.
+
+Contributions: by submitting a contribution (for example, a pull request), you
+grant CedarLogic LLC a perpetual, worldwide, royalty-free, irrevocable license
+to use, modify, and distribute your contribution as part of this software.
+
+Third-party components are licensed under their own terms; see
+THIRD_PARTY_NOTICES.md.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+For permissions, open an issue at https://github.com/cicorias/satchel-app.
