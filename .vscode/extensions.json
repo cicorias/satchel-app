@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "hverlin.mise-vscode",
+    "swiftlang.swift-vscode",
+    "sweetpad.sweetpad",
+    "biomejs.biome",
+    "vitest.explorer",
+    "redhat.vscode-yaml",
+    "github.vscode-github-actions",
+    "bierner.markdown-mermaid"
+  ]
+}

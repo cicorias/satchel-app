@@ -48,7 +48,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run sim:stop` | stop the app, shut down the simulator, quit DeviceHub/Simulator (`ALL=1` for every simulator) |
 | `mise run sim:reset` | uninstall Satchel and erase that simulator (`PRUNE=1` also deletes simulators with missing runtimes) |
 | `mise run clean` | remove build outputs (`DEPS=1` also removes node_modules) |
-| `mise run apple:project` | regenerate `apple/Satchel.xcodeproj` only, then open it in Xcode |
+| `mise run apple:project` | regenerate `apple/Satchel.xcodeproj` (skipped when nothing changed; `FORCE=1` always regenerates), then open it in Xcode. Add files on disk and put settings in `project.yml`, because edits made in Xcode's project editor are lost on regenerate |
 | `mise run format` | Biome and swift-format, applied in place |
 | `mise run art` | re-render every icon and store asset |
 | `mise run deploy:ios-archive` / `deploy:ios-upload` | signed archive, then TestFlight upload (see docs/setup/apple.md) |
