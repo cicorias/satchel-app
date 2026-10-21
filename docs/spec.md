@@ -15,6 +15,7 @@
 - Scripted iOS release to TestFlight, GitHub Actions CI, and GitHub Pages hosting from `site/` ([ADR-0016](adr/0016-release-ci-and-hosting.md)).
 - GRDB + SQLite (WAL) in the App Group confirmed as the Apple local store, with FTS5 search ([ADR-0017](adr/0017-local-store-grdb.md)).
 - Work items live in the repo as Markdown under `.scratch/`, not in GitHub Issues ([ADR-0018](adr/0018-work-items-in-repo.md)).
+- Shell scripts are bash, bash 3.2-compatible, and ShellCheck-clean ([ADR-0019](adr/0019-bash-3-2-and-shellcheck.md)).
 
 ---
 
@@ -656,6 +657,7 @@ satchel/
 - mise pins the toolchain and defines thin tasks that call scripts under `scripts/<aspect>/` (see ADR-0013).
 - TypeScript in `strict` mode, ESM everywhere, Vitest, Biome for linting and formatting (replaces ESLint + Prettier; see ADR-0013).
 - swift-format (`swift format`, bundled with the Xcode toolchain) for Swift (see ADR-0013).
+- Shell scripts: bash, compatible with macOS `/bin/bash` 3.2, linted by ShellCheck (see ADR-0019).
 - WXT for the extension. Vite library mode (or tsup) for the IIFE bundles.
 - XcodeGen generates `Satchel.xcodeproj`. Swift Package Manager for `SatchelKit` and third-party Swift packages (GRDB).
 - Pin exact versions of `defuddle` and `turndown` (no `^` or `~`). Upgrades go through the golden tests.

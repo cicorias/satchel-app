@@ -6,6 +6,7 @@ node = "24.17.0"
 pnpm = "11.8.0"
 xcodegen = { version = "2.46.0", os = ["macos"] }
 gitleaks = "8.30.1"
+shellcheck = "0.11.0"
 
 [env]
 _.path = ["./node_modules/.bin"]
@@ -63,7 +64,7 @@ run = "scripts/run/sim-reset.sh"
 
 # --- verify ------------------------------------------------------------------
 [tasks.verify]
-description = "Everything CI runs: secrets, lint, typecheck, tests"
+description = "Everything CI runs: secrets, shell lint, lint, typecheck, tests"
 run = "scripts/verify/all.sh"
 
 [tasks."verify:web"]
@@ -73,6 +74,10 @@ run = "scripts/verify/web.sh"
 [tasks."verify:apple"]
 description = "Lint Swift and run SatchelKit tests"
 run = "scripts/verify/apple.sh"
+
+[tasks."verify:shell"]
+description = "ShellCheck + bash 3.2 compatibility checks for all shell scripts"
+run = "scripts/verify/shell.sh"
 
 [tasks."verify:secrets"]
 description = "Scan the repo history and working tree for secrets"

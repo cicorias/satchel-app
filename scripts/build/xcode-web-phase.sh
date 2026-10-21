@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Xcode "WebAssets" build phase. Xcode runs scripts with a minimal PATH, so locate mise first.
 set -euo pipefail
-repo="$(cd "$SRCROOT/.." && pwd)"
+repo="$(cd "${SRCROOT:?run from an Xcode build phase (SRCROOT is set by Xcode)}/.." && pwd)"
 for candidate in "$(command -v mise || true)" "$HOME/.local/bin/mise" /opt/homebrew/bin/mise /usr/local/bin/mise; do
   if [ -n "$candidate" ] && [ -x "$candidate" ]; then mise="$candidate"; break; fi
 done

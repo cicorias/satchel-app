@@ -1,6 +1,6 @@
 # ADR-0013: Tooling — mise, Biome, swift-format, AGENTS.md
 
-- **Status:** Accepted; amended by [ADR-0018](0018-work-items-in-repo.md) (work items live in the repo)
+- **Status:** Accepted; amended by [ADR-0018](0018-work-items-in-repo.md) (work items live in the repo) and [ADR-0019](0019-bash-3-2-and-shellcheck.md) (bash 3.2 + ShellCheck)
 - **Supersedes:** the ESLint + Prettier choice in spec §12.2
 - **Date:** 2026-10-21
 

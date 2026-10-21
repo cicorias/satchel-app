@@ -22,6 +22,7 @@ jobs:
       - uses: jdx/mise-action@v3
       - run: pnpm install --frozen-lockfile
       - run: mise run verify:secrets
+      - run: mise run verify:shell
       - run: mise run verify:web
       - run: mise run deploy:extension-zips
       - uses: actions/upload-artifact@v4

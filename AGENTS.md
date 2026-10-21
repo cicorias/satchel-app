@@ -40,7 +40,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 |---|---|
 | `mise run setup` | install tools and deps, set up git hooks, generate config |
 | `mise run verify` | secrets scan, Biome, typecheck, tests, swift-format lint, SatchelKit tests |
-| `mise run verify:web` / `verify:apple` | just one half |
+| `mise run verify:web` / `verify:apple` / `verify:shell` | one part only (shell: ShellCheck + bash 3.2 checks) |
 | `mise run build` | all web packages and all three extension targets |
 | `mise run build:extension [chrome\|edge\|safari]` | one extension target |
 | `mise run build:ios` | XcodeGen, then an unsigned simulator build (`SIGNED=1` for automatic signing) |
@@ -65,7 +65,24 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 - Don't hand-edit generated files: `.xcodeproj`, `apple/*/Info.plist`, `*.entitlements`, `apple/Config/Generated.xcconfig`, WXT `.output/`, `dist/`, or rendered art. Edit the source (`project.yml`, `app.config.json`, `art/src/`) and regenerate.
 - Swift: Swift 6 language mode with complete concurrency checking, formatted by swift-format (`.swift-format`), tested with Swift Testing. TypeScript: strict ESM, formatted and linted by Biome, tested with Vitest.
 - Commits follow Conventional Commits (`feat(capture): …`, `chore(apple): …`). Commit straight to `main` during scaffolding, then use a branch and PR per milestone.
-- Don't use ESLint, Prettier, SwiftLint, fastlane, or npm scripts as task runners. Each was weighed and rejected in an ADR.
+- Don't use ESLint, Prettier, SwiftLint, fastlane, or npm scripts as task runners. Each was weighed and rejected in an ADR. Shell scripts are bash 3.2-safe; see below.
+
+## Shell scripts (bash 3.2-safe)
+
+Every script in `scripts/` and `.githooks/` is **bash** (not zsh or sh) and must run on **macOS's `/bin/bash` 3.2**. That's what `#!/usr/bin/env bash` resolves to on a stock Mac and in Xcode build phases (ADR-0019).
+
+- Start with `#!/usr/bin/env bash`, `set -euo pipefail`, and `cd "$(dirname "$0")/../.."`. Sourced helpers (e.g. `scripts/run/sim-lib.sh`) have no shebang. Instead, their first line is `# shellcheck shell=bash`.
+- **Don't use bash 4+ features:**
+  - associative arrays (`declare -A`) or namerefs (`declare -n`, `local -n`)
+  - `mapfile` / `readarray`
+  - case conversion `${v,,}` / `${v^^}`
+  - `|&` or `&>>`
+  - `[[ -v name ]]` or `wait -n`
+  - negative array indices `${a[-1]}` or `${v@Q}`
+  - `shopt -s globstar` / `lastpipe`
+- **Empty arrays under `set -u`:** in bash 3.2, `"${arr[@]}"` on an empty array fails with "unbound variable". Branch with if/else instead, or write `${arr[@]+"${arr[@]}"}`.
+- **Fill an array from a command's output** with `while IFS= read -r x; do arr+=("$x"); done < <(cmd)`.
+- `mise run verify:shell` runs three checks: ShellCheck (`.shellcheckrc`), a grep guard against the constructs above, and, on macOS, `/bin/bash -n` with the real 3.2. It's part of `mise run verify` and both CI jobs. A justified exception to the guard needs a trailing `# bash3-ok <reason>`.
 
 ## Agent skills
 

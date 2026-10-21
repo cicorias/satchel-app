@@ -1,3 +1,4 @@
+# shellcheck shell=bash disable=SC2034  # sim, udid, bundle_id are used by the scripts that source this file
 # Sourced by scripts/run/*.sh. Resolves the target simulator and app identity.
 #   SIM="iPhone 18 Pro Max"  device name (default)
 

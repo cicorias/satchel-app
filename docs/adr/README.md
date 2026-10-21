@@ -14,12 +14,13 @@
 | 0010 | Product name and identifiers | Accepted | [0010-name-and-identifiers.md](0010-name-and-identifiers.md) |
 | 0011 | Delivery order — iPhone first | Accepted | [0011-delivery-order-iphone-first.md](0011-delivery-order-iphone-first.md) |
 | 0012 | Minimum iOS 26 | Accepted | [0012-ios-26-minimum.md](0012-ios-26-minimum.md) |
-| 0013 | Tooling — mise, Biome, swift-format, AGENTS.md | Accepted; amended by 0018 | [0013-tooling-mise-biome-swift-format.md](0013-tooling-mise-biome-swift-format.md) |
+| 0013 | Tooling — mise, Biome, swift-format, AGENTS.md | Accepted; amended by 0018, 0019 | [0013-tooling-mise-biome-swift-format.md](0013-tooling-mise-biome-swift-format.md) |
 | 0014 | Public repository, source-available license, no secrets | Accepted | [0014-public-repo-source-available.md](0014-public-repo-source-available.md) |
 | 0015 | CalVer versioning | Accepted | [0015-calver-versioning.md](0015-calver-versioning.md) |
 | 0016 | Release, CI, and web hosting | Accepted | [0016-release-ci-and-hosting.md](0016-release-ci-and-hosting.md) |
 | 0017 | GRDB + SQLite for the Apple local store | Accepted | [0017-local-store-grdb.md](0017-local-store-grdb.md) |
 | 0018 | Work items live in the repo, not GitHub Issues | Accepted | [0018-work-items-in-repo.md](0018-work-items-in-repo.md) |
+| 0019 | Shell scripts: bash 3.2-compatible, ShellCheck-clean | Accepted | [0019-bash-3-2-and-shellcheck.md](0019-bash-3-2-and-shellcheck.md) |
 
 ## Adding or changing an ADR
 

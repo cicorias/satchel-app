@@ -20,6 +20,7 @@ jobs:
       - run: scripts/ci/select-xcode.sh
       - uses: jdx/mise-action@v3
       - run: pnpm install --frozen-lockfile
+      - run: mise run verify:shell # includes the /bin/bash 3.2 parse check
       - run: mise run verify:apple
       # Unsigned simulator build: no signing secrets in CI (ADR-0016).
       - run: mise run build:ios

@@ -16,4 +16,4 @@ Ported rules (for example, from Defuddle's Turndown configuration or a GFM plugi
 
 ## Build-time only (not shipped)
 
-WXT (MIT), Vite (MIT), Turborepo (MIT), TypeScript (Apache-2.0), Vitest (MIT), Biome (MIT or Apache-2.0), tsup (MIT), resvg-js (MPL-2.0), XcodeGen (MIT), and gitleaks (MIT).
+WXT (MIT), Vite (MIT), Turborepo (MIT), TypeScript (Apache-2.0), Vitest (MIT), Biome (MIT or Apache-2.0), tsup (MIT), resvg-js (MPL-2.0), XcodeGen (MIT), gitleaks (MIT), and ShellCheck (GPL-3.0; run as a separate tool, nothing linked or shipped).

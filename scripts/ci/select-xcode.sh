@@ -4,7 +4,7 @@ set -euo pipefail
 if [ -n "${XCODE_VERSION:-}" ]; then
   app="/Applications/Xcode_${XCODE_VERSION}.app"
 else
-  app=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+  app=$(find /Applications -maxdepth 1 -name 'Xcode*.app' | sort -V | tail -1)
 fi
 sudo xcode-select -s "$app/Contents/Developer"
 xcodebuild -version
