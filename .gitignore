@@ -1,0 +1,43 @@
+# --- local / secrets (ADR-0014) ---
+config/local.config.json
+.env
+.env.*
+!.env.example
+*.p8
+*.p12
+*.mobileprovision
+*.cer
+AuthKey_*.p8
+
+# --- node / web ---
+node_modules/
+dist/
+.turbo/
+.output/
+.wxt/
+coverage/
+*.tsbuildinfo
+packages/*/src/generated/
+apps/extension/src/generated/
+
+# --- apple ---
+apple/*.xcodeproj/
+apple/*.xcworkspace/
+apple/Config/Generated.xcconfig
+apple/build/
+apple/Staged/
+apple/**/.build/
+apple/**/.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcresult
+/build/
+
+# --- misc ---
+.DS_Store
+.scratch/
+*.log
+
+# --- XcodeGen writes these from project.yml ---
+apple/*/Info.plist
+apple/*/*.entitlements

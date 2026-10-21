@@ -1,0 +1,16 @@
+# gitleaks config (ADR-0014): default rules, minus generated/vendored trees that are never committed.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "build output and dependencies"
+paths = [
+  '''(^|/)node_modules/''',
+  '''(^|/)\.output/''',
+  '''(^|/)\.wxt/''',
+  '''(^|/)\.turbo/''',
+  '''(^|/)dist/''',
+  '''^apple/build/''',
+  '''^apple/Staged/''',
+  '''^apple/Satchel\.xcodeproj/''',
+]

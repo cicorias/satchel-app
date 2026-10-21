@@ -1,0 +1,11 @@
+packages:
+  - packages/*
+  - apps/*
+  - scripts/art
+
+# Exact pins everywhere; upgrades are deliberate and go through golden tests (spec §12.2).
+saveExact: true
+
+# pnpm's default minimumReleaseAge stays on (supply-chain hygiene); don't add excludes.
+allowBuilds:
+  esbuild: true

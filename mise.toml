@@ -1,0 +1,84 @@
+# Toolchain pins and task entry points.
+# Tasks are thin wrappers only — logic lives in scripts/<aspect>/ (ADR-0013).
+
+[tools]
+node = "24.17.0"
+pnpm = "11.8.0"
+xcodegen = { version = "2.46.0", os = ["macos"] }
+gitleaks = "8.30.1"
+
+[env]
+_.path = ["./node_modules/.bin"]
+
+# --- setup -------------------------------------------------------------------
+[tasks.setup]
+description = "Install deps, git hooks, and generate local config"
+run = "scripts/setup/bootstrap.sh"
+
+[tasks."setup:config"]
+description = "Generate derived config (xcconfig, TS constants) from config/app.config.json"
+run = "scripts/setup/gen-config.sh"
+
+[tasks."setup:hooks"]
+description = "Point git at the committed .githooks/"
+run = "scripts/setup/install-hooks.sh"
+
+# --- build -------------------------------------------------------------------
+[tasks.build]
+description = "Build all web packages and extension targets"
+run = "scripts/build/web.sh"
+
+[tasks."build:web-for-apple"]
+description = "Build capture/render IIFEs + Safari extension and stage them for Xcode"
+run = "scripts/build/web-for-apple.sh"
+
+[tasks."build:extension"]
+description = "Build the browser extension (chrome|edge|safari; default all)"
+run = "scripts/build/extension.sh"
+
+[tasks."build:ios"]
+description = "Generate the Xcode project and build the iOS app for the simulator"
+run = "scripts/build/ios.sh"
+
+[tasks."apple:project"]
+description = "Generate apple/Satchel.xcodeproj with XcodeGen"
+run = "scripts/build/xcodegen.sh"
+
+# --- verify ------------------------------------------------------------------
+[tasks.verify]
+description = "Everything CI runs: secrets, lint, typecheck, tests"
+run = "scripts/verify/all.sh"
+
+[tasks."verify:web"]
+description = "Lint, typecheck, and test the TypeScript workspace"
+run = "scripts/verify/web.sh"
+
+[tasks."verify:apple"]
+description = "Lint Swift and run SatchelKit tests"
+run = "scripts/verify/apple.sh"
+
+[tasks."verify:secrets"]
+description = "Scan the repo history and working tree for secrets"
+run = "scripts/verify/secrets.sh"
+
+[tasks.format]
+description = "Format TypeScript (Biome) and Swift (swift-format)"
+run = "scripts/verify/format.sh"
+
+# --- art ---------------------------------------------------------------------
+[tasks.art]
+description = "Render all icons and store artwork from art/*.svg"
+run = "scripts/art/render.sh"
+
+# --- deploy ------------------------------------------------------------------
+[tasks."deploy:ios-archive"]
+description = "Archive and export a signed iOS build (App Store Connect)"
+run = "scripts/deploy/ios-archive.sh"
+
+[tasks."deploy:ios-upload"]
+description = "Upload the exported IPA to App Store Connect / TestFlight"
+run = "scripts/deploy/ios-upload.sh"
+
+[tasks."deploy:extension-zips"]
+description = "Produce Chrome and Edge store zips"
+run = "scripts/deploy/extension-zips.sh"

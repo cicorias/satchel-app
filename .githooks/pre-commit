@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Block commits that contain secrets (ADR-0014). Bypass only with care: git commit --no-verify.
+set -euo pipefail
+exec mise exec -- gitleaks git --pre-commit --staged --redact --no-banner

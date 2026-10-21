@@ -1,0 +1,29 @@
+{
+  "$schema": "./app.config.schema.json",
+  "name": "Satchel",
+  "slug": "satchel",
+  "description": "Save links and full pages as Markdown into storage you own.",
+  "version": "2026.10.0",
+  "repo": "cicorias/satchel-app",
+  "siteUrl": "https://cicorias.github.io/satchel-app/",
+  "apple": {
+    "teamName": "CedarLogic LLC",
+    "bundleId": "com.cedarlogic.satchel",
+    "shareExtensionBundleId": "com.cedarlogic.satchel.share",
+    "safariExtensionBundleId": "com.cedarlogic.satchel.safari",
+    "appGroup": "group.com.cedarlogic.satchel",
+    "iCloudContainer": "iCloud.com.cedarlogic.satchel",
+    "keychainGroupSuffix": "com.cedarlogic.satchel.shared",
+    "urlScheme": "satchel",
+    "deploymentTarget": {
+      "iOS": "26.0",
+      "macOS": "26.0"
+    },
+    "cloudKitZone": "Library"
+  },
+  "web": {
+    "npmScope": "@satchel",
+    "captureGlobal": "SatchelCapture",
+    "renderGlobal": "SatchelRender"
+  }
+}
