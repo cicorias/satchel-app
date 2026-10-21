@@ -40,9 +40,26 @@ run = "scripts/build/extension.sh"
 description = "Generate the Xcode project and build the iOS app for the simulator"
 run = "scripts/build/ios.sh"
 
+[tasks.clean]
+description = "Remove build outputs (DEPS=1 also removes node_modules)"
+run = "scripts/build/clean.sh"
+
 [tasks."apple:project"]
 description = "Generate apple/Satchel.xcodeproj with XcodeGen"
 run = "scripts/build/xcodegen.sh"
+
+# --- run ---------------------------------------------------------------------
+[tasks."run:ios"]
+description = "Build, install, and launch Satchel on a simulator (SIM=\"iPhone 18 Pro Max\", LOGS=1)"
+run = "scripts/run/ios-sim.sh"
+
+[tasks."sim:stop"]
+description = "Stop the app, shut down the simulator, quit DeviceHub/Simulator (ALL=1 for every simulator)"
+run = "scripts/run/sim-stop.sh"
+
+[tasks."sim:reset"]
+description = "Uninstall Satchel and erase the simulator to factory state (PRUNE=1 deletes stale simulators)"
+run = "scripts/run/sim-reset.sh"
 
 # --- verify ------------------------------------------------------------------
 [tasks.verify]

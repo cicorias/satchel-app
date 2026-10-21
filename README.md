@@ -17,7 +17,8 @@ Requirements: macOS with Xcode 27+, and [mise](https://mise.jdx.dev).
 ```sh
 mise run setup      # tools, dependencies, git hooks, generated config
 mise run verify     # everything CI checks
-mise run build:ios  # simulator build (XcodeGen → xcodebuild)
+mise run run:ios    # build + launch on the iPhone 18 Pro Max simulator
+mise run sim:stop   # shut it down again (sim:reset erases it; clean removes builds)
 mise run build      # web packages + Chrome/Edge/Safari extension builds
 ```
 
