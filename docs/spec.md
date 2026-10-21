@@ -943,7 +943,7 @@ What is not clean:
 - [ ] On iPhone, sharing from Safari saves both links and pages.
 - [ ] Sharing a URL from another app saves a pending link, which the host app later enriches.
 - [ ] The Safari extension saves links and pages on iOS and macOS.
-- [ ] An Item saved in Chrome appears in the iOS library, and vice versa.
+- [ ] An Item saved in Chrome appears in the iOS library, and vice versa. *(Verified in Phase 2, since Chrome/Edge now ships after the iPhone app; see ADR-0011.)*
 - [ ] Saves made with no network sync once the device is back online.
 
 ### Phase 4 — Polish
