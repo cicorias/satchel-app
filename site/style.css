@@ -1,0 +1,22 @@
+:root {
+  --bg: #f7efe2; --fg: #2a1a0e; --muted: #6b5240; --accent: #2e6b4e; --card: #fffaf2; --rule: #e3d3bb;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1d130b; --fg: #f4e8d2; --muted: #c9b291; --accent: #5fb08a; --card: #2a1c11; --rule: #4a3422; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Avenir Next", "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; padding: 48px 16px 64px; }
+header.hero { text-align: center; margin-bottom: 40px; }
+header.hero img { width: 112px; height: 112px; border-radius: 24px; box-shadow: 0 8px 30px rgb(0 0 0 / 0.2); }
+h1 { font-size: 2.4rem; margin: 16px 0 4px; letter-spacing: -0.02em; }
+h2 { margin-top: 2em; }
+.lede { color: var(--muted); font-size: 1.15rem; margin: 0; }
+.cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 32px 0; }
+.card { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 16px; }
+.card h3 { margin: 0 0 4px; font-size: 1rem; }
+.card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+a { color: var(--accent); }
+nav.top { font-size: 0.95rem; margin-bottom: 24px; }
+footer { border-top: 1px solid var(--rule); margin-top: 48px; padding-top: 16px; color: var(--muted); font-size: 0.9rem; }
