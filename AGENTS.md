@@ -22,6 +22,7 @@ packages/storage         StorageProvider contract + CloudKit Web Services adapte
 apps/extension           WXT: chrome / edge / safari (MV3), src/entrypoints, src/platform
 apple/project.yml        XcodeGen; Satchel (app), SatchelShare, SatchelSafari, WebAssets (aggregate)
 apple/SatchelKit         Swift package shared by the app and its extensions
+apple/SatchelUITests     UI tests that drive Settings + Safari (Safari extension end to end)
 apple/Staged/            gitignored; web build outputs staged for Xcode
 art/src/satchel.mjs      artwork design source → art/svg/ masters → PNGs (mise run art)
 store/                   rendered store artwork (Chrome, Edge, App Store, GitHub)
@@ -45,6 +46,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run build:extension [chrome\|edge\|safari]` | one extension target |
 | `mise run build:ios` | XcodeGen, then an unsigned simulator build (`SIGNED=1` for automatic signing) |
 | `mise run run:ios` | build, install, and launch on a simulator (`SIM="iPhone 18 Pro Max"` by default, `LOGS=1` to stream output) |
+| `mise run test:ios-ui` | UI tests that enable the Safari extension in Settings and open its popup (`ONLY=Class/test`, `VERBOSE=1`) |
 | `mise run sim:stop` | stop the app, shut down the simulator, quit DeviceHub/Simulator (`ALL=1` for every simulator) |
 | `mise run sim:reset` | uninstall Satchel and erase that simulator (`PRUNE=1` also deletes simulators with missing runtimes) |
 | `mise run clean` | remove build outputs (`DEPS=1` also removes node_modules) |

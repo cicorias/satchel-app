@@ -54,6 +54,10 @@ run = "scripts/build/xcodegen.sh"
 description = "Build, install, and launch Satchel on a simulator (SIM=\"iPhone 18 Pro Max\", LOGS=1)"
 run = "scripts/run/ios-sim.sh"
 
+[tasks."test:ios-ui"]
+description = "Run the UI tests that drive Settings and Safari on a simulator (ONLY=Class/test to pick one)"
+run = "scripts/run/ios-ui-tests.sh"
+
 [tasks."sim:stop"]
 description = "Stop the app, shut down the simulator, quit DeviceHub/Simulator (ALL=1 for every simulator)"
 run = "scripts/run/sim-stop.sh"

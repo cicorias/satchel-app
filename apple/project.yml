@@ -127,7 +127,7 @@ targets:
     # so the Safari extension can never drift from Chrome/Edge (spec §12.3).
     postBuildScripts:
       - name: Copy Safari web extension resources
-        script: rsync -a "$SRCROOT/Staged/safari-extension/" "$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/"
+        script: '"$SRCROOT/../scripts/build/xcode-copy-safari-resources.sh"'
         basedOnDependencyAnalysis: false
     dependencies:
       - target: WebAssets
@@ -156,6 +156,20 @@ targets:
         com.apple.security.application-groups: [$(SATCHEL_APP_GROUP)]
         keychain-access-groups: [$(AppIdentifierPrefix)$(SATCHEL_KEYCHAIN_GROUP_SUFFIX)]
 
+  # UI tests that drive Settings and Safari (ADR-0005 addendum). Not part of the app bundle.
+  SatchelUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: SatchelUITests
+    dependencies:
+      - target: Satchel
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(SATCHEL_BUNDLE_ID).uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Satchel
+
 schemes:
   Satchel:
     build:
@@ -165,5 +179,7 @@ schemes:
       config: Debug
     test:
       config: Debug
+      targets:
+        - SatchelUITests
     archive:
       config: Release
