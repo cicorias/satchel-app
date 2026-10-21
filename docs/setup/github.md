@@ -6,7 +6,7 @@ The agent applies these settings through `gh` when it creates the repo:
 
 - Secret scanning and push protection: **on**
 - Pages: **GitHub Actions** source (`.github/workflows/pages.yml` publishes `site/`)
-- Issues: **on** (issue tracker for agents, see `docs/agents/issue-tracker.md`)
+- Issues: **on**, for external bug reports and support only. Work items live in the repo under `.scratch/` (ADR-0018).
 
 You need to do these in the web UI:
 

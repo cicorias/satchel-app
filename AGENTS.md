@@ -8,7 +8,7 @@ Satchel saves links and full pages (as Markdown with YAML frontmatter) into stor
 
 ## Current state
 
-The Phase 0 scaffold is in place, and the delivery order is Phase 0 → 1 (capture engine) → 3 (iPhone) → 2 (Chrome/Edge), per ADR-0011. The packages, the extension, and the Apple targets build and test, but they are placeholders. Open work is tracked in GitHub Issues.
+The Phase 0 scaffold is in place, and the delivery order is Phase 0 → 1 (capture engine) → 3 (iPhone) → 2 (Chrome/Edge), per ADR-0011. The packages, the extension, and the Apple targets build and test, but they are placeholders. Open work is in `.scratch/` (start with `.scratch/README.md`).
 
 ## Layout
 
@@ -29,6 +29,7 @@ site/                    GitHub Pages: landing page, privacy policy, support
 scripts/<aspect>/        all task logic: setup, build, verify, deploy, art, ci
 .githooks/               pre-commit runs gitleaks
 docs/                    spec, ADRs, setup guides, agent config (docs/agents/)
+.scratch/                work items: <feature>/spec.md + issues/NN-*.md (committed; ADR-0018)
 ```
 
 ## Commands
@@ -43,6 +44,10 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run build` | all web packages and all three extension targets |
 | `mise run build:extension [chrome\|edge\|safari]` | one extension target |
 | `mise run build:ios` | XcodeGen, then an unsigned simulator build (`SIGNED=1` for automatic signing) |
+| `mise run run:ios` | build, install, and launch on a simulator (`SIM="iPhone 18 Pro Max"` by default, `LOGS=1` to stream output) |
+| `mise run sim:stop` | stop the app, shut down the simulator, quit DeviceHub/Simulator (`ALL=1` for every simulator) |
+| `mise run sim:reset` | uninstall Satchel and erase that simulator (`PRUNE=1` also deletes simulators with missing runtimes) |
+| `mise run clean` | remove build outputs (`DEPS=1` also removes node_modules) |
 | `mise run apple:project` | regenerate `apple/Satchel.xcodeproj` only, then open it in Xcode |
 | `mise run format` | Biome and swift-format, applied in place |
 | `mise run art` | re-render every icon and store asset |
@@ -66,7 +71,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 
 ### Issue tracker
 
-Issues live in GitHub Issues for `cicorias/satchel-app`, managed with the `gh` CLI. See `docs/agents/issue-tracker.md`.
+Work items are Markdown files committed under `.scratch/<feature>/` (ADR-0018). GitHub Issues is only for external reports. See `docs/agents/issue-tracker.md`.
 
 ### Domain docs
 

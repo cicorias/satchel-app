@@ -35,7 +35,6 @@ xcuserdata/
 
 # --- misc ---
 .DS_Store
-.scratch/
 *.log
 
 # --- XcodeGen writes these from project.yml ---

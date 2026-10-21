@@ -1,6 +1,6 @@
 # ADR-0013: Tooling — mise, Biome, swift-format, AGENTS.md
 
-- **Status:** Accepted
+- **Status:** Accepted; amended by [ADR-0018](0018-work-items-in-repo.md) (work items live in the repo)
 - **Supersedes:** the ESLint + Prettier choice in spec §12.2
 - **Date:** 2026-10-21
 
@@ -15,7 +15,7 @@ The repo mixes a pnpm/TypeScript workspace with an XcodeGen/Swift project, and i
 - **Biome** for TypeScript/JavaScript/JSON linting and formatting, replacing ESLint + Prettier.
 - **swift-format** (bundled with the Xcode toolchain, run as `swift format`) for Swift formatting and linting.
 - **`AGENTS.md`** is the canonical agent instructions file. `CLAUDE.md` contains only `@AGENTS.md`.
-- Issues are tracked in GitHub Issues; agent guidance for this lives in `docs/agents/`.
+- Issues are tracked in GitHub Issues; agent guidance for this lives in `docs/agents/`. *(Amended: work items now live in the repo under `.scratch/`; see ADR-0018.)*
 
 ## Consequences
 

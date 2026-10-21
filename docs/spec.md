@@ -14,6 +14,7 @@
 - CalVer `YYYY.M.PATCH` single version shared by all targets ([ADR-0015](adr/0015-calver-versioning.md)).
 - Scripted iOS release to TestFlight, GitHub Actions CI, and GitHub Pages hosting from `site/` ([ADR-0016](adr/0016-release-ci-and-hosting.md)).
 - GRDB + SQLite (WAL) in the App Group confirmed as the Apple local store, with FTS5 search ([ADR-0017](adr/0017-local-store-grdb.md)).
+- Work items live in the repo as Markdown under `.scratch/`, not in GitHub Issues ([ADR-0018](adr/0018-work-items-in-repo.md)).
 
 ---
 
