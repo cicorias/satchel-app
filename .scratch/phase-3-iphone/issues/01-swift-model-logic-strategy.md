@@ -1,6 +1,6 @@
 # Decide how Swift gets URL normalization, IDs, and merge rules
 
-Status: ready-for-agent
+Status: resolved
 Type: research
 Blocked by: -
 
@@ -20,3 +20,15 @@ Measure (b) in the Share Extension on a device: JSContext creation plus the firs
 **Done when** an ADR (0020) records the decision and the measurements, and tickets 03 and 07 are updated to match.
 
 Agent's starting recommendation: (b), unless the measurements rule it out. One implementation removes a whole class of duplicate-item bugs, and the capture engine already ships as an IIFE the same way.
+
+## Answer
+
+Resolved on 2026-10-22. The user chose (b), and the measurements support it.
+
+**ADR-0020: Swift runs `@satchel/model` in JavaScriptCore.**
+- **Missing Web APIs:** bare JSC has no `URL` or `TextEncoder`, so a dedicated `model.jsc.iife.js` (190 KB) adds core-js's `URL` polyfill and a small UTF-8 encoder.
+- **On the iPhone:** 10–23 ms to create the context and load the bundle, 1.6–4.8 ms for the first call, 0.27 ms per later call, and about +8 MB of memory.
+- **Parity:** the results matched native `URL` on all 118 parity inputs, and `test/jsc-bundle.test.ts` keeps checking that in CI.
+- **Probe:** a reference copy is in `../research/01-jsc-probe.md`.
+
+Tickets 03 and 07 are updated to match.

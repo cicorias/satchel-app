@@ -30,7 +30,7 @@ SatchelShare / SatchelSafari handler      host app (Satchel)
 
 | # | Ticket | Blocked by |
 |---|---|---|
-| 01 | Decide how Swift gets normalization, IDs, and merge rules | - |
+| 01 | ~~Decide how Swift gets normalization, IDs, and merge rules~~ → ADR-0020 (JavaScriptCore) | - |
 | 02 | SatchelKit: Item model and contract fixtures | - |
 | 03 | SatchelKit: normalization, IDs, and merge (per 01) | 01, 02 |
 | 04 | SatchelKit: GRDB store and outbox in the App Group | 02 |

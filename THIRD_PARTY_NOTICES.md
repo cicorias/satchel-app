@@ -10,6 +10,7 @@ Satchel's own code is source-available (see `LICENSE`). It incorporates or is bu
 | [Turndown](https://github.com/mixmark-io/turndown) 7.2.4 | MIT | HTML → Markdown (ADR-0003) | in use |
 | [tldts](https://github.com/remusao/tldts) 7.4.19 (with tldts-core) | MIT; bundles the [Public Suffix List](https://publicsuffix.org/) (MPL-2.0) | registrable-domain check in URL normalization (`packages/model`) | in use |
 | [@noble/hashes](https://github.com/paulmillr/noble-hashes) 2.4.0 | MIT | SHA-256 for item IDs (`packages/model`) | in use |
+| [core-js](https://github.com/zloirock/core-js) 3.51.0 (`URL`, `URLSearchParams`) | MIT | polyfills in `model.jsc.iife.js` only, for JavaScriptCore (ADR-0020) | in use |
 | [markdown-it](https://github.com/markdown-it/markdown-it) 15.0.3 | MIT | Markdown rendering (`packages/render`) | in use |
 | [markdown-it-footnote](https://github.com/markdown-it/markdown-it-footnote) 4.0.0 | MIT | footnotes in rendered Markdown | in use |
 | [DOMPurify](https://github.com/cure53/DOMPurify) 3.4.17 | Apache-2.0 or MPL-2.0 | sanitizing rendered output (`packages/render`) | in use |
