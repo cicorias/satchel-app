@@ -7,7 +7,8 @@ This is the temporary code used for Spikes B and D on 2026-10-21. Results are in
 1. Save the TypeScript below as `apps/extension/src/platform/spike-native-messaging.ts`.
 2. In `apps/extension/src/entrypoints/popup/main.ts` (and optionally in `background.ts`), call `runNativeMessagingSpike('popup')`, guarded by `if (import.meta.env.SAFARI && import.meta.env.WXT_SATCHEL_SPIKE === '1')`. Render the returned summary into a `<p>` whose text starts with `spike`.
 3. Add the Swift cases below to `SafariWebExtensionHandler.beginRequest`.
-4. Build with `WXT_SATCHEL_SPIKE=1`, open the popup, and read the summary. Alternatively, read the handler's log: `xcrun simctl spawn booted log show --last 5m --predicate 'eventMessage BEGINSWITH "SPIKE"'` on a simulator, or Console.app filtered on `SPIKE` for a device.
+4. Build with `WXT_SATCHEL_SPIKE=1`, open the popup, and read the summary. Alternatively, read the handler's log: `xcrun simctl spawn booted log show --last 5m --predicate 'eventMessage BEGINSWITH "SPIKE"'` on a simulator, or, for a device (reading its log needs root), pull the report file:
+   `xcrun devicectl device copy from --device <UDID> --domain-type appGroupDataContainer --domain-identifier group.com.cedarlogic.satchel --source Library/spike-d-report.jsonl --destination apple/build/spike-d-report.jsonl`.
 5. Remove all of it afterward.
 
 ## `spike-native-messaging.ts`
@@ -64,5 +65,17 @@ case "reply":
 case "spike-report":
     let data = (try? JSONSerialization.data(withJSONObject: message?["results"] ?? [])) ?? Data()
     log.notice("SPIKE report \(String(decoding: data, as: UTF8.self), privacy: .public)")
+    // On a device, `devicectl device copy from` can only reach Library/, Documents/, and tmp/.
+    if let dir = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.cedarlogic.satchel") {
+        let line = Data("\(Date().ISO8601Format()) \(message?["trigger"] as? String ?? "?") ".utf8) + data + Data("\n".utf8)
+        let url = dir.appendingPathComponent("Library/spike-d-report.jsonl")
+        if let handle = try? FileHandle(forWritingTo: url) {
+            handle.seekToEndOfFile()
+            handle.write(line)
+            try? handle.close()
+        } else {
+            try? line.write(to: url)
+        }
+    }
     reply = ["ok": true]
 ```

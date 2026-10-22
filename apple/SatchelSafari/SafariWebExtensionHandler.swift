@@ -4,7 +4,7 @@ import os
 
 /// Native side of the Safari Web Extension (spec §9.2.3, ADR-0007).
 /// Phase 3 adds `save`, `status`, and `tags`. `ping` exists so the extension can warm up this process
-/// before a save: the first native message after a cold start costs ~1.4 s (ADR-0007 addendum).
+/// before a save. A cold first message took 69 ms on an iPhone and ~1.4 s on the simulator (ADR-0007 addenda).
 final class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
     private let log = Logger(subsystem: Bundle.main.bundleIdentifier ?? "satchel", category: "safari")
 
