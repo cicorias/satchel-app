@@ -17,7 +17,9 @@ function check(name: string, value: unknown) {
 }
 
 test('normalization and ID vectors', () => {
-  const inputs: [string, string | null][] = JSON.parse(readFileSync(new URL('url-inputs.json', import.meta.url), 'utf8'));
+  const inputs: [string, string | null][] = JSON.parse(
+    readFileSync(new URL('url-inputs.json', import.meta.url), 'utf8'),
+  );
   check(
     'normalization.json',
     inputs.map(([pageUrl, canonicalUrl]) => {
@@ -34,7 +36,8 @@ test('normalization and ID vectors', () => {
 test('merge vectors', () => {
   const fixture = (name: string): Item => JSON.parse(readFileSync(new URL(name, dir), 'utf8'));
   const link = fixture('link-minimal.json');
-  const later = (item: Item, overrides: Partial<Item> & Record<string, unknown>): Item => ({ ...item, ...overrides }) as Item;
+  const later = (item: Item, overrides: Partial<Item> & Record<string, unknown>): Item =>
+    ({ ...item, ...overrides }) as Item;
   const page = later(link, {
     kind: 'page',
     title: 'Hello, World: the page',
@@ -45,11 +48,31 @@ test('merge vectors', () => {
     page: { wordCount: 900, readingMinutes: 4, engine: 'defuddle@0.19.4+turndown@7.2.4', images: [] },
   });
   const pairs: [string, Item, Item][] = [
-    ['link re-saved with tags and a note', link, later(link, { tags: ['swift'], note: 'read later', updatedAt: '2026-10-22T15:00:00.000Z' })],
+    [
+      'link re-saved with tags and a note',
+      link,
+      later(link, { tags: ['swift'], note: 'read later', updatedAt: '2026-10-22T15:00:00.000Z' }),
+    ],
     ['link upgraded to a page', link, page],
-    ['page re-captured', page, later(page, { capturedAt: '2026-10-24T08:00:00.000Z', updatedAt: '2026-10-24T08:00:00.000Z', title: 'Hello again' })],
-    ['newer save with empty metadata keeps values', page, later(link, { title: '', updatedAt: '2026-10-25T00:00:00.000Z' })],
-    ['unknown fields from both sides', later(link, { archived: true }), later(link, { pinned: 1, updatedAt: '2026-10-22T16:00:00.000Z' })],
+    [
+      'page re-captured',
+      page,
+      later(page, {
+        capturedAt: '2026-10-24T08:00:00.000Z',
+        updatedAt: '2026-10-24T08:00:00.000Z',
+        title: 'Hello again',
+      }),
+    ],
+    [
+      'newer save with empty metadata keeps values',
+      page,
+      later(link, { title: '', updatedAt: '2026-10-25T00:00:00.000Z' }),
+    ],
+    [
+      'unknown fields from both sides',
+      later(link, { archived: true }),
+      later(link, { pinned: 1, updatedAt: '2026-10-22T16:00:00.000Z' }),
+    ],
   ];
   check(
     'merge.json',
