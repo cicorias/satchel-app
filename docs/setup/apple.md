@@ -52,23 +52,29 @@ SIGNED=1 DESTINATION="platform=iOS,name=<your iPhone name>" mise run build:ios
 
 If Xcode reports a missing capability on an App ID, recheck step 1. The entitlements come from `apple/project.yml`, so the portal must match them.
 
-## 4. CloudKit schema (icloud.developer.apple.com → CloudKit Console)
+## 4. CloudKit schema (scripted with `xcrun cktool`)
 
-1. Select container `iCloud.com.cedarlogic.satchel`, then the **Development** environment.
-2. **Schema → Record Types →** create `Item` with these fields (spec §8.2):
+The schema lives in `apple/CloudKit/Satchel.ckdb` (spec §8.2): record type `Item`, its fields, and its indexes (`recordName`, `kind`, `normalizedUrl`, `tags` queryable; `createdAt` sortable). `mise run deploy:cloudkit-schema` pushes it with Xcode's `cktool`, so you don't need to click through the Console field by field.
 
-   | Field | Type |
-   |---|---|
-   | `schemaVersion` | Int(64) |
-   | `kind`, `url`, `canonicalUrl`, `normalizedUrl`, `title`, `description`, `siteName`, `author`, `lang`, `imageUrl`, `faviconUrl`, `note`, `metadataStatus`, `source`, `page`, `body` | String |
-   | `createdAt`, `publishedAt`, `updatedAt`, `capturedAt` | Date/Time |
-   | `tags` | String (List) |
-   | `bodyAsset` | Asset |
+1. **Create a management token.** In CloudKit Console (icloud.developer.apple.com), open **Settings → Tokens & Keys**, choose the **CedarLogic LLC** team, and create a **Management Token**. Copy it; it's shown once.
+2. **Save it to your keychain** (never the repo):
+   ```sh
+   xcrun cktool save-token --type management   # paste at the secure prompt
+   ```
+3. **Check, then push, the schema** to the Development environment. The Team ID comes from `config/local.config.json` and the container from `config/app.config.json`.
+   ```sh
+   mise run deploy:cloudkit-schema validate
+   mise run deploy:cloudkit-schema import
+   ```
+4. **First run only: reconcile the system types.** Export the live schema and diff it against the file. If the `Users` record type or the system-field lines differ from what CloudKit generated, copy CloudKit's version into `Satchel.ckdb`, then record what changed under `## Comments` in `.scratch/phase-0-foundations/issues/04-apple-portal-setup.md`.
+   ```sh
+   mise run deploy:cloudkit-schema export
+   diff -u apple/CloudKit/Satchel.ckdb apple/build/cloudkit-schema.development.ckdb
+   ```
+5. Don't create the `Library` zone by hand. The app creates it.
+6. Skip **API tokens** for CloudKit Web Services until the Chrome/Edge phase. Spike A decides the callback URLs (ADR-0011).
 
-   In Development, CloudKit can also create fields on first save. The **indexes** must be added by hand, though, and the Production schema must be deployed explicitly (Phase 7).
-3. **Schema → Indexes →** for `Item`, add: `recordName` **Queryable**, `kind` **Queryable**, `normalizedUrl` **Queryable**, `tags` **Queryable**, and `createdAt` **Sortable**.
-4. Don't create the `Library` zone by hand. The app creates it.
-5. Skip **API tokens** for CloudKit Web Services until the Chrome/Edge phase. Spike A decides the callback URLs (ADR-0011).
+**Changing the schema later.** Edit `Satchel.ckdb` and run `import`. Production isn't scripted: `cktool` only imports into Development. Before a release (Phase 7), use CloudKit Console → **Deploy Schema Changes…** to promote Development to Production, then confirm with `ENV=production mise run deploy:cloudkit-schema export`. Once a field is in Production it can't be deleted or retyped, so every field addition is permanent.
 
 ## 5. App Store Connect
 

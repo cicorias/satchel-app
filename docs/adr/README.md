@@ -5,7 +5,7 @@
 | 0001 | Single repository (monorepo) | Accepted | [0001-monorepo.md](0001-monorepo.md) |
 | 0002 | Defuddle for content extraction | Accepted | [0002-defuddle.md](0002-defuddle.md) |
 | 0003 | Turndown for HTML → Markdown | Accepted | [0003-turndown.md](0003-turndown.md) |
-| 0004 | CloudKit first, behind a provider abstraction | Accepted; amended by 0011 | [0004-cloudkit-first.md](0004-cloudkit-first.md) |
+| 0004 | CloudKit first, behind a provider abstraction | Accepted; amended by 0011; schema-as-file addendum | [0004-cloudkit-first.md](0004-cloudkit-first.md) |
 | 0005 | Safari via the shared WXT codebase and Apple's packager | Accepted, pending Spike B addendum; amended by 0011 | [0005-safari-packager.md](0005-safari-packager.md) |
 | 0006 | Client-side capture | Accepted | [0006-client-side-capture.md](0006-client-side-capture.md) |
 | 0007 | Safari saves through native code | Accepted | [0007-safari-native-saves.md](0007-safari-native-saves.md) |

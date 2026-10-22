@@ -425,7 +425,7 @@ Readers check `body` first, then `bodyAsset`. Writers set exactly one and clear 
 
 - **Record type `ImageAsset` (Phase 5).** Record name = `<itemId>_<first 16 hex of SHA-256(originalUrl)>`. Fields: `item` (Reference to `Item`, delete-self action), `originalUrl`, `contentType`, `bytes`, `file` (Asset).
 - Make `recordName` queryable (needed for Dashboard and Web Services queries).
-- The schema is created in the **Development** environment and deployed to **Production** before any release build (Phase 7).
+- The schema source of truth is `apple/CloudKit/Satchel.ckdb`, applied to **Development** with `mise run deploy:cloudkit-schema import` (ADR-0004 addendum). It is deployed to **Production** from CloudKit Console before any release build (Phase 7).
 
 ### 8.3 CloudKit access per platform
 

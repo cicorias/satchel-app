@@ -22,6 +22,7 @@ packages/storage         StorageProvider contract + CloudKit Web Services adapte
 apps/extension           WXT: chrome / edge / safari (MV3), src/entrypoints, src/platform
 apple/project.yml        XcodeGen; Satchel (app), SatchelShare, SatchelSafari, WebAssets (aggregate)
 apple/SatchelKit         Swift package shared by the app and its extensions
+apple/CloudKit/          Satchel.ckdb: the CloudKit schema (source of truth; spec §8.2)
 apple/SatchelUITests     UI tests that drive Settings + Safari (Safari extension end to end)
 apple/Staged/            gitignored; web build outputs staged for Xcode
 art/src/satchel.mjs      artwork design source → art/svg/ masters → PNGs (mise run art)
@@ -54,6 +55,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run format` | Biome and swift-format, applied in place |
 | `mise run art` | re-render every icon and store asset |
 | `mise run deploy:ios-archive` / `deploy:ios-upload` | signed archive, then TestFlight upload (see docs/setup/apple.md) |
+| `mise run deploy:cloudkit-schema [validate\|import\|export]` | check, push (Development only), or pull the CloudKit schema in `apple/CloudKit/Satchel.ckdb` with `xcrun cktool` |
 | `mise run deploy:extension-zips` | Chrome and Edge store zips |
 
 ## Conventions

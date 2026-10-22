@@ -105,6 +105,10 @@ run = "scripts/deploy/ios-archive.sh"
 description = "Upload the exported IPA to App Store Connect / TestFlight"
 run = "scripts/deploy/ios-upload.sh"
 
+[tasks."deploy:cloudkit-schema"]
+description = "Validate, import, or export the CloudKit schema (validate|import|export; ENV=production)"
+run = "scripts/deploy/cloudkit-schema.sh"
+
 [tasks."deploy:extension-zips"]
 description = "Produce Chrome and Edge store zips"
 run = "scripts/deploy/extension-zips.sh"

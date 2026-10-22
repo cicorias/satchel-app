@@ -1,0 +1,58 @@
+// CloudKit schema for iCloud.com.cedarlogic.satchel (spec §8.2), in CloudKit Schema Language.
+// This file is the source of truth: change it here, then `mise run deploy:cloudkit-schema import`.
+// Import only reaches Development; Production is deployed from CloudKit Console (Phase 7).
+// Fields can't be removed or retyped once deployed to Production, so treat every field as permanent.
+
+DEFINE SCHEMA
+
+    RECORD TYPE Users (
+        "___createTime" TIMESTAMP,
+        "___createdBy"  REFERENCE,
+        "___etag"       STRING,
+        "___modTime"    TIMESTAMP,
+        "___modifiedBy" REFERENCE,
+        "___recordID"   REFERENCE,
+        roles           LIST<INT64>,
+        GRANT WRITE TO "_creator",
+        GRANT READ TO "_world"
+    );
+
+    // Record name = Item.id ("u_" + 32 hex of SHA-256(normalizedUrl), spec §7.1).
+    RECORD TYPE Item (
+        "___createTime" TIMESTAMP,
+        "___createdBy"  REFERENCE,
+        "___etag"       STRING,
+        "___modTime"    TIMESTAMP,
+        "___modifiedBy" REFERENCE,
+        "___recordID"   REFERENCE QUERYABLE,
+        schemaVersion   INT64,
+        kind            STRING QUERYABLE,
+        url             STRING,
+        canonicalUrl    STRING,
+        normalizedUrl   STRING QUERYABLE,
+        title           STRING,
+        "description"   STRING,
+        siteName        STRING,
+        author          STRING,
+        lang            STRING,
+        imageUrl        STRING,
+        faviconUrl      STRING,
+        note            STRING,
+        metadataStatus  STRING,
+        tags            LIST<STRING> QUERYABLE,
+        createdAt       TIMESTAMP SORTABLE,
+        publishedAt     TIMESTAMP,
+        updatedAt       TIMESTAMP,
+        capturedAt      TIMESTAMP,
+        // JSON-encoded objects (spec §7.1).
+        source          STRING,
+        page            STRING,
+        // Markdown: `body` when its UTF-8 size is ≤ 512 KB, otherwise `bodyAsset`. Writers set exactly one.
+        body            STRING,
+        bodyAsset       ASSET,
+        GRANT WRITE TO "_creator",
+        GRANT CREATE TO "_icloud",
+        GRANT READ TO "_world"
+    );
+
+    // Phase 5 adds RECORD TYPE ImageAsset (spec §8.2).
