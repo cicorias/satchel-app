@@ -3,12 +3,17 @@
   "version": "2026.10.0",
   "private": true,
   "type": "module",
-  "description": "Item types, URL normalization, ID derivation, merge rules (spec §7).",
+  "description": "Item types, URL normalization, ID derivation, merge rules (spec \u00a77).",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./schema/item.schema.json": "./schema/item.schema.json"
   },
   "scripts": {
     "typecheck": "tsc -p .",
     "test": "vitest run"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
   }
 }

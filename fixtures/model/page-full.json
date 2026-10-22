@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "u_6934756466cbddd7758641e28103be7e",
+  "kind": "page",
+  "url": "https://developer.apple.com/documentation/safariservices/safari-web-extensions",
+  "canonicalUrl": "https://developer.apple.com/documentation/safariservices/safari-web-extensions",
+  "normalizedUrl": "https://developer.apple.com/documentation/safariservices/safari-web-extensions",
+  "title": "Safari web extensions",
+  "description": "Enhance and customize the web browsing experience on iPhone, iPad, and Mac with Safari web extensions.",
+  "siteName": "Apple Developer Documentation",
+  "author": "Apple Inc.",
+  "publishedAt": "2026-06-09T17:00:00.000Z",
+  "imageUrl": "https://developer.apple.com/tutorials/assets/elements/icons/safari/safari-96x96_2x.png",
+  "faviconUrl": "https://developer.apple.com/favicon.ico",
+  "lang": "en-US",
+  "tags": ["safari", "extensions", "ios"],
+  "note": "Read the native messaging section before Phase 3.",
+  "selection": false,
+  "createdAt": "2026-10-20T09:15:00.000Z",
+  "updatedAt": "2026-10-22T16:40:27.512Z",
+  "capturedAt": "2026-10-22T16:40:27.512Z",
+  "metadataStatus": "complete",
+  "source": { "client": "safari-ios", "version": "2026.10.0" },
+  "page": {
+    "wordCount": 1843,
+    "readingMinutes": 8,
+    "engine": "defuddle@0.19.4+turndown@7.2.4",
+    "images": [
+      {
+        "originalUrl": "https://docs-assets.developer.apple.com/published/safari-extension-diagram.png",
+        "alt": "Diagram of a Safari web extension and its containing app",
+        "status": "remote"
+      },
+      {
+        "originalUrl": "https://docs-assets.developer.apple.com/published/safari-settings.png",
+        "status": "remote"
+      }
+    ]
+  }
+}
