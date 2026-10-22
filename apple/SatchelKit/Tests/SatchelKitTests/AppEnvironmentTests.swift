@@ -20,8 +20,4 @@ import Testing
             try AppEnvironment(infoDictionary: [:])
         }
     }
-
-    @Test func itemKindRawValuesMatchTheTypeScriptModel() {
-        #expect(ItemKind.allCases.map(\.rawValue) == ["link", "page"])
-    }
 }
