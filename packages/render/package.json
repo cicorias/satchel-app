@@ -14,6 +14,13 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@satchel/model": "workspace:*"
+    "@satchel/model": "workspace:*",
+    "dompurify": "3.4.17",
+    "markdown-it": "15.0.3",
+    "markdown-it-footnote": "4.0.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "30.0.0",
+    "jsdom": "30.1.3"
   }
 }
