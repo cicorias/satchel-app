@@ -1,0 +1,705 @@
+[
+  {
+    "pageUrl": "  https://example.com/trim  ",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/trim",
+    "id": "u_08f8230c01c4620de2d8cb66b08334e4"
+  },
+  {
+    "pageUrl": "HTTPS://Example.COM/Path",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/Path",
+    "id": "u_b6c2a6931da9e0ebf2da943412098588"
+  },
+  {
+    "pageUrl": "HTTPS://WWW.Example.com:443/Docs/?utm_source=nl&b=2&a=1#top",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/Docs?a=1&b=2",
+    "id": "u_78d9ed066e58a9934dea01ae209af6a8"
+  },
+  {
+    "pageUrl": "file:///etc/hosts",
+    "canonicalUrl": null,
+    "error": "UnsupportedUrlError"
+  },
+  {
+    "pageUrl": "ftp://example.com/a",
+    "canonicalUrl": null,
+    "error": "UnsupportedUrlError"
+  },
+  {
+    "pageUrl": "http://192.168.0.1:80/a?b=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "http://192.168.0.1/a?b=1",
+    "id": "u_1995698b52b7a07505082e3c50307f18"
+  },
+  {
+    "pageUrl": "http://192.168.1.10/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "http://192.168.1.10/a",
+    "id": "u_2c184921622ca12c17165ce306b4b709"
+  },
+  {
+    "pageUrl": "http://192.168.1.10/a?x=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "http://192.168.1.10/a?x=1",
+    "id": "u_f6bfa2123f6ca22b6d460bbc2508c181"
+  },
+  {
+    "pageUrl": "http://192.168.1.11/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "http://192.168.1.11/a",
+    "id": "u_6ada47cdd604aa27e2773f98ea045a06"
+  },
+  {
+    "pageUrl": "http://example.com/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "http://example.com/a",
+    "id": "u_5bd48fa66118084cc32779267a31116d"
+  },
+  {
+    "pageUrl": "http://example.com:80/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "http://example.com/a",
+    "id": "u_5bd48fa66118084cc32779267a31116d"
+  },
+  {
+    "pageUrl": "http://intranet/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "http://intranet/a",
+    "id": "u_ffab0d7d9b3a268eb07945a781da39fd"
+  },
+  {
+    "pageUrl": "http://wiki.intranet.example:8080/handbuch/installation",
+    "canonicalUrl": null,
+    "normalizedUrl": "http://wiki.intranet.example:8080/handbuch/installation",
+    "id": "u_1d0ca36b62118a0d94cf845dc6700be2"
+  },
+  {
+    "pageUrl": "http://wiki/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "http://wiki/a",
+    "id": "u_b3b339afd063207f48d638ede655ea0f"
+  },
+  {
+    "pageUrl": "https://0x7f.0.0.1/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://127.0.0.1/a",
+    "id": "u_4e26dc29b715fc93c886c01b27f79649"
+  },
+  {
+    "pageUrl": "https://Bücher.example/Straße?q=ä#x",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://xn--bcher-kva.example/Stra%C3%9Fe?q=%C3%A4",
+    "id": "u_bc89928cd3f1436c17b5bef945a724d7"
+  },
+  {
+    "pageUrl": "https://EXAMPLE.com./a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com./a",
+    "id": "u_90243f09aec3bed5aee938720339b080"
+  },
+  {
+    "pageUrl": "https://[2001:DB8::1]:443/a/",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://[2001:db8::1]/a",
+    "id": "u_0de259d5e13b2260244a3bd6ad3495da"
+  },
+  {
+    "pageUrl": "https://alice.github.io/post",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://alice.github.io/post",
+    "id": "u_f73987db24fb3a3319efa2fafb99af77"
+  },
+  {
+    "pageUrl": "https://blog.example.org/posts/2026/10/future-proofing",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://blog.example.org/posts/2026/10/future-proofing",
+    "id": "u_56015387b59d49633eb238d764573d81"
+  },
+  {
+    "pageUrl": "https://bob.github.io/post",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://bob.github.io/post",
+    "id": "u_7ee2d49d4a33dd88f21ac55e762b4db6"
+  },
+  {
+    "pageUrl": "https://cedar-log.example.com/2026/09/build-times/?utm_source=rss&utm_medium=rss",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://cedar-log.example.com/2026/09/build-times",
+    "id": "u_75867fa07ca95ac42115600f3fa82a28"
+  },
+  {
+    "pageUrl": "https://devdocs.example.org/en-US/docs/Web/API/StorageQueue/drain",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://devdocs.example.org/en-US/docs/Web/API/StorageQueue/drain",
+    "id": "u_29956c3d02c043acfcffb6801ca48140"
+  },
+  {
+    "pageUrl": "https://developer.apple.com/documentation/safariservices/safari-web-extensions",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://developer.apple.com/documentation/safariservices/safari-web-extensions",
+    "id": "u_6934756466cbddd7758641e28103be7e"
+  },
+  {
+    "pageUrl": "https://en.lorepedia.example/wiki/Brasswick_Kettle_Bridge",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://en.lorepedia.example/wiki/Brasswick_Kettle_Bridge",
+    "id": "u_bf1cc6385580b7d62e8b4106e57429fa"
+  },
+  {
+    "pageUrl": "https://exa mple.com/a",
+    "canonicalUrl": null,
+    "error": "UnsupportedUrlError"
+  },
+  {
+    "pageUrl": "https://example.com",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/",
+    "id": "u_0f115db062b7c0dd030b16878c99dea5"
+  },
+  {
+    "pageUrl": "https://example.com/",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/",
+    "id": "u_0f115db062b7c0dd030b16878c99dea5"
+  },
+  {
+    "pageUrl": "https://example.com/\ta\nb",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/ab",
+    "id": "u_1af5bd292c7210d9c111f9012fbfc431"
+  },
+  {
+    "pageUrl": "https://example.com/#!/inbox/42",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/#!/inbox/42",
+    "id": "u_ada068bfac1f3ace31eb74b936fd487b"
+  },
+  {
+    "pageUrl": "https://example.com/#!/r?x=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/#!/r?x=1",
+    "id": "u_0a93c686c76bfd4571f05386d0ea9343"
+  },
+  {
+    "pageUrl": "https://example.com/%7Euser/%e2%82%ac",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/%7Euser/%e2%82%ac",
+    "id": "u_12345e1443cdaf2e3cad67b09822095b"
+  },
+  {
+    "pageUrl": "https://example.com/CaseSensitive",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/CaseSensitive",
+    "id": "u_12592eb0fa43395188b96263ea89eb42"
+  },
+  {
+    "pageUrl": "https://example.com/Docs?a=1&b=2",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/Docs?a=1&b=2",
+    "id": "u_78d9ed066e58a9934dea01ae209af6a8"
+  },
+  {
+    "pageUrl": "https://example.com/Path",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/Path",
+    "id": "u_b6c2a6931da9e0ebf2da943412098588"
+  },
+  {
+    "pageUrl": "https://example.com/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://example.com/a b?c d=e f",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a%20b?c%20d=e%20f",
+    "id": "u_f8ee48526b051ea60c058c3f2c5f30d6"
+  },
+  {
+    "pageUrl": "https://example.com/a#",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://example.com/a#section-2",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://example.com/a%2Fb/",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a%2Fb",
+    "id": "u_1a5c33d5e6c4f38f2ce14c4ecc172c04"
+  },
+  {
+    "pageUrl": "https://example.com/a/",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://example.com/a/./b/../c/",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a/c",
+    "id": "u_a054f4825f715249d71685db22d53bc2"
+  },
+  {
+    "pageUrl": "https://example.com/a/?x=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?x=1",
+    "id": "u_4c70119c7bfdd28cfbae5905985d9f0d"
+  },
+  {
+    "pageUrl": "https://example.com/a/b",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a/b",
+    "id": "u_ed1d4137647b6cd085dda5d4a5b637b5"
+  },
+  {
+    "pageUrl": "https://example.com/a/b?x=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a/b?x=1",
+    "id": "u_4dc5743b632f66558518b169a2a1d8fd"
+  },
+  {
+    "pageUrl": "https://example.com/a;params?x",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a;params?x",
+    "id": "u_720103bc0cedb73ba9ff5cba0a238ac4"
+  },
+  {
+    "pageUrl": "https://example.com/a?",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://example.com/a?%62=1&a=2",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=2&%62=1",
+    "id": "u_f642af23d15aebf9c9519eaf364aa64c"
+  },
+  {
+    "pageUrl": "https://example.com/a?&b=1&&a=2&",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=2&b=1",
+    "id": "u_126a86b8932eeafbba9cfa970068f4c3"
+  },
+  {
+    "pageUrl": "https://example.com/a?UTM_Source=x&FBCLID=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://example.com/a?a=1&a=3&b=2&b=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=1&a=3&b=2&b=1",
+    "id": "u_726fc342afdc516cdd3c6d8049be2d9e"
+  },
+  {
+    "pageUrl": "https://example.com/a?a=1&flag",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=1&flag",
+    "id": "u_8e0834c26271120561e146a5cfe4e1ea"
+  },
+  {
+    "pageUrl": "https://example.com/a?a=2&%62=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=2&%62=1",
+    "id": "u_f642af23d15aebf9c9519eaf364aa64c"
+  },
+  {
+    "pageUrl": "https://example.com/a?a=2&b=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=2&b=1",
+    "id": "u_126a86b8932eeafbba9cfa970068f4c3"
+  },
+  {
+    "pageUrl": "https://example.com/a?a=2&m=3&z=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=2&m=3&z=1",
+    "id": "u_e5a9b9a7029e25b4c48be2e499a22021"
+  },
+  {
+    "pageUrl": "https://example.com/a?b=2&a=1&b=1&a=3",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=1&a=3&b=2&b=1",
+    "id": "u_726fc342afdc516cdd3c6d8049be2d9e"
+  },
+  {
+    "pageUrl": "https://example.com/a?fbclid=1&gclid=2&dclid=3&msclkid=4&mc_cid=5&mc_eid=6&igshid=7&ref_src=8&_hsenc=9&_hsmi=10&yclid=11",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://example.com/a?flag&a=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=1&flag",
+    "id": "u_8e0834c26271120561e146a5cfe4e1ea"
+  },
+  {
+    "pageUrl": "https://example.com/a?gclid_x=3&ref=2&utm=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?gclid_x=3&ref=2&utm=1",
+    "id": "u_04ba5acfcc61c7b22bb88cc726771479"
+  },
+  {
+    "pageUrl": "https://example.com/a?id=7",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?id=7",
+    "id": "u_c0ba1e9ccd88788c8de13753dc53d072"
+  },
+  {
+    "pageUrl": "https://example.com/a?id=7&utm_source=x",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?id=7",
+    "id": "u_c0ba1e9ccd88788c8de13753dc53d072"
+  },
+  {
+    "pageUrl": "https://example.com/a?q=%zz",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?q=%zz",
+    "id": "u_ce3560761df8daf5e88fba71171acc4f"
+  },
+  {
+    "pageUrl": "https://example.com/a?utm=1&ref=2&gclid_x=3",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?gclid_x=3&ref=2&utm=1",
+    "id": "u_04ba5acfcc61c7b22bb88cc726771479"
+  },
+  {
+    "pageUrl": "https://example.com/a?utm_source=x&a=%20&b=+",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=%20&b=+",
+    "id": "u_3d32c8ee939a4ab1e17bdc3546a07f57"
+  },
+  {
+    "pageUrl": "https://example.com/a?utm_source=x&utm_medium=y&utm_campaign=z&utm_new_thing=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://example.com/a?x=1",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?x=1",
+    "id": "u_4c70119c7bfdd28cfbae5905985d9f0d"
+  },
+  {
+    "pageUrl": "https://example.com/a?z=1&a=2&m=3",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=2&m=3&z=1",
+    "id": "u_e5a9b9a7029e25b4c48be2e499a22021"
+  },
+  {
+    "pageUrl": "https://example.com/articles/hello-world",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/articles/hello-world",
+    "id": "u_445740458d1bf9f96939cbc420e6973c"
+  },
+  {
+    "pageUrl": "https://example.com/articles/hello-world?fbclid=abc",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/articles/hello-world",
+    "id": "u_445740458d1bf9f96939cbc420e6973c"
+  },
+  {
+    "pageUrl": "https://example.com/café",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/caf%C3%A9",
+    "id": "u_d111192409cd9af133e4ad4bf2783397"
+  },
+  {
+    "pageUrl": "https://example.com/s?q=a+b&r=c%20d",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/s?q=a+b&r=c%20d",
+    "id": "u_fae0f67b036a37ad6175972895217aaf"
+  },
+  {
+    "pageUrl": "https://example.com:443/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://example.com:80/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com:80/a",
+    "id": "u_24fefe9287c62455f5c406f005da6afa"
+  },
+  {
+    "pageUrl": "https://example.com:8080",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com:8080/",
+    "id": "u_07f7861a69b13c229c6ae596d198b276"
+  },
+  {
+    "pageUrl": "https://example.com:8443/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com:8443/a",
+    "id": "u_be01f593553344991b58f8c4c408bb6c"
+  },
+  {
+    "pageUrl": "https://example.com\\a\\b",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a/b",
+    "id": "u_ed1d4137647b6cd085dda5d4a5b637b5"
+  },
+  {
+    "pageUrl": "https://garden.example.org/guides/winter-pruning-for-beginners",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://garden.example.org/guides/winter-pruning-for-beginners",
+    "id": "u_8284cccfc13a564731fc07ca08b447a8"
+  },
+  {
+    "pageUrl": "https://github.example/ferncroft/tidepool",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://github.example/ferncroft/tidepool",
+    "id": "u_d54b81a10e6ffdffcaa35c02e945f177"
+  },
+  {
+    "pageUrl": "https://hannelore.example.net/2026/08/03/why-i-still-keep-a-paper-notebook.html",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://hannelore.example.net/2026/08/03/why-i-still-keep-a-paper-notebook.html",
+    "id": "u_38ec34269ce515c66ff1ffc507f40f80"
+  },
+  {
+    "pageUrl": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain",
+    "id": "u_4a9fdd4ebaefde2811b1280012e89373"
+  },
+  {
+    "pageUrl": "https://lab.example.net/notes/printer-calibration?view=full",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://lab.example.net/notes/printer-calibration?view=full",
+    "id": "u_894729cfb09c4b6a47d4afa4b54be61c"
+  },
+  {
+    "pageUrl": "https://m.example.com/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://m.example.com/a",
+    "id": "u_9fac04200f860819e012080dd82a6588"
+  },
+  {
+    "pageUrl": "https://medium.example/@saskia.montrose/what-a-year-of-on-call-taught-our-team-4f9a2c1b7e3d?source=rss----5517fd7b58a6---4",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://medium.example/@saskia.montrose/what-a-year-of-on-call-taught-our-team-4f9a2c1b7e3d?source=rss----5517fd7b58a6---4",
+    "id": "u_dcf0866a35a972e09d39be6b68b195b2"
+  },
+  {
+    "pageUrl": "https://news.example.co.uk/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://news.example.co.uk/a",
+    "id": "u_fbda9e81f57f94c2551ac5f28fed936b"
+  },
+  {
+    "pageUrl": "https://notes.byteorchard.example/posts/writing-a-tiny-markdown-linter/",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://notes.byteorchard.example/posts/writing-a-tiny-markdown-linter",
+    "id": "u_bca7d7c39f723cbdcf3abe302817097b"
+  },
+  {
+    "pageUrl": "https://other.org/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://other.org/a",
+    "id": "u_a0fad438f4b0cac5653d36f51e01ffc4"
+  },
+  {
+    "pageUrl": "https://quarry.readthedocs.example/en/stable/guide/workers.html#scaling",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://quarry.readthedocs.example/en/stable/guide/workers.html",
+    "id": "u_8c72952ba176703ef1fa116049d2deac"
+  },
+  {
+    "pageUrl": "https://sub.www.example.com/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://sub.www.example.com/a",
+    "id": "u_415ccff140850e30e54fc48c42e8db6c"
+  },
+  {
+    "pageUrl": "https://tidewaterletters.substack.example/p/the-quiet-economics-of-ferries?utm_source=post-email-title&publication_id=88231&r=4k2x&triedRedirect=true",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://tidewaterletters.substack.example/p/the-quiet-economics-of-ferries?publication_id=88231&r=4k2x&triedRedirect=true",
+    "id": "u_31eeea0587fb35d019e790acd3815466"
+  },
+  {
+    "pageUrl": "https://tsukimi.blog.example/entry/2026/09/28/110000",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://tsukimi.blog.example/entry/2026/09/28/110000",
+    "id": "u_c4783e6d45101694e2ccc80292745cb6"
+  },
+  {
+    "pageUrl": "https://user:pass@example.com/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://www.Bücher.example/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://xn--bcher-kva.example/a",
+    "id": "u_3b143cdb0ceaca31a25870a2fc854939"
+  },
+  {
+    "pageUrl": "https://www.craftcorner.example/videos/2026/09/hand-cut-dovetails",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://craftcorner.example/videos/2026/09/hand-cut-dovetails",
+    "id": "u_430e1da764ec14b8e68ae7f422146b30"
+  },
+  {
+    "pageUrl": "https://www.example.co.uk/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.co.uk/a",
+    "id": "u_0eae9cdf3e3558d545654dd35fd504ad"
+  },
+  {
+    "pageUrl": "https://www.example.com/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a",
+    "id": "u_2dce0a4c50441bfccfa9caf4b58c3cba"
+  },
+  {
+    "pageUrl": "https://www.example.com/a/?utm_source=x&z=1&a=2#frag",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/a?a=2&z=1",
+    "id": "u_0495e69d2f3ed26abee9ef83d3d7ccd0"
+  },
+  {
+    "pageUrl": "https://www.example.com/articles/hello-world/?utm_source=newsletter#comments",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.com/articles/hello-world",
+    "id": "u_445740458d1bf9f96939cbc420e6973c"
+  },
+  {
+    "pageUrl": "https://www.example.edu/~rkalnins/notes/linear-algebra/eigenvalues.html",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://example.edu/~rkalnins/notes/linear-algebra/eigenvalues.html",
+    "id": "u_f072aa98d52c9579da8129d38002e1a9"
+  },
+  {
+    "pageUrl": "https://www.gearbench.example/reviews/2026-portable-power-stations",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://gearbench.example/reviews/2026-portable-power-stations",
+    "id": "u_8b0c759aa13ccf539affbe1b2280b844"
+  },
+  {
+    "pageUrl": "https://www.lakeshoredaily.example/business/ferry-operator-orders-electric-vessels-1.48213?utm_source=newsletter&utm_campaign=am",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://lakeshoredaily.example/business/ferry-operator-orders-electric-vessels-1.48213",
+    "id": "u_7fadc8eb779b4095281a671fc82e50f3"
+  },
+  {
+    "pageUrl": "https://www.lanternworks.example/blog/",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://lanternworks.example/blog",
+    "id": "u_e1dfd4b547bd889dad7e5036eadb225f"
+  },
+  {
+    "pageUrl": "https://www.news.example.co.uk/local/harbour-bridge-reopens?at_medium=social#comments",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://news.example.co.uk/local/harbour-bridge-reopens?at_medium=social",
+    "id": "u_b842f7ee7d402cc8fa500f264b8254a2"
+  },
+  {
+    "pageUrl": "https://www.quietmachines.example/posts/fixing-a-1970s-desk-lamp/",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://quietmachines.example/posts/fixing-a-1970s-desk-lamp",
+    "id": "u_ae3d0d7028ac2feddf90c141bdb18095"
+  },
+  {
+    "pageUrl": "https://www.saltandember.example/recipes/brown-butter-oat-scones/",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://saltandember.example/recipes/brown-butter-oat-scones",
+    "id": "u_50274e0a33abe7754e83deb6f798a5f0"
+  },
+  {
+    "pageUrl": "https://www.slowtrails.example/journal/autumn-on-the-ridgeway",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://slowtrails.example/journal/autumn-on-the-ridgeway",
+    "id": "u_9788c16225da7ad8473037228336e9d8"
+  },
+  {
+    "pageUrl": "https://www.stadtlicht-magazin.example/kultur/2026/10/die-letzte-dampfwalze-von-kesselbrueck.html",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://stadtlicht-magazin.example/kultur/2026/10/die-letzte-dampfwalze-von-kesselbrueck.html",
+    "id": "u_86498ca49efbde6e3ff9f922db966138"
+  },
+  {
+    "pageUrl": "https://www.valleyherald.example/news/2026/10/19/library-late-fees-ended",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://valleyherald.example/news/2026/10/19/library-late-fees-ended",
+    "id": "u_b77d6de951a38997f0eb443576aa1c0c"
+  },
+  {
+    "pageUrl": "https://www.www.example.com/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://www.example.com/a",
+    "id": "u_7ea22417f447d9f9e1b7d35aae3f76e9"
+  },
+  {
+    "pageUrl": "https://www2.example.com/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://www2.example.com/a",
+    "id": "u_5dd1db21db63e23c381aff9abb00e488"
+  },
+  {
+    "pageUrl": "https://xn--bcher-kva.example/a",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://xn--bcher-kva.example/a",
+    "id": "u_3b143cdb0ceaca31a25870a2fc854939"
+  },
+  {
+    "pageUrl": "https://例え.テスト/パス",
+    "canonicalUrl": null,
+    "normalizedUrl": "https://xn--r8jz45g.xn--zckzah/%E3%83%91%E3%82%B9",
+    "id": "u_86902ef748bac691f0f5fbbc3337f5f4"
+  },
+  {
+    "pageUrl": "javascript:alert(1)",
+    "canonicalUrl": null,
+    "error": "UnsupportedUrlError"
+  },
+  {
+    "pageUrl": "mailto:a@example.com",
+    "canonicalUrl": null,
+    "error": "UnsupportedUrlError"
+  },
+  {
+    "pageUrl": "https://news.example.co.uk/a",
+    "canonicalUrl": "https://www.example.co.uk/a",
+    "normalizedUrl": "https://example.co.uk/a",
+    "id": "u_0eae9cdf3e3558d545654dd35fd504ad"
+  },
+  {
+    "pageUrl": "https://alice.github.io/p",
+    "canonicalUrl": "https://bob.github.io/p",
+    "normalizedUrl": "https://alice.github.io/p",
+    "id": "u_0f16608e4d20e0b857564f4d68acf5a3"
+  },
+  {
+    "pageUrl": "https://m.example.com/a/b?x=1",
+    "canonicalUrl": "/a/b",
+    "normalizedUrl": "https://m.example.com/a/b",
+    "id": "u_832048c69782681ae8aba3dff3947135"
+  },
+  {
+    "pageUrl": "https://example.com/a",
+    "canonicalUrl": "//cdn.example.com/a",
+    "normalizedUrl": "https://cdn.example.com/a",
+    "id": "u_f4fc97751022524844f2602b34c2592d"
+  },
+  {
+    "pageUrl": "https://例え.テスト/a",
+    "canonicalUrl": "https://www.例え.テスト/a",
+    "normalizedUrl": "https://xn--r8jz45g.xn--zckzah/a",
+    "id": "u_cfb7be02abbec594028b82f4436088da"
+  }
+]

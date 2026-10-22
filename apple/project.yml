@@ -49,6 +49,10 @@ targets:
     platform: iOS
     sources:
       - path: Satchel
+      # The JavaScriptCore model (ADR-0020), staged by the WebAssets target.
+      - path: Staged/web/model.jsc.iife.js
+        buildPhase: resources
+        optional: true
     dependencies:
       - target: WebAssets
       - target: SatchelShare
@@ -94,6 +98,10 @@ targets:
     platform: iOS
     sources:
       - path: SatchelShare
+      # The JavaScriptCore model (ADR-0020), staged by the WebAssets target.
+      - path: Staged/web/model.jsc.iife.js
+        buildPhase: resources
+        optional: true
     dependencies:
       - target: WebAssets
       - package: SatchelKit
@@ -132,6 +140,10 @@ targets:
     platform: iOS
     sources:
       - path: SatchelSafari
+      # The JavaScriptCore model (ADR-0020), staged by the WebAssets target.
+      - path: Staged/web/model.jsc.iife.js
+        buildPhase: resources
+        optional: true
     # The staged WXT Safari build is copied to the appex root (where the packager puts it; ADR-0005 addendum),
     # so the Safari extension can never drift from Chrome/Edge (spec §12.3).
     postBuildScripts:
