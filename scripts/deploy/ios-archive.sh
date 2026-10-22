@@ -10,6 +10,12 @@ xcodebuild archive \
   -project apple/Satchel.xcodeproj -scheme Satchel -configuration Release \
   -destination "generic/platform=iOS" -archivePath "$out/Satchel.xcarchive" \
   -allowProvisioningUpdates
+# iPhone only (ADR-0011): an iPad family here gets the upload rejected (ITMS-90474), so fail now instead.
+family=$(/usr/libexec/PlistBuddy -c "Print :UIDeviceFamily" "$out/Satchel.xcarchive/Products/Applications/Satchel.app/Info.plist" | tr -dc '0-9')
+if [ "$family" != 1 ]; then
+  echo "error: archived UIDeviceFamily is '$family', expected 1 (iPhone only); see settingGroups in apple/project.yml" >&2
+  exit 1
+fi
 team=$(node -p "require('./config/local.config.json').apple.developmentTeam")
 sed "s/__TEAM_ID__/$team/" scripts/deploy/ExportOptions.plist > "$out/ExportOptions.plist"
 xcodebuild -exportArchive -archivePath "$out/Satchel.xcarchive" \

@@ -18,12 +18,19 @@ settings:
   base:
     SWIFT_VERSION: "6.0"
     SWIFT_STRICT_CONCURRENCY: complete
-    TARGETED_DEVICE_FAMILY: "1"
     SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
     SUPPORTS_MACCATALYST: NO
     CODE_SIGN_STYLE: Automatic
     ENABLE_USER_SCRIPT_SANDBOXING: NO
     GENERATE_INFOPLIST_FILE: NO
+
+# XcodeGen's per-target iOS preset sets TARGETED_DEVICE_FAMILY to "1,2", which overrides the project
+# level. So every target pulls in this group instead. Shipping "1,2" made App Store Connect treat Satchel as
+# an iPad app and reject the portrait-only orientation list (ITMS-90474).
+settingGroups:
+  iphoneOnly:
+    base:
+      TARGETED_DEVICE_FAMILY: "1"
 
 packages:
   SatchelKit:
@@ -48,6 +55,7 @@ targets:
       - target: SatchelSafari
       - package: SatchelKit
     settings:
+      groups: [iphoneOnly]
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(SATCHEL_BUNDLE_ID)
         PRODUCT_NAME: Satchel
@@ -90,6 +98,7 @@ targets:
       - target: WebAssets
       - package: SatchelKit
     settings:
+      groups: [iphoneOnly]
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(SATCHEL_SHARE_BUNDLE_ID)
         PRODUCT_NAME: SatchelShare
@@ -133,6 +142,7 @@ targets:
       - target: WebAssets
       - package: SatchelKit
     settings:
+      groups: [iphoneOnly]
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(SATCHEL_SAFARI_BUNDLE_ID)
         PRODUCT_NAME: SatchelSafari
@@ -165,6 +175,7 @@ targets:
     dependencies:
       - target: Satchel
     settings:
+      groups: [iphoneOnly]
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(SATCHEL_BUNDLE_ID).uitests
         GENERATE_INFOPLIST_FILE: YES
