@@ -68,13 +68,12 @@ The schema lives in `apple/CloudKit/Satchel.ckdb` (spec §8.2): record type `Ite
    ```
 4. **First run only: reconcile the system types.** Export the live schema and diff it against the file. If the `Users` record type or the system-field lines differ from what CloudKit generated, copy CloudKit's version into `Satchel.ckdb`, then record what changed under `## Comments` in `.scratch/phase-0-foundations/issues/04-apple-portal-setup.md`.
    ```sh
-   mise run deploy:cloudkit-schema export
-   diff -u apple/CloudKit/Satchel.ckdb apple/build/cloudkit-schema.development.ckdb
+   mise run deploy:cloudkit-schema diff   # exports, then diffs with comments ignored
    ```
 5. Don't create the `Library` zone by hand. The app creates it.
 6. Skip **API tokens** for CloudKit Web Services until the Chrome/Edge phase. Spike A decides the callback URLs (ADR-0011).
 
-**Changing the schema later.** Edit `Satchel.ckdb` and run `import`. Production isn't scripted: `cktool` only imports into Development. Before a release (Phase 7), use CloudKit Console → **Deploy Schema Changes…** to promote Development to Production, then confirm with `ENV=production mise run deploy:cloudkit-schema export`. Once a field is in Production it can't be deleted or retyped, so every field addition is permanent.
+**Changing the schema later.** Edit `Satchel.ckdb` and run `import`. Production isn't scripted: `cktool` only imports into Development. Before a release (Phase 7), use CloudKit Console → **Deploy Schema Changes…** to promote Development to Production, then confirm with `ENV=production mise run deploy:cloudkit-schema diff`. Once a field is in Production it can't be deleted or retyped, so every field addition is permanent.
 
 ## 5. App Store Connect
 

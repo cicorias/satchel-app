@@ -4,8 +4,9 @@ cd "$(dirname "$0")/../.."
 # Manage the CloudKit schema from apple/CloudKit/Satchel.ckdb with Xcode's cktool (ADR-0004 addendum).
 #   scripts/deploy/cloudkit-schema.sh validate   check the file against the container (default)
 #   scripts/deploy/cloudkit-schema.sh import     validate, then replace the Development schema
-#   scripts/deploy/cloudkit-schema.sh export     write the live schema to apple/build/ for diffing
-# ENV=production works for validate and export. Production is deployed from CloudKit Console.
+#   scripts/deploy/cloudkit-schema.sh export     write the live schema to apple/build/
+#   scripts/deploy/cloudkit-schema.sh diff       export, then diff against the file (comments ignored)
+# ENV=production works for validate, export, and diff. Production is deployed from CloudKit Console.
 # One-time: `xcrun cktool save-token --type management` (stored in the keychain, never in the repo).
 action="${1:-validate}"
 env="${ENV:-development}"
@@ -41,14 +42,23 @@ case "$action" in
     xcrun cktool import-schema "${target[@]}" --validate --file "$schema"
     echo "imported $schema into $container ($env)"
     ;;
-  export)
+  export|diff)
     mkdir -p apple/build
     out="apple/build/cloudkit-schema.$env.ckdb"
     xcrun cktool export-schema "${target[@]}" --output-file "$out"
-    echo "exported to $out (compare: diff -u $schema $out)"
+    echo "exported to $out"
+    if [ "$action" = diff ]; then
+      # CloudKit drops comments and the blank lines around them; compare what it would keep.
+      if diff -u --label "$schema" --label "$out" \
+        <(grep -v '^[[:space:]]*//' "$schema" | sed -e '/./,$!d') "$out"; then
+        echo "no differences: $container ($env) matches $schema"
+      else
+        exit 1
+      fi
+    fi
     ;;
   *)
-    echo "usage: $0 [validate|import|export]" >&2
+    echo "usage: $0 [validate|import|export|diff]" >&2
     exit 2
     ;;
 esac

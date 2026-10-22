@@ -106,7 +106,7 @@ description = "Upload the exported IPA to App Store Connect / TestFlight"
 run = "scripts/deploy/ios-upload.sh"
 
 [tasks."deploy:cloudkit-schema"]
-description = "Validate, import, or export the CloudKit schema (validate|import|export; ENV=production)"
+description = "Validate, import, or export the CloudKit schema (validate|import|export|diff; ENV=production)"
 run = "scripts/deploy/cloudkit-schema.sh"
 
 [tasks."deploy:extension-zips"]

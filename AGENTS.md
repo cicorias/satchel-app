@@ -55,7 +55,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run format` | Biome and swift-format, applied in place |
 | `mise run art` | re-render every icon and store asset |
 | `mise run deploy:ios-archive` / `deploy:ios-upload` | signed archive, then TestFlight upload (see docs/setup/apple.md) |
-| `mise run deploy:cloudkit-schema [validate\|import\|export]` | check, push (Development only), or pull the CloudKit schema in `apple/CloudKit/Satchel.ckdb` with `xcrun cktool` |
+| `mise run deploy:cloudkit-schema [validate\|import\|export\|diff]` | check, push (Development only), pull, or diff the CloudKit schema in `apple/CloudKit/Satchel.ckdb` with `xcrun cktool` |
 | `mise run deploy:extension-zips` | Chrome and Edge store zips |
 
 ## Conventions
