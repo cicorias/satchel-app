@@ -280,7 +280,7 @@ flowchart LR
 
 ## 7. Data model
 
-**Package:** `packages/model` (TypeScript) mirrored by `SatchelKit` (Swift).
+**Package:** `packages/model` (TypeScript). `SatchelKit` (Swift) mirrors the types and runs the same normalization, ID, and merge code through JavaScriptCore rather than a port (ADR-0020).
 
 ### 7.1 Item
 

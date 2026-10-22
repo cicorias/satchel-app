@@ -21,6 +21,7 @@
 | 0017 | GRDB + SQLite for the Apple local store | Accepted | [0017-local-store-grdb.md](0017-local-store-grdb.md) |
 | 0018 | Work items live in the repo, not GitHub Issues | Accepted | [0018-work-items-in-repo.md](0018-work-items-in-repo.md) |
 | 0019 | Shell scripts: bash 3.2-compatible, ShellCheck-clean | Accepted | [0019-bash-3-2-and-shellcheck.md](0019-bash-3-2-and-shellcheck.md) |
+| 0020 | Swift runs the TypeScript model in JavaScriptCore | Accepted | [0020-swift-model-logic-in-javascriptcore.md](0020-swift-model-logic-in-javascriptcore.md) |
 
 ## Adding or changing an ADR
 

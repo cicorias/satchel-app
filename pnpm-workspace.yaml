@@ -7,5 +7,7 @@ packages:
 saveExact: true
 
 # pnpm's default minimumReleaseAge stays on (supply-chain hygiene); don't add excludes.
+# Install scripts run only when listed true here. core-js's postinstall only prints a funding banner.
 allowBuilds:
+  core-js: false
   esbuild: true

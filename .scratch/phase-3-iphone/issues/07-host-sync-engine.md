@@ -6,7 +6,7 @@ Blocked by: 06
 
 Implement sync in the host app only (§9.2.4). The extensions never run it (§9.2.3).
 
-- **CKSyncEngine** against the `Library` zone. Persist its state in the store, map records with ticket 05, and merge fetched changes with ticket 03's rules. On a `serverRecordChanged` conflict, merge the server record into the local one and send it again.
+- **CKSyncEngine** against the `Library` zone. Persist its state in the store, map records with ticket 05, and merge fetched changes with ticket 03's `SatchelModel.merge`, which runs in JavaScriptCore (ADR-0020); reuse one context for a whole fetch batch. On a `serverRecordChanged` conflict, merge the server record into the local one and send it again.
 - **Outbox drain:** on launch, on foreground, from `BGAppRefreshTask` (`<bundle>.sync`, already in Info.plist), and after CloudKit push notifications (`remote-notification` background mode; register for pushes).
 - **Deletes:** a delete in the library becomes a pending deletion in the engine, and a remote deletion removes the local row.
 - **iCloud account changes:** handle sign-out and switching accounts. Pause sync, keep the outbox, and report status for ticket 12. Never mix two accounts' data in one store.
