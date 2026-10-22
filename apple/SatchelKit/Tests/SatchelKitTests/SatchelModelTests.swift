@@ -81,6 +81,21 @@ import Testing
         }
     }
 
+    @Test func storeMergesThroughTheBridge() async throws {
+        let dir = FileManager.default.temporaryDirectory.appending(path: "satchel-model-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let store = try Store(url: dir.appending(path: "store.sqlite"), merge: Self.model.itemMerge)
+        let vector = try #require(
+            (try Self.vectors("merge.json") as [MergeVector]).first { $0.name == "link upgraded to a page" })
+
+        try await store.save(item: vector.a)
+        let merged = try await store.save(item: vector.b, body: "# Hello\n")
+        #expect(merged == vector.result.item)
+        #expect(try await store.item(id: vector.a.id)?.kind == .page)
+        #expect(try await store.body(for: vector.a.id) == "# Hello\n")
+    }
+
     @Test func reportsABrokenScript() {
         let broken = SatchelModel(source: "this is not javascript")
         #expect(throws: SatchelModelError.self) { try broken.itemID(forNormalizedURL: "https://example.com/") }
