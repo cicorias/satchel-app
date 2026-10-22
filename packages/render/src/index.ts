@@ -4,6 +4,7 @@
 // DOMPurify needs a DOM. In a browser or WKWebView the global `window` is used; tests and other hosts pass one in.
 
 import type { WindowLike } from 'dompurify';
+import app from '../../../config/app.config.json' with { type: 'json' };
 import { splitFrontmatter } from './frontmatter.ts';
 import { createMarkdown } from './markdown.ts';
 import { createSanitizer } from './sanitize.ts';
@@ -11,7 +12,8 @@ import { createSanitizer } from './sanitize.ts';
 export type { WindowLike } from 'dompurify';
 export { type FrontmatterSplit, splitFrontmatter } from './frontmatter.ts';
 
-export const version = '0.0.0';
+/** The app version (CalVer, ADR-0015) from config/app.config.json. */
+export const version: string = app.version;
 
 export interface RendererInit {
   /** The DOM DOMPurify works in. Defaults to `globalThis.window`. */

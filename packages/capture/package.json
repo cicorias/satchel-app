@@ -14,9 +14,13 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@satchel/model": "workspace:*"
+    "@satchel/model": "workspace:*",
+    "defuddle": "0.19.4",
+    "turndown": "7.2.4"
   },
   "devDependencies": {
-    "linkedom": "0.18.14"
+    "@types/turndown": "5.0.6",
+    "linkedom": "0.18.14",
+    "yaml": "2.9.1"
   }
 }

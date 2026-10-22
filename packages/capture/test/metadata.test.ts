@@ -70,9 +70,9 @@ describe('truncate', () => {
     expect(truncate('x'.repeat(300))).toBe('x'.repeat(300));
   });
 
-  test('cuts at the last sentence end in the second half', () => {
+  test('cuts at the last sentence end in the second half, the ellipsis replacing its full stop', () => {
     const text = `${'a'.repeat(200)}. ${'b '.repeat(100)}`;
-    expect(truncate(text)).toBe(`${'a'.repeat(200)}.…`);
+    expect(truncate(text)).toBe(`${'a'.repeat(200)}…`);
   });
 
   test('otherwise cuts at a word boundary and trims trailing punctuation', () => {

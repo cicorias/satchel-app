@@ -30,7 +30,8 @@ export function truncate(text: string, max = 300): string {
   if (text.length <= max) return text;
   const room = text.slice(0, max - 1);
   const sentenceEnd = Math.max(room.lastIndexOf('. '), room.lastIndexOf('! '), room.lastIndexOf('? '));
-  if (sentenceEnd >= max / 2) return `${room.slice(0, sentenceEnd + 1)}…`;
+  // At a sentence end, the ellipsis replaces a full stop ("…Feuerbüchse…", not "…Feuerbüchse.…").
+  if (sentenceEnd >= max / 2) return `${room.slice(0, sentenceEnd + 1).replace(/\.$/, '')}…`;
   const space = room.lastIndexOf(' ');
   const cut = space > 0 ? room.slice(0, space) : room;
   return `${cut.replace(/[\s,;:–—-]+$/, '')}…`;
