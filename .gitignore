@@ -40,3 +40,5 @@ xcuserdata/
 # --- XcodeGen writes these from project.yml ---
 apple/*/Info.plist
 apple/*/*.entitlements
+.envrc
+resume.sh
