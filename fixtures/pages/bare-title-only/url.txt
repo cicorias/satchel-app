@@ -1,0 +1,1 @@
+http://wiki.intranet.example:8080/handbuch/installation

@@ -1,0 +1,12 @@
+{
+  "title": "How We Cut Build Times in Half",
+  "description": "A walk through the caching, parallelism, and dependency changes that took our CI from 22 minutes to 11.",
+  "siteName": "The Cedar Log",
+  "canonicalUrl": "https://cedar-log.example.com/2026/09/build-times/",
+  "imageUrl": "https://cedar-log.example.com/wp-content/uploads/2026/09/build-graph.png",
+  "author": "Morgan Reyes",
+  "publishedAt": "2026-09-14T15:30:00.000Z",
+  "faviconUrl": "https://cedar-log.example.com/wp-content/uploads/2026/01/cropped-icon-180x180.png",
+  "lang": "en-US",
+  "type": "article"
+}
