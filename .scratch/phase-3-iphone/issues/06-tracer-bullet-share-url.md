@@ -14,3 +14,12 @@ The thinnest end-to-end path through every layer, before any feature work:
 - On the iPhone, sharing a link from Notes (not Safari) shows it in Satchel's list within a second of returning to the app.
 - The record is in CloudKit Console.
 - A UI test covers the simulator half of this (share sheet → list).
+
+## Comments
+
+Notes carried over from tickets 04 and 05 (2026-10-22):
+- **The Xcode project must resolve GRDB** (7.11.1) once SatchelKit is linked into the targets. `project.yml` already lists SatchelKit as a package.
+- **Wiring:** open the store with `Store(environment:merge: SatchelModel.bundled().itemMerge)`, and save through `OneShotSaver(environment:)`. Map `OneShotFailure` onto `markSent`/`markFailed`.
+- **Suspension:** post GRDB's `Database.suspendNotification`/`resumeNotification` around app and extension suspension, or iOS can kill the process for holding a database lock (0xDEAD10CC).
+- **iCloud in the extensions:** both extension targets need the iCloud entitlement, or `CKContainer(identifier:)` fails. They already have it in `project.yml`; check it on the signed device build.
+- **Device check:** run `docs/setup/manual-test-plan.md` §4 (CloudKit one-shot save) here.

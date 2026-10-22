@@ -15,3 +15,10 @@ Implement sync in the host app only (§9.2.4). The extensions never run it (§9.
 - Saves made in airplane mode sync after reconnecting (acceptance criterion).
 - An edit made on one simulator or device appears on another signed into the same iCloud account.
 - The conflict path is unit-tested with a fake engine.
+
+## Comments
+
+Notes carried over from tickets 04 and 05 (2026-10-22):
+- **Applying remote changes:** `Store.save` always queues an outbox `upsert`, so applying remote changes needs a variant that doesn't, and remote deletions need a path that removes the row without queuing a `delete`.
+- **Unknown fields:** use `ItemRecordMapper.item(from:existing:)` with the local copy, so `extra` and `selection` (which have no CloudKit column) survive a fetch.
+- **Sync state:** persist CKSyncEngine state through `Store.syncState(forKey:)`/`setSyncState`.
