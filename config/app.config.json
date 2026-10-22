@@ -8,6 +8,7 @@
   "siteUrl": "https://cicorias.github.io/satchel-app/",
   "apple": {
     "teamName": "CedarLogic LLC",
+    "appStoreName": "Satchel - Web Clipper",
     "bundleId": "com.cedarlogic.satchel",
     "shareExtensionBundleId": "com.cedarlogic.satchel.share",
     "safariExtensionBundleId": "com.cedarlogic.satchel.safari",

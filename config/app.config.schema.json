@@ -5,7 +5,8 @@
   "required": ["name", "slug", "version", "apple", "web"],
   "properties": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "description": "Product name: the label under the iOS icon (CFBundleDisplayName) and the extension name. Keep it short"
     },
     "slug": {
       "type": "string",
@@ -39,6 +40,10 @@
         "deploymentTarget"
       ],
       "properties": {
+        "appStoreName": {
+          "type": "string",
+          "description": "The App Store listing name, set in App Store Connect. It must be unique in the store, so it can differ from `name`. Not compiled into the app"
+        },
         "teamName": {
           "type": "string",
           "description": "Used to look up the Team ID from Xcode; the ID itself lives in config/local.config.json"

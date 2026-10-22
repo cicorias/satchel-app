@@ -77,7 +77,7 @@ The schema lives in `apple/CloudKit/Satchel.ckdb` (spec §8.2): record type `Ite
 
 ## 5. App Store Connect
 
-1. **Apps → + → New App:** platform iOS. Name: **Satchel**. If that name is taken in the store, use something like *Satchel – Web Clipper* and record it in `config/app.config.json`. Primary language English (U.S.), bundle ID `com.cedarlogic.satchel`, SKU `satchel-ios`, full access.
+1. **Apps → + → New App:** platform iOS. Name: **Satchel**. If that name is taken in the store, use something like *Satchel - Web Clipper*. Record it as `apple.appStoreName` in `config/app.config.json`, and leave `name` as **Satchel**. The store name only lives in App Store Connect and must be unique there. `name` is the label under the icon, which doesn't need to be unique and should stay short. Primary language English (U.S.), bundle ID `com.cedarlogic.satchel`, SKU `satchel-ios`, full access.
 2. **TestFlight → Internal Testing →** create a group (e.g. `Developers`) and add yourself.
 3. **App Store Connect API key** (for `mise run deploy:ios-upload`):
    1. Go to **Users and Access → Integrations → App Store Connect API → Team Keys**, click **+**, name it `satchel-upload`, and choose the **App Manager** role.
