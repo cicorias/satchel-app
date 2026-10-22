@@ -15,7 +15,7 @@ Satchel's own code is source-available (see `LICENSE`). It incorporates or is bu
 | [markdown-it-footnote](https://github.com/markdown-it/markdown-it-footnote) 4.0.0 | MIT | footnotes in rendered Markdown | in use |
 | [DOMPurify](https://github.com/cure53/DOMPurify) 3.4.17 | Apache-2.0 or MPL-2.0 | sanitizing rendered output (`packages/render`) | in use |
 | markdown-it's dependencies: [entities](https://github.com/fb55/entities), [linkify-it](https://github.com/markdown-it/linkify-it), [mdurl](https://github.com/markdown-it/mdurl), [uc.micro](https://github.com/markdown-it/uc.micro), [punycode.js](https://github.com/mathiasbynens/punycode.js) | entities: BSD-2-Clause; the rest: MIT | bundled into `render.iife.js` with markdown-it | in use |
-| [GRDB.swift](https://github.com/groue/GRDB.swift) | MIT | SQLite local store (ADR-0017) | planned for Phase 3 |
+| [GRDB.swift](https://github.com/groue/GRDB.swift) 7.11.1 | MIT | SQLite local store, migrations, and FTS5 search in `SatchelKit` (ADR-0017) | in use |
 
 Ported rules keep their original copyright headers in the source files:
 
