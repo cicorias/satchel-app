@@ -4,9 +4,10 @@ Committed work tracking (ADR-0018). The conventions are in `docs/agents/issue-tr
 
 | Folder | What | Order |
 |---|---|---|
-| [`phase-0-foundations/`](phase-0-foundations/spec.md) | remaining spikes and human-only setup | now |
-| [`phase-1-capture-engine/`](phase-1-capture-engine/spec.md) | model, capture engine, renderer, golden fixtures | after the Phase 0 spikes |
+| [`phase-0-foundations/`](phase-0-foundations/spec.md) | spikes and human-only setup | spikes done; 05–07 are yours |
+| [`phase-1-capture-engine/`](phase-1-capture-engine/spec.md) | model, capture engine, renderer, golden fixtures | done (ticket 10 waits for Defuddle 0.19.5) |
+| [`phase-3-iphone/`](phase-3-iphone/spec.md) | iPhone app, Share Extension, Safari extension, CloudKit sync | now |
 
-Phase 3 (iPhone app) and Phase 2 (Chrome/Edge) get their own folders once Phase 1 is under way (ADR-0011).
+Phase 2 (Chrome/Edge) gets its folder after Phase 3, and the Mac app after that (ADR-0011).
 
 To find the next item, look for files with `Status: ready-for-agent` (or `ready-for-human`) whose `Blocked by:` tickets are all `resolved`. Take them lowest-numbered first.
