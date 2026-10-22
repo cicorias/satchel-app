@@ -1,0 +1,12 @@
+{
+  "title": "Calibrating lidar in the rain",
+  "description": "Field notes on why wet weather skews our point clouds, and the three-step recalibration routine that fixed it.",
+  "siteName": "Northfield Robotics",
+  "canonicalUrl": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain",
+  "imageUrl": "https://journal.northfield-robotics.example/media/lidar-rain-1600.jpg",
+  "author": "Amara Velasquez-Thorne, Jun Takeda-Price",
+  "publishedAt": "2026-09-30T06:15:00.000Z",
+  "faviconUrl": "https://journal.northfield-robotics.example/favicon.ico",
+  "lang": "en",
+  "type": "TechArticle"
+}

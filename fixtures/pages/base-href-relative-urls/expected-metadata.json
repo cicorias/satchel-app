@@ -1,0 +1,11 @@
+{
+  "title": "Calibrating the lab printer’s first layer",
+  "description": "A checklist for levelling the bed, setting the Z offset, and tuning first-layer flow on the shared lab printer.",
+  "siteName": "Makerspace Lab Notes",
+  "canonicalUrl": "https://lab.example.net/notes/printer-calibration",
+  "imageUrl": "https://lab.example.net/static/notes/printer/img/cover.jpg",
+  "publishedAt": "2026-09-02T00:00:00.000Z",
+  "faviconUrl": "https://lab.example.net/static/icons/touch-180.png",
+  "lang": "en",
+  "type": "article"
+}

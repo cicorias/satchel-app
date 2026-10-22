@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: https://ogp.me/ns#">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.6803c6f0.png">
+<link rel="manifest" href="/manifest.f42880861b394dd4dc9b.json">
+<meta name="application-name" content="DevDocs Reference">
+<meta name="theme-color" content="#ffffff">
+<title>StorageQueue: drain() method - Web APIs | DevDocs Reference</title>
+<link rel="alternate" title="StorageQueue: drain() method" href="https://devdocs.example.org/de/docs/Web/API/StorageQueue/drain" hreflang="de">
+<link rel="alternate" title="StorageQueue: drain() method" href="https://devdocs.example.org/en-US/docs/Web/API/StorageQueue/drain" hreflang="en">
+<meta name="description" content="The drain() method of the StorageQueue interface returns a Promise that resolves once every pending write in the queue has been flushed to disk.">
+<meta property="og:url" content="https://devdocs.example.org/en-US/docs/Web/API/StorageQueue/drain">
+<meta property="og:title" content="StorageQueue: drain() method - Web APIs | DevDocs Reference">
+<meta property="og:locale" content="en_US">
+<meta property="og:description" content="The drain() method of the StorageQueue interface returns a Promise that resolves once every pending write in the queue has been flushed to disk.">
+<meta property="og:image" content="https://devdocs.example.org/devdocs-social-share.png">
+<meta property="og:image:type" content="image/png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://devdocs.example.org/en-US/docs/Web/API/StorageQueue/drain">
+</head>
+<body>
+<ul id="nav-access" class="a11y-nav"><li><a href="#content">Skip to main content</a></li><li><a href="#search">Skip to search</a></li></ul>
+<div class="page-wrapper category-api document-page">
+  <header class="top-navigation">
+    <a class="logo" href="/en-US/">DevDocs Reference</a>
+    <nav class="main-nav"><ul><li><a href="/en-US/docs/Web">References</a></li><li><a href="/en-US/docs/Learn">Guides</a></li><li><a href="/en-US/blog/">Blog</a></li></ul></nav>
+    <form id="search" role="search"><input type="search" name="q" placeholder="Search"></form>
+  </header>
+  <div class="article-actions-container">
+    <nav class="breadcrumbs-container" aria-label="Breadcrumb"><ol><li><a href="/en-US/docs/Web">Web</a></li><li><a href="/en-US/docs/Web/API">Web APIs</a></li><li><a href="/en-US/docs/Web/API/StorageQueue">StorageQueue</a></li><li><a href="/en-US/docs/Web/API/StorageQueue/drain">drain()</a></li></ol></nav>
+  </div>
+  <div class="main-wrapper">
+    <nav id="sidebar-quicklinks" class="sidebar" aria-label="Related Topics">
+      <p class="sidebar-heading">Storage Queue API</p>
+      <ol>
+        <li><strong><a href="/en-US/docs/Web/API/StorageQueue">StorageQueue</a></strong></li>
+        <li class="toggle"><details open><summary>Instance methods</summary><ol><li><a href="/en-US/docs/Web/API/StorageQueue/enqueue">enqueue()</a></li><li><em><a href="/en-US/docs/Web/API/StorageQueue/drain" aria-current="page">drain()</a></em></li><li><a href="/en-US/docs/Web/API/StorageQueue/abort">abort()</a></li></ol></details></li>
+        <li class="toggle"><details><summary>Instance properties</summary><ol><li><a href="/en-US/docs/Web/API/StorageQueue/pending">pending</a></li><li><a href="/en-US/docs/Web/API/StorageQueue/state">state</a></li></ol></details></li>
+        <li class="toggle"><details><summary>Events</summary><ol><li><a href="/en-US/docs/Web/API/StorageQueue/drained_event">drained</a></li></ol></details></li>
+      </ol>
+    </nav>
+    <main id="content" class="main-content">
+      <article class="main-page-content" lang="en-US">
+        <header><h1>StorageQueue: drain() method</h1></header>
+        <div class="section-content">
+          <p><span class="badge secure">Secure context:</span> This feature is available only in secure contexts (HTTPS), in some or all supporting browsers.</p>
+          <p>The <strong><code>drain()</code></strong> method of the <a href="/en-US/docs/Web/API/StorageQueue"><code>StorageQueue</code></a> interface returns a <a href="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a> that resolves once every pending write in the queue has been flushed to disk.</p>
+          <p>Calling <code>drain()</code> does not stop new writes from being added. Writes enqueued after the call are not waited for; call <code>drain()</code> again if you need them flushed too.</p>
+          <div class="notecard note"><p><strong>Note:</strong> On some platforms the operating system may cache writes after the browser hands them off, so a resolved promise means the browser has finished, not necessarily the disk.</p></div>
+        </div>
+        <section aria-labelledby="syntax"><h2 id="syntax"><a href="#syntax">Syntax</a></h2>
+          <div class="code-example"><div class="example-header"><span class="language-name">js</span></div><pre class="brush: js notranslate"><code>drain()
+drain(options)</code></pre></div>
+        </section>
+        <section aria-labelledby="parameters"><h3 id="parameters"><a href="#parameters">Parameters</a></h3>
+          <dl>
+            <dt><code>options</code> <span class="badge inline optional">Optional</span></dt>
+            <dd><p>An object with the following property:</p><dl><dt><code>timeout</code></dt><dd><p>The number of milliseconds to wait before rejecting. Defaults to no timeout.</p></dd></dl></dd>
+          </dl>
+        </section>
+        <section aria-labelledby="return_value"><h3 id="return_value"><a href="#return_value">Return value</a></h3><p>A <code>Promise</code> that fulfills with <code>undefined</code>.</p></section>
+        <section aria-labelledby="exceptions"><h3 id="exceptions"><a href="#exceptions">Exceptions</a></h3>
+          <dl><dt><code>TimeoutError</code> <code>DOMException</code></dt><dd><p>Returned if the timeout elapses before the queue is empty.</p></dd><dt><code>InvalidStateError</code> <code>DOMException</code></dt><dd><p>Returned if the queue was aborted.</p></dd></dl>
+        </section>
+        <section aria-labelledby="examples"><h2 id="examples"><a href="#examples">Examples</a></h2>
+          <p>This example writes a batch of records and waits until all of them are stored before showing a confirmation.</p>
+          <div class="code-example"><div class="example-header"><span class="language-name">js</span></div><pre class="brush: js notranslate"><code>const queue = await navigator.storageQueue.open("drafts");
+for (const draft of drafts) {
+  queue.enqueue(draft.id, draft);
+}
+await queue.drain({ timeout: 5000 });
+status.textContent = "All drafts saved";</code></pre></div>
+        </section>
+        <section aria-labelledby="specifications"><h2 id="specifications"><a href="#specifications">Specifications</a></h2>
+          <table class="standard-table"><thead><tr><th scope="col">Specification</th></tr></thead><tbody><tr><td><a href="https://spec.example.org/storage-queue/#dom-storagequeue-drain">Storage Queue<br><small># dom-storagequeue-drain</small></a></td></tr></tbody></table>
+        </section>
+        <section aria-labelledby="browser_compatibility"><h2 id="browser_compatibility"><a href="#browser_compatibility">Browser compatibility</a></h2>
+          <table class="bc-table"><thead><tr><th></th><th>Desktop A</th><th>Desktop B</th><th>Mobile A</th></tr></thead><tbody><tr><th scope="row"><code>drain</code></th><td>128</td><td>No</td><td>128</td></tr><tr><th scope="row"><code>options.timeout</code></th><td>131</td><td>No</td><td>131</td></tr></tbody></table>
+        </section>
+        <section aria-labelledby="see_also"><h2 id="see_also"><a href="#see_also">See also</a></h2><ul><li><a href="/en-US/docs/Web/API/StorageQueue/enqueue"><code>StorageQueue.enqueue()</code></a></li><li><a href="/en-US/docs/Web/API/Storage_Queue_API">Storage Queue API</a></li></ul></section>
+      </article>
+      <aside class="metadata"><div class="metadata-content-container"><p class="last-modified-date">This page was last modified on Sep 30, 2026 by contributors.</p></div></aside>
+    </main>
+    <aside class="toc"><section class="document-toc"><h2>In this article</h2><ul><li><a href="#syntax">Syntax</a></li><li><a href="#examples">Examples</a></li><li><a href="#specifications">Specifications</a></li><li><a href="#browser_compatibility">Browser compatibility</a></li><li><a href="#see_also">See also</a></li></ul></section></aside>
+  </div>
+  <footer id="nav-footer" class="page-footer"><p>Content is available under a Creative Commons Attribution-ShareAlike license. Code samples are in the public domain.</p></footer>
+</div>
+</body>
+</html>

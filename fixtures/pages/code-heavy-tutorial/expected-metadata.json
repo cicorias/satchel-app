@@ -1,0 +1,12 @@
+{
+  "title": "Writing a tiny Markdown linter in three languages",
+  "description": "Rules, a tokenizer, and test fixtures: the same small linter written in Python, TypeScript, and Go.",
+  "siteName": "Byte Orchard",
+  "canonicalUrl": "https://notes.byteorchard.example/posts/writing-a-tiny-markdown-linter/",
+  "imageUrl": "https://notes.byteorchard.example/og/tiny-linter.png",
+  "author": "Ilse Marchetti",
+  "publishedAt": "2026-06-22T01:45:00.000Z",
+  "faviconUrl": "https://notes.byteorchard.example/favicon.ico",
+  "lang": "en",
+  "type": "BlogPosting"
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="https://lab.example.net/static/notes/printer/">
+<title>Calibrating the lab printer&#39;s first layer</title>
+<meta name="description" content="A checklist for levelling the bed, setting the Z offset, and tuning first-layer flow on the shared lab printer.">
+<meta property="og:title" content="Calibrating the lab printer’s first layer">
+<meta property="og:site_name" content="Makerspace Lab Notes">
+<meta property="og:type" content="article">
+<meta property="og:image" content="img/cover.jpg">
+<link rel="canonical" href="/notes/printer-calibration">
+<link rel="apple-touch-icon" sizes="180x180" href="../../icons/touch-180.png">
+<link rel="icon" sizes="32x32" href="../../icons/favicon-32.png">
+<link rel="stylesheet" href="css/notes.css">
+</head>
+<body>
+<header><a href="../../../">Makerspace Lab Notes</a><nav><a href="../../../notes/">All notes</a> <a href="../../../equipment/">Equipment</a> <a href="../../../booking/">Book a machine</a></nav></header>
+<main>
+  <article>
+    <h1>Calibrating the lab printer’s first layer</h1>
+    <p class="meta">Maintained by the 3D printing volunteers. Last checked <time datetime="2026-09-02">2 September 2026</time>.</p>
+    <p>Most failed prints on the shared printer fail in the first five minutes, and almost all of those are first-layer problems. This page is the checklist the volunteers use after the bed has been moved, the nozzle swapped, or someone has had a bad afternoon with a scraper.</p>
+    <p>Jump to <a href="#tuning">flow tuning</a> if the bed is already level, or see the <a href="../../../notes/printer-maintenance">maintenance schedule</a> for the full service routine.</p>
+    <h2 id="levelling">1. Level the bed</h2>
+    <p>Heat the bed to sixty degrees first, because it moves as it warms up. Run the levelling routine from the touchscreen and check the mesh. If any corner is more than three tenths of a millimetre off, adjust the knob under that corner and run it again.</p>
+    <figure><img src="img/step-1-mesh.jpg" alt="The bed mesh shown on the printer's touchscreen" width="960" height="540"><figcaption>A good mesh is mostly green.</figcaption></figure>
+    <h2 id="offset">2. Set the Z offset</h2>
+    <p>Print the single-layer test square from <a href="files/first-layer-square.3mf">first-layer-square.3mf</a> and adjust the offset while it prints. The lines should be slightly squashed and touch each other without ridges.</p>
+    <figure><img src="/static/shared/img/z-offset-comparison.jpg" alt="Three test squares: too high, correct, and too low" width="960" height="320"><figcaption>Too high, about right, too low.</figcaption></figure>
+    <h2 id="tuning">3. Tune first-layer flow</h2>
+    <p>If the square is right in the middle but rough at the edges, raise first-layer flow by five percent at a time in the slicer profile. Record the final value on the sheet taped to the side of the printer so the next person does not repeat the work.</p>
+    <img src="img/flow-sheet.png" alt="The paper record sheet on the printer enclosure" width="640" height="480">
+  </article>
+</main>
+<footer><p>Questions? Ask in the volunteers channel or leave a note at the front desk.</p><a href="../../../privacy">Privacy</a></footer>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lecture 7: Eigenvalues &amp; eigenvectors</title>
+<meta name="description" content="Notes for MATH 2410, Lecture 7: characteristic polynomials, eigenspaces, and diagonalization.">
+<meta name="author" content="R. Kalniņš">
+<link rel="stylesheet" href="../../css/notes.css">
+<link rel="stylesheet" href="../../vendor/katex/katex.min.css">
+</head>
+<body>
+<header class="course-header"><a href="../">MATH 2410 Linear Algebra</a> · Autumn 2026</header>
+<nav class="lecture-list" aria-label="Lectures">
+  <ol start="5"><li><a href="determinants.html">Determinants</a></li><li><a href="change-of-basis.html">Change of basis</a></li><li><a href="eigenvalues.html" aria-current="page">Eigenvalues &amp; eigenvectors</a></li><li><a href="orthogonality.html">Orthogonality</a></li></ol>
+</nav>
+<article class="notes">
+  <h1>Lecture 7: Eigenvalues and eigenvectors</h1>
+  <p class="revised">Notes revised <time datetime="2026-02-17">17 February 2026</time>.</p>
+  <h2 id="definition">1. Definition</h2>
+  <p>Let <math data-latex="A"><mi>A</mi></math> be an <math data-latex="n \times n"><mi>n</mi><mo>×</mo><mi>n</mi></math> matrix. A nonzero vector <math data-latex="\mathbf{v}"><mi mathvariant="bold">v</mi></math> is an <dfn>eigenvector</dfn> of <math data-latex="A"><mi>A</mi></math> if multiplying by the matrix only stretches it, so that <math data-latex="A\mathbf{v} = \lambda \mathbf{v}"><mi>A</mi><mi mathvariant="bold">v</mi><mo>=</mo><mi>λ</mi><mi mathvariant="bold">v</mi></math> for some scalar <math data-latex="\lambda"><mi>λ</mi></math>, called the <dfn>eigenvalue</dfn>.</p>
+  <p>Rearranging, we need <math data-latex="(A - \lambda I)\mathbf{v} = \mathbf{0}"><mo>(</mo><mi>A</mi><mo>−</mo><mi>λ</mi><mi>I</mi><mo>)</mo><mi mathvariant="bold">v</mi><mo>=</mo><mn mathvariant="bold">0</mn></math> to have a nonzero solution, which happens exactly when the matrix is singular:</p>
+  <math display="block" data-latex="\det(A - \lambda I) = 0"><mrow><mo>det</mo><mo>(</mo><mi>A</mi><mo>−</mo><mi>λ</mi><mi>I</mi><mo>)</mo><mo>=</mo><mn>0</mn></mrow></math>
+  <p>The left-hand side is a polynomial of degree <math data-latex="n"><mi>n</mi></math> in <math data-latex="\lambda"><mi>λ</mi></math>, the <dfn>characteristic polynomial</dfn>. Its roots are the eigenvalues, counted with multiplicity.</p>
+  <h2 id="example">2. A worked example</h2>
+  <p>Take the matrix below. Its characteristic polynomial factors neatly, which is not typical, but it keeps the arithmetic short.</p>
+  <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mo>=</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mn>4</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>2</mn></mtd><mtd><mn>3</mn></mtd></mtr></mtable><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">A = \begin{pmatrix} 4 &amp; 1 \\ 2 &amp; 3 \end{pmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="mord mathnormal">A</span><span class="mrel">=</span><span class="minner">(4 1; 2 3)</span></span></span></span></span>
+  <p>Expanding gives <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>λ</mi><mn>2</mn></msup><mo>−</mo><mn>7</mn><mi>λ</mi><mo>+</mo><mn>10</mn><mo>=</mo><mo>(</mo><mi>λ</mi><mo>−</mo><mn>5</mn><mo>)</mo><mo>(</mo><mi>λ</mi><mo>−</mo><mn>2</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">\lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="mord">λ²−7λ+10=(λ−5)(λ−2)</span></span></span></span>, so the eigenvalues are 5 and 2. Substituting each back into <math data-latex="A - \lambda I"><mi>A</mi><mo>−</mo><mi>λ</mi><mi>I</mi></math> and solving gives one eigenvector for each.</p>
+  <h2 id="diagonalization">3. Diagonalization</h2>
+  <p>When an <math data-latex="n \times n"><mi>n</mi><mo>×</mo><mi>n</mi></math> matrix has <math data-latex="n"><mi>n</mi></math> linearly independent eigenvectors, we can collect them as the columns of a matrix <math data-latex="P"><mi>P</mi></math> and write</p>
+  <math display="block" data-latex="A = P D P^{-1}"><mrow><mi>A</mi><mo>=</mo><mi>P</mi><mi>D</mi><msup><mi>P</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow></math>
+  <p>where <math data-latex="D"><mi>D</mi></math> is diagonal with the eigenvalues on its diagonal. Powers then become easy, since <math data-latex="A^k = P D^k P^{-1}"><msup><mi>A</mi><mi>k</mi></msup><mo>=</mo><mi>P</mi><msup><mi>D</mi><mi>k</mi></msup><msup><mi>P</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></math> and raising a diagonal matrix to a power only raises each diagonal entry.</p>
+  <p><strong>Exercise.</strong> Show that a matrix with a repeated eigenvalue may or may not be diagonalizable, by finding one example of each.</p>
+</article>
+<footer class="course-footer"><p>Office hours: Tuesdays 14:00–16:00, Room 3.12. Problem set 4 is due on Friday at noon.</p></footer>
+</body>
+</html>

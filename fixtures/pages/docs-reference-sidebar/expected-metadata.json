@@ -1,0 +1,9 @@
+{
+  "title": "StorageQueue: drain() method - Web APIs | DevDocs Reference",
+  "description": "The drain() method of the StorageQueue interface returns a Promise that resolves once every pending write in the queue has been flushed to disk.",
+  "siteName": "DevDocs Reference",
+  "canonicalUrl": "https://devdocs.example.org/en-US/docs/Web/API/StorageQueue/drain",
+  "imageUrl": "https://devdocs.example.org/devdocs-social-share.png",
+  "faviconUrl": "https://devdocs.example.org/apple-touch-icon.6803c6f0.png",
+  "lang": "en-US"
+}
