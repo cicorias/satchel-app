@@ -1,5 +1,3 @@
-// Placeholder for Phase 1 (spec §7): Item types, URL normalization, ID derivation, merge rules.
+// @satchel/model (spec §7): Item types and their JSON contract. URL normalization, IDs, and merge rules follow.
 
-export const SCHEMA_VERSION = 1 as const;
-
-export type ClientId = 'chrome' | 'edge' | 'safari-ios' | 'safari-macos' | 'ios-share' | 'ios-app' | 'macos-app';
+export * from './item.ts';

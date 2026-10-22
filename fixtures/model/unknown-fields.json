@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "u_56015387b59d49633eb238d764573d81",
+  "kind": "page",
+  "url": "https://blog.example.org/posts/2026/10/future-proofing",
+  "canonicalUrl": "https://blog.example.org/posts/2026/10/future-proofing",
+  "normalizedUrl": "https://blog.example.org/posts/2026/10/future-proofing",
+  "title": "Fields from a newer client",
+  "tags": ["compat"],
+  "createdAt": "2026-10-22T10:00:00.000Z",
+  "updatedAt": "2026-10-22T10:00:00.000Z",
+  "metadataStatus": "complete",
+  "source": { "client": "chrome", "version": "2027.1.0", "build": 4211 },
+  "page": {
+    "wordCount": 0,
+    "readingMinutes": 0,
+    "engine": "defuddle@0.20.0+turndown@7.2.4",
+    "images": [{ "originalUrl": "https://blog.example.org/a.png", "status": "remote", "width": 640, "dominantColor": "#336699" }],
+    "outline": [{ "level": 2, "text": "Introduction" }]
+  },
+  "readingProgress": { "fraction": 0.42, "updatedAt": "2026-10-22T11:00:00.000Z" },
+  "archived": true,
+  "highlights": [],
+  "x-experiment": null
+}

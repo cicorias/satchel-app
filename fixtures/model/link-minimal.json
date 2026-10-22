@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "u_445740458d1bf9f96939cbc420e6973c",
+  "kind": "link",
+  "url": "https://www.example.com/articles/hello-world/?utm_source=newsletter#comments",
+  "canonicalUrl": "https://example.com/articles/hello-world",
+  "normalizedUrl": "https://example.com/articles/hello-world",
+  "title": "Hello, World",
+  "tags": [],
+  "createdAt": "2026-10-22T14:03:11.000Z",
+  "updatedAt": "2026-10-22T14:03:11.000Z",
+  "metadataStatus": "pending",
+  "source": { "client": "ios-share", "version": "2026.10.0" }
+}

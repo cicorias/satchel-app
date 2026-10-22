@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:satchel:schema:item:1",
+  "title": "Satchel Item (schemaVersion 1)",
+  "description": "Spec §7.1. Unknown properties are allowed at every level so newer clients' fields survive a round trip.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "kind",
+    "url",
+    "canonicalUrl",
+    "normalizedUrl",
+    "title",
+    "tags",
+    "createdAt",
+    "updatedAt",
+    "metadataStatus",
+    "source"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^u_[0-9a-f]{32}$" },
+    "kind": { "enum": ["link", "page"] },
+    "url": { "$ref": "#/$defs/httpUrl" },
+    "canonicalUrl": { "$ref": "#/$defs/httpUrl" },
+    "normalizedUrl": { "$ref": "#/$defs/httpUrl" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "siteName": { "type": "string" },
+    "author": { "type": "string" },
+    "publishedAt": { "type": "string", "format": "date-time" },
+    "imageUrl": { "type": "string", "format": "uri" },
+    "faviconUrl": { "type": "string", "format": "uri" },
+    "lang": { "type": "string", "minLength": 1 },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[^\\p{Lu}\\s](?:[^\\p{Lu}]*[^\\p{Lu}\\s])?$" }
+    },
+    "note": { "type": "string" },
+    "selection": { "type": "boolean" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "metadataStatus": { "enum": ["complete", "pending", "failed"] },
+    "source": {
+      "type": "object",
+      "required": ["client", "version"],
+      "properties": {
+        "client": { "enum": ["chrome", "edge", "safari-ios", "safari-macos", "ios-share", "ios-app", "macos-app"] },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "page": {
+      "type": "object",
+      "required": ["wordCount", "readingMinutes", "engine", "images"],
+      "properties": {
+        "wordCount": { "type": "integer", "minimum": 0 },
+        "readingMinutes": { "type": "integer", "minimum": 0 },
+        "engine": { "type": "string", "minLength": 1 },
+        "images": { "type": "array", "items": { "$ref": "#/$defs/imageRef" } }
+      }
+    }
+  },
+  "$defs": {
+    "httpUrl": { "type": "string", "format": "uri", "pattern": "^https?://" },
+    "imageRef": {
+      "type": "object",
+      "required": ["originalUrl", "status"],
+      "properties": {
+        "originalUrl": { "type": "string", "format": "uri" },
+        "alt": { "type": "string" },
+        "status": { "enum": ["remote", "stored", "failed"] },
+        "assetKey": { "type": "string" },
+        "contentType": { "type": "string" },
+        "bytes": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}
