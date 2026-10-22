@@ -1,6 +1,7 @@
 // Metadata resolution from "data islands" (spec §4.2): <head> tags and JSON-LD only, the fast path for link
 // mode. Each field takes the first non-empty source in the §4.2 priority order.
 
+import { linkExcerpt } from './excerpt.ts';
 import { type JsonLd, readJsonLd, typesOf } from './json-ld.ts';
 import { absoluteHttpUrl, clean, isoDate, truncate } from './text.ts';
 
@@ -86,7 +87,15 @@ function jsonLdNames(doc: Document, ld: JsonLd, value: unknown): string | undefi
 
 const looksLikeUrl = (value: string | undefined) => value !== undefined && /^https?:\/\//i.test(value);
 
-export function extractMetadata(doc: Document, pageUrl: string): MetadataResult {
+export interface MetadataOptions {
+  /**
+   * End the description chain with the link-mode body excerpt (§4.3). Page mode turns this off and uses
+   * Defuddle's description and its own excerpt from the extracted content instead.
+   */
+  bodyExcerpt?: boolean;
+}
+
+export function extractMetadata(doc: Document, pageUrl: string, options: MetadataOptions = {}): MetadataResult {
   const warnings: string[] = [];
   const page = new URL(pageUrl);
   const base = absoluteHttpUrl(doc.querySelector('base[href]')?.getAttribute('href')?.trim(), pageUrl) ?? pageUrl;
@@ -114,6 +123,7 @@ export function extractMetadata(doc: Document, pageUrl: string): MetadataResult 
     tag('twitter:description'),
     tag('description'),
     field('description'),
+    options.bodyExcerpt === false ? undefined : linkExcerpt(doc),
   );
 
   const siteName = first(tag('og:site_name'), clean(doc, publisher?.name), tag('application-name')) ?? hostname;

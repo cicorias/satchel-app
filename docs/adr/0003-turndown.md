@@ -46,3 +46,28 @@
 - **On each Defuddle bump,** diff upstream `src/markdown.ts` between the two tags and cherry-pick the fixes we want.
 
 Full findings: [Spike C research](../../.scratch/phase-0-foundations/research/02-spike-c-defuddle-markdown.md).
+
+## Addendum (2026-10-22): the port, and the Defuddle behaviors we kept or dropped
+
+Phase 1 ticket 06 ported Defuddle 0.19.4's rules into `packages/capture/src/markdown/convert.ts`, with the MIT header and the full notice in `THIRD_PARTY_NOTICES.md`. These are the decisions Spike C left open:
+
+| Defuddle behavior | Decision | Why |
+|---|---|---|
+| Strips a leading `# H1` | **Kept.** The body then starts with our own `# <title>`. | One heading per document, always the resolved title. Defuddle usually demotes the article's `<h1>` to `<h2>` anyway. |
+| `<mark>` → `==highlight==` | **Dropped.** `<mark>` is kept as inline HTML. | `==` is Obsidian-only. Inline `<mark>` renders in Obsidian, GitHub, and our renderer (`packages/render` allows it). |
+| YouTube/X embeds → `![](url)` | **Dropped.** They become a link on its own line: `[YouTube video](https://www.youtube.com/watch?v=…)`, `[Post on X](…)`. Other `<iframe>`, `<video>`, `<audio>`, `<embed>`, and `<object>` become `[Embedded content](src)`, `[Video](src)`, or `[Audio](src)`. | `![](page-url)` is Obsidian's embed syntax. Anywhere else, it's a broken image. |
+| Keeps `<iframe>`, `<video>`, `<audio>`, `<svg>`, `<math>` as raw HTML | **Dropped.** Only `<sup>`, `<sub>`, and `<mark>` stay as HTML. Media become links (above), `<svg>` is removed, and `<math>` becomes `$…$`. | Raw embeds in stored Markdown would load third-party content wherever the file is opened. The renderer strips them anyway. |
+| Tab-indented nested lists | **Kept.** | It is valid CommonMark, and it is what Obsidian users expect. |
+| "Partial conversion…" HTML fallback on error | **Dropped.** Conversion errors throw. | A save should fail loudly, not store HTML labeled as Markdown. |
+| Task items need the `task-list-item` class | **Changed.** The checkbox alone marks a task item. | Defuddle 0.19.4 strips the classes but keeps `<input type="checkbox" checked>`. |
+| MathML → LaTeX via `mathml-to-latex` | **Not ported.** | The core bundle only keeps LaTeX the page provides (Spike C). Pages with MathML only lose their math; revisit if fixtures show it matters. |
+
+Additional §4.5 changes:
+- Figures keep the image title, and the caption becomes an italic line (`_…_` if the caption contains `*`).
+- Empty and whitespace-only links are removed.
+- `lang-*` classes name the code-fence language, alongside `language-*` and `data-lang`.
+- Whitespace-only lines left by stray `<br>`s become blank lines.
+- A `<math data-latex>` with no text (which Turndown treats as blank) is still converted.
+- `javascript:`, `vbscript:`, `blob:`, and non-image `data:` URLs never become link or image destinations.
+
+The 0.19.5 escaping fixes are still to be ported once that version is eligible (2026-10-24). This is now part of the first Defuddle bump.
