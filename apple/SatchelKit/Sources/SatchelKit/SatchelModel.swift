@@ -55,6 +55,11 @@ public final class SatchelModel: Sendable {
         }
     }
 
+    /// `merge` as the `ItemMerge` that `Store` takes, so the store merges exactly as every other client does.
+    public var itemMerge: ItemMerge {
+        { [self] a, b in try merge(a, b) }
+    }
+
     // MARK: - JavaScriptCore
 
     private final class State {
@@ -128,23 +133,4 @@ public enum SatchelModelError: Error, Equatable {
     /// Only http and https URLs can be saved.
     case unsupportedURL(String)
     case script(String)
-}
-
-/// The result of `SatchelModel.merge`, matching `MergeResult` in `packages/model/src/merge.ts`.
-public struct MergeResult: Codable, Sendable, Equatable {
-    public enum BodyOwner: String, Codable, Sendable {
-        case a, b, none
-    }
-
-    public var item: Item
-    /// Whose Markdown body the merged item keeps.
-    public var body: BodyOwner
-    /// Both sides had a page body and one replaces the other: ask "Replace saved copy?" on an interactive re-save.
-    public var replacesBody: Bool
-
-    public init(item: Item, body: BodyOwner, replacesBody: Bool) {
-        self.item = item
-        self.body = body
-        self.replacesBody = replacesBody
-    }
 }
