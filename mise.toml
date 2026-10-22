@@ -83,6 +83,14 @@ run = "scripts/verify/apple.sh"
 description = "ShellCheck + bash 3.2 compatibility checks for all shell scripts"
 run = "scripts/verify/shell.sh"
 
+[tasks."test:golden"]
+description = "Golden capture tests over fixtures/pages/ (-u rewrites expected.md)"
+run = "scripts/verify/golden.sh"
+
+[tasks."report:capture-timing"]
+description = "Informational capture timing over fixtures/pages/ (never fails)"
+run = "scripts/verify/capture-timing.sh"
+
 [tasks."verify:secrets"]
 description = "Scan the repo history and working tree for secrets"
 run = "scripts/verify/secrets.sh"

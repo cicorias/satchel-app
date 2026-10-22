@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northfield Journal</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://northfield-robotics.example/#org",
+      "name": "Northfield Robotics",
+      "url": "https://northfield-robotics.example/",
+      "logo": {"@type": "ImageObject", "url": "https://northfield-robotics.example/logo.png"}
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://journal.northfield-robotics.example/#website",
+      "name": "Northfield Journal",
+      "url": "https://journal.northfield-robotics.example/",
+      "publisher": {"@id": "https://northfield-robotics.example/#org"}
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain#webpage",
+      "url": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain",
+      "name": "Calibrating lidar in the rain | Northfield Journal",
+      "description": "Engineering notes from the Northfield field-test team.",
+      "isPartOf": {"@id": "https://journal.northfield-robotics.example/#website"},
+      "primaryImageOfPage": {"@id": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain#primaryimage"}
+    },
+    {
+      "@type": "ImageObject",
+      "@id": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain#primaryimage",
+      "url": "https://journal.northfield-robotics.example/media/lidar-rain-1600.jpg",
+      "width": 1600,
+      "height": 900,
+      "caption": "A test rover in light rain"
+    },
+    {
+      "@type": "Person",
+      "@id": "https://journal.northfield-robotics.example/#/schema/person/amara",
+      "name": "Amara Velasquez-Thorne"
+    },
+    {
+      "@type": "Person",
+      "@id": "https://journal.northfield-robotics.example/#/schema/person/jun",
+      "name": "Jun Takeda-Price"
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain#article",
+      "headline": "Calibrating lidar in the rain",
+      "description": "Field notes on why wet weather skews our point clouds, and the three-step recalibration routine that fixed it.",
+      "image": {"@id": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain#primaryimage"},
+      "author": [
+        {"@id": "https://journal.northfield-robotics.example/#/schema/person/amara"},
+        {"@id": "https://journal.northfield-robotics.example/#/schema/person/jun"}
+      ],
+      "publisher": {"@id": "https://northfield-robotics.example/#org"},
+      "datePublished": "2026-09-30T08:15:00+02:00",
+      "dateModified": "2026-10-01T10:00:00+02:00",
+      "isPartOf": {"@id": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain#webpage"},
+      "mainEntityOfPage": {"@id": "https://journal.northfield-robotics.example/articles/calibrating-lidar-in-the-rain#webpage"},
+      "inLanguage": "en"
+    }
+  ]
+}
+</script>
+<script type="module" src="/assets/app.4c1d2e.js"></script>
+</head>
+<body>
+<div id="app">
+  <header class="nav-bar"><a href="/" class="wordmark">Northfield Journal</a><nav><a href="/articles/">Articles</a> <a href="/careers/">Careers</a></nav></header>
+  <main>
+    <div class="article-shell">
+      <h1>Calibrating lidar in the rain</h1>
+      <div class="authors">Amara Velasquez-Thorne and Jun Takeda-Price · 30 September 2026</div>
+      <img src="/media/lidar-rain-1600.jpg" alt="A test rover in light rain" width="1600" height="900">
+      <p>Our outdoor rovers navigate with a spinning lidar on the mast. On dry days it is the most reliable sensor we have. On wet days it starts seeing obstacles that are not there, and the rover stops in the middle of an empty car park and waits for a puddle to move.</p>
+      <p>We spent most of August working out why. The short answer is that raindrops on the sensor window scatter a little of each outgoing pulse back into the receiver, and the firmware reads that early return as a very close object. The long answer involves a lot of spray bottles and a borrowed garden hose.</p>
+      <h2>What we changed</h2>
+      <ol>
+        <li>We now discard returns closer than thirty centimetres unless two consecutive sweeps agree on them.</li>
+        <li>The window has a hydrophobic coating and a small wiper that runs once a minute in wet weather.</li>
+        <li>Each rover recalibrates its range offset against a reference target at the depot every morning.</li>
+      </ol>
+      <p>Since the change, phantom stops in rain have dropped from several per hour to roughly one per shift. We will publish the filter code once it has survived a full winter.</p>
+    </div>
+    <section class="more"><h2>More from the journal</h2><ul><li><a href="/articles/wheel-odometry-on-gravel">Wheel odometry on gravel</a></li><li><a href="/articles/battery-swaps-in-the-cold">Battery swaps in the cold</a></li></ul></section>
+  </main>
+  <footer><p>&copy; 2026 Northfield Robotics. Careers · Press · Privacy</p></footer>
+</div>
+</body>
+</html>

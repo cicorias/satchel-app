@@ -1,0 +1,8 @@
+{
+  "title": "Configuring workers — Quarry 3.2 documentation",
+  "description": "A Quarry worker is a long-running process that pulls tasks from a broker and runs them. This page covers how many tasks a worker runs at once, how to run more workers when the queue grows, and how to stop them without losing work.",
+  "siteName": "quarry.readthedocs.example",
+  "canonicalUrl": "https://quarry.readthedocs.example/en/stable/guide/workers.html",
+  "faviconUrl": "https://quarry.readthedocs.example/en/stable/_static/favicon.ico",
+  "lang": "en"
+}

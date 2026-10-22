@@ -6,7 +6,7 @@ Packages: `packages/model`, `packages/capture`, `packages/render`. All are pure 
 
 ## Acceptance criteria (from the spec)
 
-- [ ] Golden tests pass (at least 20 fixtures).
-- [ ] Model contract fixtures round-trip in TypeScript.
-- [ ] IIFE bundles build and expose `globalThis.SatchelCapture` and `globalThis.SatchelRender`.
-- [ ] Timing on the fixture set is logged in CI (informational): `captureLink` well under 50 ms, `capturePage` under 1.5 s.
+- [x] Golden tests pass (at least 20 fixtures).
+- [x] Model contract fixtures round-trip in TypeScript.
+- [x] IIFE bundles build and expose `globalThis.SatchelCapture` and `globalThis.SatchelRender`.
+- [x] Timing on the fixture set is logged in CI (informational): `captureLink` well under 50 ms, `capturePage` under 1.5 s.
