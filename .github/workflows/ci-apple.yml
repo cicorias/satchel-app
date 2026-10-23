@@ -14,7 +14,12 @@ concurrency:
 
 jobs:
   apple:
-    runs-on: macos-26
+    # The Xcode 27 image (public preview) has the same Xcode as local and release builds. `macos-26` stops at
+    # Xcode 26.6, whose Swift compiler differs (it rejected code 27.1 accepts). Back to `macos-26` with
+    # XCODE_VERSION unset if the preview image is unavailable.
+    runs-on: xcode-27
+    env:
+      XCODE_VERSION: "27.1"
     steps:
       - uses: actions/checkout@v5
       - run: scripts/ci/select-xcode.sh
