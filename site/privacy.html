@@ -15,7 +15,7 @@
 <main>
   <nav class="top"><a href="index.html">← Satchel</a></nav>
   <h1>Privacy Policy</h1>
-  <p class="lede">Effective October 21, 2026 · Draft, to be finalized before store release</p>
+  <p class="lede">Effective October 23, 2026</p>
 
   <h2>The short version</h2>
   <p>Satchel does not collect, store, or have access to your data. What you save goes straight from your device to <strong>your own</strong> iCloud account, and from there to your other devices.</p>
@@ -23,8 +23,9 @@
   <h2>What Satchel stores, and where</h2>
   <ul>
     <li><strong>Your saves</strong> (URLs, titles, descriptions, tags, notes, and saved page content) are stored in your private iCloud database (Apple CloudKit), which only you can access. They count toward your iCloud storage. CedarLogic LLC cannot read them.</li>
-    <li><strong>A local copy</strong> is kept on each device for fast search and for saving while offline.</li>
-    <li><strong>Browser extensions on Chrome and Edge</strong> keep a sign-in token for your iCloud account in the browser's local extension storage. It is never synced or sent anywhere other than Apple.</li>
+    <li><strong>A local copy</strong> is kept on each device, inside the app, for fast search and for saving while offline. Saves made without a connection or without an iCloud account stay on the device until iCloud is available.</li>
+    <li><strong>The iPhone app's extensions</strong> (the share sheet and the Safari extension) save to the same local copy and to your iCloud. Nothing goes to CedarLogic LLC.</li>
+    <li><strong>Browser extensions on Chrome and Edge</strong> (when available) keep a sign-in token for your iCloud account in the browser's local extension storage. It is never synced or sent anywhere other than Apple.</li>
   </ul>
 
   <h2>What Satchel does not do</h2>
@@ -35,10 +36,14 @@
   </ul>
 
   <h2>Network connections</h2>
-  <p>Satchel connects to Apple's iCloud services to sync your library. When you view a saved page that contains remote images, those images load from their original websites, which can see that request. You can turn off remote image loading in Settings.</p>
+  <ul>
+    <li><strong>iCloud.</strong> Satchel connects to Apple's iCloud services to sync your library.</li>
+    <li><strong>Link details.</strong> When you save a link from another app (for example, from Notes), Satchel downloads that one web page once to read its title, description, and preview image address, just as a browser would. It sends no cookies, loads nothing else from the page, and runs none of the page's scripts. The website sees that request.</li>
+    <li><strong>Images.</strong> Satchel doesn't load images from websites unless you ask: turn on <em>Load Remote Images</em> in Settings, or tap <em>Load Images</em> on a saved page. When you do, those images and link previews load from their original websites, which can see those requests.</li>
+  </ul>
 
   <h2>Extension permissions</h2>
-  <p>The browser extension reads a page only when you choose to save it. It is not injected into the pages you browse.</p>
+  <p>The Safari extension (and the Chrome and Edge extensions, when available) reads a page only when you choose to save it. It is not injected into the pages you browse.</p>
 
   <h2>Children</h2>
   <p>Satchel is not directed at children and collects no personal information from anyone.</p>
