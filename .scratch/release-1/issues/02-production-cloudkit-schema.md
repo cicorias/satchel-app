@@ -1,6 +1,6 @@
 # Deploy the CloudKit schema to Production
 
-Status: ready-for-human
+Status: resolved
 Type: task
 Blocked by: -
 
@@ -11,3 +11,7 @@ TestFlight and App Store builds use CloudKit's **Production** environment. Every
 3. Confirm: `ENV=production mise run deploy:cloudkit-schema diff` shows no changes (`docs/setup/apple.md` §4).
 
 Fields can't be removed or retyped once they're in Production, so this step is permanent.
+
+## Answer
+
+Deployed by the user on 2026-10-23. `ENV=production mise run deploy:cloudkit-schema diff` reports "no differences: iCloud.com.cedarlogic.satchel (production) matches apple/CloudKit/Satchel.ckdb".

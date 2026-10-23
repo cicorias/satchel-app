@@ -8,3 +8,7 @@ The app currently ships a flat asset-catalog icon (any, dark, and tinted variant
 
 - The layers are ready in `art/svg/layers/` (background, bag).
 - Decide whether this is worth doing before the first TestFlight build. If yes, build `AppIcon.icon` in Icon Composer, reference it from `project.yml`, and document the regeneration steps in `art/README.md`.
+
+## Comments
+
+2026-10-23: the user kept the flat icon for release 1. A layered `.icon` is still optional for a later release.
