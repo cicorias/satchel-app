@@ -1,8 +1,8 @@
 import SatchelKit
 import SwiftUI
 
-/// Phase 3 ticket 06: the saved items, newest first, with their sync state. Search, filters, and the detail view
-/// arrive in ticket 10 (spec §9.2.4).
+/// The saved items, newest first, with their sync state; swipe to delete, pull to sync. Search, filters, and the
+/// detail view arrive in ticket 10, and the full sync status in settings in ticket 12 (spec §9.2.4).
 struct LibraryView: View {
     @State private var model = LibraryModel()
     @State private var showingSettings = false
@@ -20,9 +20,22 @@ struct LibraryView: View {
                         Text("Share a link from any app to save it here.")
                     }
                 } else {
-                    List(model.items) { item in
-                        ItemRow(item: item, state: model.unsent[item.id])
+                    List {
+                        ForEach(model.items) { item in
+                            ItemRow(item: item, state: model.unsent[item.id])
+                        }
+                        .onDelete { offsets in
+                            let doomed = offsets.map { model.items[$0] }
+                            Task { for item in doomed { await model.delete(item) } }
+                        }
+                        if let note = SyncNote(model.syncStatus) {
+                            Label(note.text, systemImage: note.symbol)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                                .accessibilityIdentifier("sync-status")
+                        }
                     }
+                    .refreshable { await model.refresh() }
                     .accessibilityIdentifier("library-list")
                 }
             }
@@ -37,6 +50,30 @@ struct LibraryView: View {
             }
         }
         .task { await model.observe() }
+    }
+}
+
+/// A one-line explanation when sync isn't working normally.
+private struct SyncNote {
+    let text: String
+    let symbol: String
+
+    init?(_ status: SyncStatus) {
+        switch status {
+        case .starting, .syncing, .upToDate:
+            return nil
+        case .noAccount:
+            (text, symbol) = ("Sign in to iCloud to sync. Saves are kept on this iPhone until then.", "icloud.slash")
+        case .temporarilyUnavailable:
+            (text, symbol) = ("iCloud isn't available right now. Saves will sync later.", "icloud.slash")
+        case .otherAccount:
+            (text, symbol) = (
+                "This library belongs to a different iCloud account, so sync is paused.",
+                "person.crop.circle.badge.exclamationmark"
+            )
+        case .failed(let reason):
+            (text, symbol) = ("Sync stopped: \(reason)", "exclamationmark.icloud")
+        }
     }
 }
 

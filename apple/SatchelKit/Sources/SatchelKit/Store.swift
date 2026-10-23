@@ -81,7 +81,7 @@ public final class Store: Sendable {
         let saved = try await pool.write { db -> Item in
             var final = item
             var finalBody = body
-            let seq: Int64
+            let seq: Int64?
             if let stored = try Row.fetchOne(db, sql: "SELECT seq, json FROM items WHERE id = ?", arguments: [item.id])
             {
                 seq = stored["seq"]
@@ -92,28 +92,11 @@ public final class Store: Sendable {
                     throw StoreError.mergeChangedID(expected: item.id, actual: result.item.id)
                 }
                 final = result.item
-                switch result.body {
-                case .a: finalBody = storedBody
-                case .b: finalBody = body ?? storedBody
-                case .none: finalBody = nil
-                }
-                try Self.unindex(seq: seq, db)
-                try Self.writeItem(final, seq: seq, db)
+                finalBody = Self.body(result.body, stored: storedBody, incoming: body)
             } else {
-                seq = try Self.writeItem(final, seq: nil, db)
+                seq = nil
             }
-            try Self.writeTags(final, db)
-            if let finalBody {
-                try db.execute(
-                    sql: """
-                        INSERT INTO bodies (itemID, markdown) VALUES (?, ?)
-                        ON CONFLICT (itemID) DO UPDATE SET markdown = excluded.markdown
-                        """,
-                    arguments: [final.id, finalBody])
-            } else {
-                try db.execute(sql: "DELETE FROM bodies WHERE itemID = ?", arguments: [final.id])
-            }
-            try Self.index(seq: seq, db)
+            try Self.write(final, body: finalBody, replacing: seq, db)
             try Self.enqueue(.upsert, itemID: final.id, payload: try Self.encodeItem(final), db)
             return final
         }
@@ -158,8 +141,7 @@ public final class Store: Sendable {
             guard let seq = try Int64.fetchOne(db, sql: "SELECT seq FROM items WHERE id = ?", arguments: [id]) else {
                 return false
             }
-            try Self.unindex(seq: seq, db)
-            try db.execute(sql: "DELETE FROM items WHERE seq = ?", arguments: [seq])
+            try Self.remove(seq: seq, db)
             try Self.enqueue(.delete, itemID: id, payload: nil, db)
             return true
         }
@@ -270,6 +252,120 @@ public final class Store: Sendable {
         }
     }
 
+    /// Removes every key that starts with `prefix`.
+    public func removeSyncState(keyPrefix prefix: String) async throws {
+        try await pool.write { db in
+            try db.execute(
+                sql: "DELETE FROM syncState WHERE substr(key, 1, ?) = ?",
+                arguments: [prefix.unicodeScalars.count, prefix])
+        }
+    }
+
+    // MARK: - Remote changes
+
+    // The host app's sync engine (ticket 07) applies changes fetched from CloudKit through these. Unlike `save` and
+    // `delete`, they never queue an outbox entry, because the change came from the server. An unsent local change
+    // (an outbox entry that isn't `sent`) is the user's latest intent and wins: a local save is merged into the
+    // server copy and sent again, and a local delete is kept.
+
+    /// What `applyRemote(_:body:)` did with an item fetched from CloudKit.
+    public enum RemoteChange: Sendable, Equatable {
+        /// The local copy now matches the server's.
+        case applied
+        /// The item has an unsent local save. The server copy was merged into it (spec §7.3), and its outbox entry
+        /// now carries the merged item, which the caller must send.
+        case merged(Item)
+        /// The item has an unsent local delete, which wins. Nothing changed.
+        case keptLocalDelete
+    }
+
+    /// Stores an item fetched from CloudKit. `body` is the record's Markdown, or `nil` when the record has none, which
+    /// keeps the stored body of a page.
+    @discardableResult
+    public func applyRemote(_ remote: Item, body: String?) async throws -> RemoteChange {
+        let merge = self.merge
+        let change = try await pool.write { db -> RemoteChange in
+            let unsent = try Self.unsentEntry(itemID: remote.id, db)
+            if unsent?.operation == .delete { return .keptLocalDelete }
+            let stored = try Row.fetchOne(db, sql: "SELECT seq, json FROM items WHERE id = ?", arguments: [remote.id])
+            let seq: Int64? = stored?["seq"]
+            let storedBody = try String.fetchOne(
+                db, sql: "SELECT markdown FROM bodies WHERE itemID = ?", arguments: [remote.id])
+            var final = remote
+            var finalBody = remote.kind == .page ? body ?? storedBody : nil
+            var change = RemoteChange.applied
+            if let stored, let unsent {
+                let result = try merge(try Self.decodeItem(stored["json"]), remote)
+                guard result.item.id == remote.id else {
+                    throw StoreError.mergeChangedID(expected: remote.id, actual: result.item.id)
+                }
+                final = result.item
+                finalBody = Self.body(result.body, stored: storedBody, incoming: body)
+                try db.execute(
+                    sql: "UPDATE outbox SET payload = ?, updatedAt = ? WHERE id = ?",
+                    arguments: [try Self.encodeItem(final), Date(), unsent.id])
+                change = .merged(final)
+            }
+            try Self.write(final, body: finalBody, replacing: seq, db)
+            return change
+        }
+        postChange()
+        return change
+    }
+
+    /// What `applyRemoteDeletion(id:)` did with a deletion fetched from CloudKit.
+    public enum RemoteDeletion: Sendable, Equatable {
+        /// The local item, if there was one, is gone.
+        case deleted
+        /// The item has an unsent local save, which wins: the caller must send it again as a new record.
+        case keptLocalSave(Item)
+    }
+
+    /// Removes an item that was deleted in CloudKit, along with its outbox entries.
+    @discardableResult
+    public func applyRemoteDeletion(id: String) async throws -> RemoteDeletion {
+        let deletion = try await pool.write { db -> RemoteDeletion in
+            if let unsent = try Self.unsentEntry(itemID: id, db), unsent.operation == .upsert,
+                let json = try String.fetchOne(db, sql: "SELECT json FROM items WHERE id = ?", arguments: [id])
+            {
+                return .keptLocalSave(try Self.decodeItem(json))
+            }
+            if let seq = try Int64.fetchOne(db, sql: "SELECT seq FROM items WHERE id = ?", arguments: [id]) {
+                try Self.remove(seq: seq, db)
+            }
+            try db.execute(sql: "DELETE FROM outbox WHERE itemID = ?", arguments: [id])
+            return .deleted
+        }
+        postChange()
+        return deletion
+    }
+
+    /// Queues an outbox `upsert` for every item, replacing any earlier entry, so the next sync uploads the whole
+    /// library again (after CloudKit resets the zone's encrypted data). Returns how many were queued.
+    @discardableResult
+    public func queueAllForUpload() async throws -> Int {
+        let count = try await pool.write { db -> Int in
+            let rows = try Row.fetchAll(db, sql: "SELECT id, json FROM items ORDER BY seq")
+            for row in rows {
+                try Self.enqueue(.upsert, itemID: row["id"], payload: row["json"], db)
+            }
+            return rows.count
+        }
+        if count > 0 { postChange() }
+        return count
+    }
+
+    /// Erases every item, body, tag, outbox entry, and sync state value, for starting over with another iCloud account.
+    public func removeAllData() async throws {
+        try await pool.write { db in
+            try db.execute(sql: "INSERT INTO itemsFTS (itemsFTS) VALUES ('delete-all')")
+            try db.execute(sql: "DELETE FROM items")
+            try db.execute(sql: "DELETE FROM outbox")
+            try db.execute(sql: "DELETE FROM syncState")
+        }
+        postChange()
+    }
+
     // MARK: - Internals
 
     /// Runs FTS5's own consistency check against the content view. Throws if the index has drifted.
@@ -346,6 +442,41 @@ public final class Store: Sendable {
     }
 
     // MARK: Rows
+
+    /// Writes the item row, its tags, its body (`nil` removes it), and its search index entry. `seq` is the stored
+    /// row being replaced, or `nil` for a new item.
+    private static func write(_ item: Item, body: String?, replacing seq: Int64?, _ db: Database) throws {
+        if let seq { try unindex(seq: seq, db) }
+        let seq = try writeItem(item, seq: seq, db)
+        try writeTags(item, db)
+        if let body {
+            try db.execute(
+                sql: """
+                    INSERT INTO bodies (itemID, markdown) VALUES (?, ?)
+                    ON CONFLICT (itemID) DO UPDATE SET markdown = excluded.markdown
+                    """,
+                arguments: [item.id, body])
+        } else {
+            try db.execute(sql: "DELETE FROM bodies WHERE itemID = ?", arguments: [item.id])
+        }
+        try index(seq: seq, db)
+    }
+
+    /// Removes the item row (its tags and body cascade) and its search index entry.
+    private static func remove(seq: Int64, _ db: Database) throws {
+        try unindex(seq: seq, db)
+        try db.execute(sql: "DELETE FROM items WHERE seq = ?", arguments: [seq])
+    }
+
+    /// The body a merge keeps: `.a` the stored one, `.b` the incoming one (or the stored one when there's no incoming
+    /// body), `.none` no body.
+    private static func body(_ source: MergeResult.BodySource, stored: String?, incoming: String?) -> String? {
+        switch source {
+        case .a: stored
+        case .b: incoming ?? stored
+        case .none: nil
+        }
+    }
 
     @discardableResult
     private static func writeItem(_ item: Item, seq: Int64?, _ db: Database) throws -> Int64 {
@@ -453,6 +584,15 @@ public final class Store: Sendable {
             arguments += [limit]
         }
         return try String.fetchAll(db, sql: sql, arguments: arguments).map(decodeItem)
+    }
+
+    private static func unsentEntry(itemID: String, _ db: Database) throws -> (id: Int64, operation: OutboxOperation)? {
+        guard
+            let row = try Row.fetchOne(
+                db, sql: "SELECT id, operation FROM outbox WHERE itemID = ? AND state != ? ORDER BY id DESC LIMIT 1",
+                arguments: [itemID, OutboxState.sent.rawValue])
+        else { return nil }
+        return (row["id"], OutboxOperation(rawValue: row["operation"]) ?? .upsert)
     }
 
     private static func fetchUnsentStates(_ db: Database) throws -> [String: OutboxState] {
