@@ -29,19 +29,23 @@ const setBusy = (busy: boolean) => {
   savePage.disabled = busy;
 };
 
-const enteredTags = () => tagsInput.value.split(',');
+/** Tags are separated by commas or periods (the Share Extension uses the same rule, SatchelKit `TagInput`). */
+const TAG_SEPARATOR = /[,.]/;
+const enteredTags = () => tagsInput.value.split(TAG_SEPARATOR);
 
-/** Suggestions complete the tag being typed (the text after the last comma). */
+/** Suggestions complete the tag being typed (the text after the last separator). */
 function suggestTags() {
-  const parts = tagsInput.value.split(',');
+  const text = tagsInput.value;
+  const parts = text.split(TAG_SEPARATOR);
   const current = (parts.pop() ?? '').trim().toLowerCase();
   const chosen = new Set(parts.map((tag) => tag.trim().toLowerCase()));
-  const head = parts.length ? `${parts.join(',')}, ` : '';
+  const head = text.slice(0, text.length - (text.split(TAG_SEPARATOR).at(-1) ?? '').length).trimEnd();
+  const prefix = head ? `${head} ` : '';
   tagOptions.replaceChildren(
     ...knownTags
       .filter((tag) => tag.startsWith(current) && !chosen.has(tag))
       .slice(0, 8)
-      .map((tag) => Object.assign(document.createElement('option'), { value: `${head}${tag}` })),
+      .map((tag) => Object.assign(document.createElement('option'), { value: `${prefix}${tag}` })),
   );
 }
 

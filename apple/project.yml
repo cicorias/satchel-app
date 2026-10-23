@@ -98,8 +98,14 @@ targets:
     platform: iOS
     sources:
       - path: SatchelShare
+        # Appended to the capture engine at staging; the staged file below is what ships.
+        excludes: [preprocessing.js]
       # The JavaScriptCore model (ADR-0020), staged by the WebAssets target.
       - path: Staged/web/model.jsc.iife.js
+        buildPhase: resources
+        optional: true
+      # The page capture Safari runs before sharing (NSExtensionJavaScriptPreprocessingFile).
+      - path: Staged/web/SatchelSharePreprocessing.js
         buildPhase: resources
         optional: true
     dependencies:
@@ -126,7 +132,8 @@ targets:
             NSExtensionActivationRule:
               NSExtensionActivationSupportsWebURLWithMaxCount: 1
               NSExtensionActivationSupportsWebPageWithMaxCount: 1
-            # Phase 3: NSExtensionJavaScriptPreprocessingFile wrapping the capture IIFE (spec §9.2.2).
+            # Runs in the page when shared from Safari and returns the link and page captures (spec §9.2.2).
+            NSExtensionJavaScriptPreprocessingFile: SatchelSharePreprocessing
     entitlements:
       path: SatchelShare/SatchelShare.entitlements
       properties:

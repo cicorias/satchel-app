@@ -9,5 +9,8 @@ stage=apple/Staged
 rm -rf "$stage/safari-extension" "$stage/web"
 mkdir -p "$stage/web"
 cp packages/model/dist/model.jsc.iife.js packages/capture/dist/capture.iife.js packages/render/dist/render.iife.js "$stage/web/"
+# The Share Extension's preprocessing file (NSExtensionJavaScriptPreprocessingFile): the capture engine plus the
+# wrapper Safari calls.
+cat packages/capture/dist/capture.iife.js apple/SatchelShare/preprocessing.js >"$stage/web/SatchelSharePreprocessing.js"
 cp -R apps/extension/.output/safari-mv3 "$stage/safari-extension"
 echo "staged web assets in $stage/"
