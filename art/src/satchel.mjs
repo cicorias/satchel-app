@@ -34,38 +34,50 @@ export const tintedPalette = {
 };
 
 /**
- * The bag itself, centered on the 1024 grid, no background.
+ * The bag's parts, centered on the 1024 grid, no background. Each part carries its own gradients, so it can stand
+ * alone as an Icon Composer layer (back to front: body, flap, ribbon).
  * @param {object} o
  * @param {typeof palette} [o.p] colors
  * @param {boolean} [o.detail] stitching and shading (off for ≤32 px)
  * @param {string} [o.id] gradient id prefix, unique per document
  */
-export function bag({ p = palette, detail = true, id = 'b' } = {}) {
+export function bagParts({ p = palette, detail = true, id = 'b' } = {}) {
   const handleWidth = detail ? 48 : 64;
-  return `
+  const body = `
   <defs>
     <linearGradient id="${id}-body" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="${p.leatherLight}"/>
       <stop offset="1" stop-color="${p.leatherDark}"/>
     </linearGradient>
+  </defs>
+  <path d="M396 360 V300 A116 116 0 0 1 628 300 V360" fill="none" stroke="${p.handle}" stroke-width="${handleWidth}" stroke-linecap="round"/>
+  <rect x="196" y="336" width="632" height="452" rx="84" fill="url(#${id}-body)"/>
+  ${detail ? `<clipPath id="${id}-clip"><rect x="196" y="336" width="632" height="452" rx="84"/></clipPath><rect x="196" y="716" width="632" height="72" fill="${p.flapShade}" opacity="0.18" clip-path="url(#${id}-clip)"/>` : ''}`;
+  const flap = `
+  <defs>
     <linearGradient id="${id}-flap" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="${p.flap}"/>
       <stop offset="1" stop-color="${p.flapShade}"/>
     </linearGradient>
   </defs>
-  <path d="M396 360 V300 A116 116 0 0 1 628 300 V360" fill="none" stroke="${p.handle}" stroke-width="${handleWidth}" stroke-linecap="round"/>
-  <rect x="196" y="336" width="632" height="452" rx="84" fill="url(#${id}-body)"/>
-  ${detail ? `<clipPath id="${id}-clip"><rect x="196" y="336" width="632" height="452" rx="84"/></clipPath><rect x="196" y="716" width="632" height="72" fill="${p.flapShade}" opacity="0.18" clip-path="url(#${id}-clip)"/>` : ''}
   <path d="M280 336 H744 A84 84 0 0 1 828 420 V566 Q828 600 794 600 H230 Q196 600 196 566 V420 A84 84 0 0 1 280 336 Z" fill="url(#${id}-flap)"/>
   ${
     detail
       ? `<path d="M292 366 H732 A56 56 0 0 1 788 422 V562 H236 V422 A56 56 0 0 1 292 366 Z" fill="none" stroke="${p.stitch}" stroke-opacity="0.55" stroke-width="8" stroke-dasharray="22 16" stroke-linecap="round"/>`
       : ''
-  }
+  }`;
+  const ribbon = `
   <path d="M460 336 H564 V742 L512 694 L460 742 Z" fill="${p.ribbon}"/>
   ${detail ? `<path d="M552 336 H564 V742 L552 731 Z" fill="${p.ribbonEdge}"/>` : ''}
   <rect x="478" y="572" width="68" height="56" rx="14" fill="${p.brass}" stroke="${p.brassEdge}" stroke-width="${detail ? 8 : 12}"/>
   ${detail ? `<rect x="500" y="590" width="24" height="20" rx="5" fill="${p.brassEdge}" opacity="0.6"/>` : ''}`;
+  return { body, flap, ribbon };
+}
+
+/** The whole bag: its parts, back to front. */
+export function bag(options = {}) {
+  const { body, flap, ribbon } = bagParts(options);
+  return body + flap + ribbon;
 }
 
 /** Full-bleed cedar background (iOS masks the corners itself). */

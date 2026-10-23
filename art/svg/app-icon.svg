@@ -11,14 +11,16 @@
       <stop offset="0" stop-color="#d6a066"/>
       <stop offset="1" stop-color="#b97d43"/>
     </linearGradient>
+  </defs>
+  <path d="M396 360 V300 A116 116 0 0 1 628 300 V360" fill="none" stroke="#a36a36" stroke-width="48" stroke-linecap="round"/>
+  <rect x="196" y="336" width="632" height="452" rx="84" fill="url(#b-body)"/>
+  <clipPath id="b-clip"><rect x="196" y="336" width="632" height="452" rx="84"/></clipPath><rect x="196" y="716" width="632" height="72" fill="#8f5726" opacity="0.18" clip-path="url(#b-clip)"/>
+  <defs>
     <linearGradient id="b-flap" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#a5672f"/>
       <stop offset="1" stop-color="#8f5726"/>
     </linearGradient>
   </defs>
-  <path d="M396 360 V300 A116 116 0 0 1 628 300 V360" fill="none" stroke="#a36a36" stroke-width="48" stroke-linecap="round"/>
-  <rect x="196" y="336" width="632" height="452" rx="84" fill="url(#b-body)"/>
-  <clipPath id="b-clip"><rect x="196" y="336" width="632" height="452" rx="84"/></clipPath><rect x="196" y="716" width="632" height="72" fill="#8f5726" opacity="0.18" clip-path="url(#b-clip)"/>
   <path d="M280 336 H744 A84 84 0 0 1 828 420 V566 Q828 600 794 600 H230 Q196 600 196 566 V420 A84 84 0 0 1 280 336 Z" fill="url(#b-flap)"/>
   <path d="M292 366 H732 A56 56 0 0 1 788 422 V562 H236 V422 A56 56 0 0 1 292 366 Z" fill="none" stroke="#f4e8d2" stroke-opacity="0.55" stroke-width="8" stroke-dasharray="22 16" stroke-linecap="round"/>
   <path d="M460 336 H564 V742 L512 694 L460 742 Z" fill="#2e6b4e"/>
