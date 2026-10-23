@@ -96,6 +96,18 @@ import Testing
         #expect(try await store.body(for: vector.a.id) == "# Hello\n")
     }
 
+    @Test func exportsMarkdownFiles() throws {
+        var link = makeItem("hello", title: "Hello: World", tags: ["swift"])
+        link.description = "A first post."
+        let file = try Self.model.markdownFile(for: link, body: nil)
+        #expect(file.hasPrefix("---\nid: u_hello\ntype: link\ntitle: \"Hello: World\"\n"))
+        #expect(file.contains("tags: [swift]\nsource: ios-share\n---\n\n# Hello: World\n\nA first post.\n"))
+
+        let page = makeItem("hello", kind: .page, title: "Hello")
+        #expect(
+            try Self.model.markdownFile(for: page, body: "# Hello\n\nBody.\n").hasSuffix("---\n\n# Hello\n\nBody.\n"))
+    }
+
     @Test func reportsABrokenScript() {
         let broken = SatchelModel(source: "this is not javascript")
         #expect(throws: SatchelModelError.self) { try broken.itemID(forNormalizedURL: "https://example.com/") }

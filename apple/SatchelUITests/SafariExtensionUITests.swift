@@ -71,7 +71,7 @@ final class SafariExtensionUITests: XCTestCase {
         let app = XCUIApplication(bundleIdentifier: "com.cedarlogic.satchel")
         app.terminate()
         app.launch()
-        let row = app.descendants(matching: .any)["item-u_\(digest.prefix(32))"]
+        let row = app.descendants(matching: .any).matching(identifier: "item-u_\(digest.prefix(32))").firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 10), "saved page not in the library\n\(app.debugDescription)")
         XCTAssertTrue(row.label.contains("page"), "the row isn't a page: \(row.label)")
         XCTAssertTrue(row.label.contains("Example Domain"), "the row lacks the title: \(row.label)")

@@ -2,7 +2,7 @@ import Foundation
 import JavaScriptCore
 import Synchronization
 
-/// URL normalization, item IDs, and merge rules, computed by `@satchel/model` itself running in JavaScriptCore
+/// URL normalization, item IDs, merge rules, and Markdown export, computed by `@satchel/model` itself running in JavaScriptCore
 /// (ADR-0020), so every client agrees on identity and merges. Load `model.jsc.iife.js` (staged in
 /// `apple/Staged/web/`), not the browser bundle: bare JavaScriptCore has no `URL` or `TextEncoder`.
 ///
@@ -55,6 +55,22 @@ public final class SatchelModel: Sendable {
         }
     }
 
+    /// The `.md` file for an item (spec §5): frontmatter generated from the item's current fields, then `body` for a
+    /// page, or the title and description for a link.
+    public func markdownFile(for item: Item, body: String?) throws(SatchelModelError) -> String {
+        struct Input: Encodable {
+            let item: Item
+            let body: String?
+        }
+        let json: String
+        do {
+            json = String(decoding: try JSONEncoder().encode(Input(item: item, body: body)), as: UTF8.self)
+        } catch {
+            throw .script("could not encode the item: \(error)")
+        }
+        return try call("__markdownFileJSON", json)
+    }
+
     /// `merge` as the `ItemMerge` that `Store` takes, so the store merges exactly as every other client does.
     public var itemMerge: ItemMerge {
         { [self] a, b in try merge(a, b) }
@@ -84,6 +100,10 @@ public final class SatchelModel: Sendable {
             SatchelModel.__mergeJSON = function (json) {
               var pair = JSON.parse(json);
               return JSON.stringify(SatchelModel.mergeItems(pair[0], pair[1]));
+            };
+            SatchelModel.__markdownFileJSON = function (json) {
+              var input = JSON.parse(json);
+              return SatchelModel.markdownFile(input.item, input.body === null ? undefined : input.body);
             };
             """)
         if let loadError { throw .script("the model script failed to load: \(loadError)") }
