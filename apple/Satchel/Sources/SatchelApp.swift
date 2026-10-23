@@ -15,7 +15,7 @@ struct SatchelApp: App {
             switch phase {
             case .active:
                 Store.resume()
-                Task { await AppServices.shared.sync?.syncNow() }
+                Task { await AppServices.shared.syncAndEnrich() }
             case .background:
                 AppServices.shared.scheduleRefresh()
                 // Release locks on the shared database before suspension, or iOS kills the app (0xDEAD10CC).
@@ -27,7 +27,7 @@ struct SatchelApp: App {
         .backgroundTask(.appRefresh(AppServices.shared.refreshTaskID)) {
             await MainActor.run { AppServices.shared.scheduleRefresh() }
             Store.resume()
-            await AppServices.shared.sync?.syncNow()
+            await AppServices.shared.syncAndEnrich()
             Store.suspend()
         }
     }

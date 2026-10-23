@@ -89,7 +89,7 @@ final class LibraryModel {
     }
 
     func refresh() async {
-        await services.sync?.syncNow()
+        await services.syncAndEnrich()
     }
 
     func body(for item: Item) async -> String? {

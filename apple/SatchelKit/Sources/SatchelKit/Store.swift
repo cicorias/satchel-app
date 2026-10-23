@@ -133,6 +133,23 @@ public final class Store: Sendable {
             .values(in: pool)
     }
 
+    /// Sets the item's `metadataStatus` without merging and queues an outbox `upsert`. For enrichment giving up
+    /// (`failed`), which a merge can't express: it ranks `failed` below `pending` (spec §7.3).
+    public func setMetadataStatus(_ status: MetadataStatus, for id: String, updatedAt: String) async throws {
+        let changed = try await pool.write { db -> Bool in
+            guard let stored = try Row.fetchOne(db, sql: "SELECT seq, json FROM items WHERE id = ?", arguments: [id])
+            else { return false }
+            var item = try Self.decodeItem(stored["json"])
+            item.metadataStatus = status
+            item.updatedAt = updatedAt
+            let body = try String.fetchOne(db, sql: "SELECT markdown FROM bodies WHERE itemID = ?", arguments: [id])
+            try Self.write(item, body: body, replacing: stored["seq"], db)
+            try Self.enqueue(.upsert, itemID: id, payload: try Self.encodeItem(item), db)
+            return true
+        }
+        if changed { postChange() }
+    }
+
     /// Deletes the item, its body, and its tags locally and queues an outbox `delete`. Returns `false`, queuing
     /// nothing, when no item has this ID.
     @discardableResult
