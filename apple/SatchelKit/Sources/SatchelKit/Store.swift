@@ -20,6 +20,12 @@ public final class Store: Sendable {
     private let pool: DatabasePool
     private let merge: ItemMerge
     private let notifyToken: Int32
+    /// Observes `refreshNotification`; removed in `deinit`.
+    nonisolated(unsafe) private let refreshObserver: any NSObjectProtocol
+
+    /// Posted by `resume()` after GRDB resumes: every `Store` in the process re-reads, picking up writes it missed
+    /// while suspended (a Darwin notification that arrived then couldn't refresh a suspended database).
+    static let refreshNotification = Notification.Name("SatchelStoreRefresh")
 
     /// Opens (creating and migrating if needed) the database at `url`.
     ///
@@ -43,8 +49,16 @@ public final class Store: Sendable {
         ) { _ in
             pool.asyncWrite({ db in try db.notifyChanges(in: .fullDatabase) }, completion: { _, _ in })
         }
-        guard status == NOTIFY_STATUS_OK else { throw StoreError.changeNotificationUnavailable(status) }
+        guard status == NOTIFY_STATUS_OK else {
+            notify_cancel(token)
+            throw StoreError.changeNotificationUnavailable(status)
+        }
         self.notifyToken = token
+        refreshObserver = NotificationCenter.default.addObserver(
+            forName: Self.refreshNotification, object: nil, queue: nil
+        ) { _ in
+            pool.asyncWrite({ db in try db.notifyChanges(in: .fullDatabase) }, completion: { _, _ in })
+        }
     }
 
     /// Opens the shared store in the App Group container (`AppEnvironment.appGroup`).
@@ -57,6 +71,7 @@ public final class Store: Sendable {
 
     deinit {
         notify_cancel(notifyToken)
+        NotificationCenter.default.removeObserver(refreshObserver)
     }
 
     /// `<App Group container>/Library/Application Support/Satchel/satchel.sqlite`.
@@ -248,9 +263,11 @@ public final class Store: Sendable {
         NotificationCenter.default.post(name: Database.suspendNotification, object: nil)
     }
 
-    /// Call when the process becomes active again, after `suspend()`.
+    /// Call when the process becomes active again, after `suspend()`. Also refreshes every store's observations, since
+    /// another process may have written meanwhile.
     public static func resume() {
         NotificationCenter.default.post(name: Database.resumeNotification, object: nil)
+        NotificationCenter.default.post(name: refreshNotification, object: nil)
     }
 
     // MARK: - Sync state

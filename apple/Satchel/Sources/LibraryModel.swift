@@ -161,6 +161,10 @@ final class LibraryModel {
     }
 
     private func observeOutbox(_ store: Store) async {
+        #if DEBUG
+            // The demo (screenshots and the app preview) shows a library signed in to iCloud.
+            if DemoLibrary.isRequested { return }
+        #endif
         do {
             for try await unsent in store.observeUnsentOutbox() { self.unsent = unsent }
         } catch {
@@ -177,6 +181,12 @@ final class LibraryModel {
     }
 
     private func observeSync() async {
+        #if DEBUG
+            if DemoLibrary.isRequested {
+                syncStatus = .upToDate
+                return
+            }
+        #endif
         guard let sync = services.sync else { return }
         for await status in sync.statusUpdates() { syncStatus = status }
     }

@@ -508,6 +508,24 @@ final class Calls: Sendable {
         #expect(cleared == [:])
     }
 
+    /// A change made while the app was suspended (its Darwin notification lost, or its refresh refused while the
+    /// database was suspended) shows up once the app resumes.
+    @Test(.timeLimit(.minutes(1)))
+    func resumingRefreshesObservations() async throws {
+        let app = try temp.store()
+        // Another writer whose change notification the app never hears.
+        let silent = try Store(url: temp.database, changeNotificationName: "satchel.test.unheard", merge: fakeMerge)
+
+        let items = app.observeItems()
+        var iterator = items.makeAsyncIterator()
+        #expect(try await iterator.next() == [])
+        try await silent.save(item: makeItem("saved-while-suspended"), body: nil)
+
+        Store.resume()
+        let seen = try await next(&iterator) { !$0.isEmpty }
+        #expect(seen?.map(\.id) == ["u_saved-while-suspended"])
+    }
+
     @Test func usesTheSameNotificationNameForTheSameFile() throws {
         let a = try temp.store()
         let b = try Store(url: temp.url.appending(path: "./satchel.sqlite"), merge: fakeMerge)

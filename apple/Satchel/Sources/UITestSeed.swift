@@ -60,6 +60,8 @@
     enum DemoLibrary {
         static let argument = "-SatchelDemoLibrary"
         static var isRequested: Bool { ProcessInfo.processInfo.arguments.contains(argument) }
+        /// `-SatchelDemoPreview`: leave out the sample article, which the app preview video saves live from Safari.
+        static var leavesOutSample: Bool { ProcessInfo.processInfo.arguments.contains("-SatchelDemoPreview") }
 
         private struct Entry {
             let slug: String
@@ -150,7 +152,8 @@
                 path: "DemoImages", directoryHint: .isDirectory)
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             // Oldest first, so the list (newest first) shows them in this order.
-            for (index, entry) in entries.enumerated().reversed() {
+            for (index, entry) in entries.enumerated().reversed() where !(leavesOutSample && entry.slug == "plain-text")
+            {
                 let url = "https://example.com/\(entry.slug)"
                 let normalized = try model.normalizedURL(pageURL: url)
                 let saved = ItemSaver.timestamp(Date().addingTimeInterval(-Double(index) * 5400))
