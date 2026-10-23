@@ -4,7 +4,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
-import { background, badge, bag, palette, svg, tintedPalette } from '../../art/src/satchel.mjs';
+import { background, badge, bag, bagParts, palette, svg, tintedPalette } from '../../art/src/satchel.mjs';
 import { FONT, FRAMES, screenshotFrame } from './frames.mjs';
 
 const root = join(import.meta.dirname, '../..');
@@ -78,6 +78,47 @@ write(
     2,
   )}\n`,
 );
+
+// --- iOS Liquid Glass icon (Icon Composer document, iOS 26+) ------------------
+// The cedar gradient is the icon's fill, and the bag's parts are separate glass groups, so the system can give each
+// its own depth, highlights, and dark/tinted treatment. Groups are listed front to back. Preview it with
+// `mise run art:icon-preview`, or open it in Icon Composer (changes made there are lost on the next render).
+console.log('ios liquid glass');
+const iconDocument = 'apple/Satchel/Resources/AppIcon.icon';
+const parts = bagParts();
+// [name, SVG, translucency]: the leather lets a little light through; the ribbon stays solid so its green holds.
+const layers = [
+  ['ribbon', parts.ribbon, 0],
+  ['flap', parts.flap, 0.2],
+  ['body', parts.body, 0.2],
+];
+for (const [name, body] of layers) {
+  write(`${iconDocument}/Assets/${name}.svg`, svg(1024, 1024, body));
+  console.log(`  ${iconDocument}/Assets/${name}.svg`);
+}
+/** An Icon Composer color: `srgb:r,g,b,a` with each channel 0–1. */
+const iconColor = (hex) =>
+  `srgb:${[1, 3, 5].map((i) => (Number.parseInt(hex.slice(i, i + 2), 16) / 255).toFixed(5)).join(',')},1.00000`;
+write(
+  `${iconDocument}/icon.json`,
+  `${JSON.stringify(
+    {
+      fill: {
+        'linear-gradient': [iconColor(palette.cedarTop), iconColor(palette.cedarBottom)],
+        orientation: { start: { x: 0.5, y: 0 }, stop: { x: 0.5, y: 1 } },
+      },
+      groups: layers.map(([name, , translucency]) => ({
+        layers: [{ 'image-name': `${name}.svg`, name, glass: true }],
+        shadow: { kind: 'neutral', opacity: 0.5 },
+        translucency: { enabled: translucency > 0, value: translucency },
+      })),
+      'supported-platforms': { squares: ['iOS'] },
+    },
+    null,
+    2,
+  )}\n`,
+);
+console.log(`  ${iconDocument}/icon.json`);
 
 // --- browser extension (WXT picks up public/icon/<size>.png) -----------------
 console.log('extension');
