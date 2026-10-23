@@ -245,6 +245,7 @@ Body…
 - Dates use ISO 8601.
 - Unknown frontmatter fields are preserved on round-trip.
 - Link-type Items also produce a Markdown file on export (frontmatter plus the description as body), so a library export is uniformly Markdown.
+- **The stored body has no frontmatter.** An Item's body (in the local stores and in CloudKit's `body`/`bodyAsset`) is `PageCapture.bodyMarkdown`, starting at `# title`. Frontmatter is generated from the Item's fields whenever a file is exported or shown, so tags, notes, and dates edited after the capture are never stale (decided 2026-10-23, Phase 3 ticket 08).
 
 ---
 
@@ -525,6 +526,8 @@ interface PlatformAdapter {
 ```
 
 - **`chromium.ts`:** writes to the IndexedDB outbox, then saves through `CloudKitWebProvider` from `packages/storage`.
+The popup builds the Item in the page with `itemFromCapture` (`packages/capture`), so `save` takes the resulting `{ item, body }` rather than a raw capture.
+
 - **`safari.ts`:** sends the capture through `browser.runtime.sendNativeMessage` to the native handler. **VERIFY** (Spike D) the maximum native message size on iOS and macOS. If large pages exceed it, send the body in chunks using `begin` / `chunk` / `commit` messages keyed by Item ID.
 
 Use `import.meta.env.SAFARI` for build-time branching and feature detection (`'contextMenus' in browser`) at runtime.

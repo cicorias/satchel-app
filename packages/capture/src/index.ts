@@ -6,6 +6,7 @@ import { extractMetadata } from './metadata.ts';
 import type { CaptureOptions, LinkCapture } from './types.ts';
 
 export { type Frontmatter, formatFrontmatter } from './frontmatter.ts';
+export { type CapturedItem, type ItemOptions, itemFromCapture, normalizeTags } from './item.ts';
 export { htmlToMarkdown } from './markdown/convert.ts';
 export { extractMetadata, type MetadataOptions, type MetadataResult, type PageMetadata } from './metadata.ts';
 export {

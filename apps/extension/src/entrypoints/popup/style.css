@@ -57,3 +57,38 @@ button.primary {
 .small {
   font-size: 12px;
 }
+.title {
+  font-weight: 600;
+  margin: 8px 0 2px;
+}
+.url {
+  margin: 0 0 8px;
+  overflow-wrap: anywhere;
+}
+label {
+  display: block;
+  margin: 6px 0;
+  font-size: 12px;
+}
+input,
+textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 2px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--leather);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+button:disabled {
+  opacity: 0.5;
+}
+#status[data-tone="ok"] {
+  color: var(--ribbon);
+}
+#status[data-tone="error"] {
+  color: #b3261e;
+}

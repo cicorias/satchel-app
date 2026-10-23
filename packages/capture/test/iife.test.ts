@@ -31,6 +31,8 @@ test('capture.iife.js exposes the full API on globalThis.SatchelCapture', async 
       'extractMetadata',
       'formatFrontmatter',
       'htmlToMarkdown',
+      'itemFromCapture',
+      'normalizeTags',
       'readingStats',
       'version',
     ].sort(),

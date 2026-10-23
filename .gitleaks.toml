@@ -10,6 +10,8 @@ paths = [
   '''(^|/)\.wxt/''',
   '''(^|/)\.turbo/''',
   '''(^|/)dist/''',
+  # SwiftPM build products and package checkouts (GRDB vendors SQLite's sources and test keys).
+  '''(^|/)\.build/''',
   '''^apple/build/''',
   '''^apple/Staged/''',
   '''^apple/Satchel\.xcodeproj/''',

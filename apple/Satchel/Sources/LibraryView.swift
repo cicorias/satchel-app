@@ -86,6 +86,7 @@ private struct ItemRow: View {
             Text(item.title).font(.headline).lineLimit(2)
             HStack(spacing: 6) {
                 Text(item.siteName ?? URL(string: item.url)?.host() ?? item.url)
+                if let page = item.page { Text("· page, \(page.readingMinutes) min") }
                 if item.metadataStatus == .pending { Text("· details pending") }
             }
             .font(.subheadline)

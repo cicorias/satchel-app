@@ -49,7 +49,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run run:ios` | build, install, and launch on a simulator (`SIM="iPhone 18 Pro Max"` by default, `LOGS=1` to stream output) |
 | `mise run test:golden [-u]` | golden capture tests over `fixtures/pages/` (`-u` rewrites every `expected.md`; review the diff before committing) |
 | `mise run report:capture-timing` | informational `captureLink`/`capturePage` timing over the fixtures (CI prints it; never fails) |
-| `mise run test:ios-ui` | UI tests that enable the Safari extension in Settings and open its popup (`ONLY=Class/test`, `VERBOSE=1`) |
+| `mise run test:ios-ui` | UI tests on the simulator: enable the Safari extension in Settings, save from its popup and from the Share Extension, and check the library (`ONLY=Class/test`, `VERBOSE=1`) |
 | `mise run sim:stop` | stop the app, shut down the simulator, quit DeviceHub/Simulator (`ALL=1` for every simulator) |
 | `mise run sim:reset` | uninstall Satchel and erase that simulator (`PRUNE=1` also deletes simulators with missing runtimes) |
 | `mise run clean` | remove build outputs (`DEPS=1` also removes node_modules) |

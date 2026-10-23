@@ -1,8 +1,9 @@
+import CryptoKit
 import XCTest
 
 /// Drives the system Settings and Safari apps to exercise the Safari Web Extension end to end
 /// (ADR-0005 addendum). Run with `mise run test:ios-ui`; tests run in name order, and
-/// `testA…` enables the extension that `testB…` relies on.
+/// `testA…` enables the extension that the later tests rely on.
 final class SafariExtensionUITests: XCTestCase {
     private let extensionName = "Satchel"
 
@@ -37,9 +38,57 @@ final class SafariExtensionUITests: XCTestCase {
     @MainActor
     func testB_PopupShowsCurrentTab() throws {
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+        let popup = try openPopup(in: safari, url: "https://example.com")
+        XCTAssertTrue(
+            popup.staticTexts["Example Domain"].waitForExistence(timeout: 10), "popup didn't show the tab title")
+        XCTAssertTrue(popup.buttons["Save link"].exists)
+        snapshot(safari, "popup")
+    }
+
+    /// Saves a link, then upgrades it to a page from the popup (ticket 08), and finds the page in the library.
+    @MainActor
+    func testC_SavesALinkThenAPageFromThePopup() throws {
+        // A new URL each run, so the first save is a new link and the second a link → page upgrade (FR-6).
+        let url = "https://example.com/?run=satchel-popup-\(Int(Date().timeIntervalSince1970))"
+        let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+        let popup = try openPopup(in: safari, url: url)
+
+        popup.textFields.firstMatch.tap()
+        popup.textFields.firstMatch.typeText("ui-test")
+        let saveLink = popup.buttons["Save link"]
+        XCTAssertTrue(saveLink.waitForExistence(timeout: 5) && saveLink.isEnabled, "Save link isn't enabled")
+        saveLink.tap()
+        grantWebsiteAccess(in: safari)
+        try waitForStatus("Link saved", in: popup, safari: safari)
+
+        popup.buttons["Save page"].tap()
+        try waitForStatus("Page saved", in: popup, safari: safari)
+        snapshot(safari, "popup-saved")
+
+        // The item's ID is "u_" + the first 32 hex digits of SHA-256(normalized URL) (spec §7.1); this URL is
+        // already normalized.
+        let digest = SHA256.hash(data: Data(url.utf8)).map { String(format: "%02x", $0) }.joined()
+        let app = XCUIApplication(bundleIdentifier: "com.cedarlogic.satchel")
+        app.terminate()
+        app.launch()
+        let row = app.descendants(matching: .any)["item-u_\(digest.prefix(32))"]
+        XCTAssertTrue(row.waitForExistence(timeout: 10), "saved page not in the library\n\(app.debugDescription)")
+        XCTAssertTrue(row.label.contains("page"), "the row isn't a page: \(row.label)")
+        XCTAssertTrue(row.label.contains("Example Domain"), "the row lacks the title: \(row.label)")
+        snapshot(app, "library-after-popup")
+    }
+
+    // MARK: - Helpers
+
+    /// Opens `url` in Safari, then the Satchel popup from the page menu, and returns the popup's web view.
+    @MainActor
+    private func openPopup(in safari: XCUIApplication, url: String) throws -> XCUIElement {
         safari.terminate()
-        XCUIDevice.shared.system.open(URL(string: "https://example.com")!)
+        XCUIDevice.shared.system.open(URL(string: url)!)
         XCTAssertTrue(safari.wait(for: .runningForeground, timeout: 15))
+        let heading = safari.descendants(matching: .any)
+            .matching(NSPredicate(format: "label CONTAINS 'Example Domain'")).firstMatch
+        XCTAssertTrue(heading.waitForExistence(timeout: 20), "page didn't load\n\(safari.debugDescription)")
 
         // On a Reader-capable page the first tap on the page-menu button can toggle Reader instead of
         // opening the menu, so tap its left (menu) side until the extension's entry shows up.
@@ -55,23 +104,32 @@ final class SafariExtensionUITests: XCTestCase {
         }
         XCTAssertTrue(found, "no \(extensionName) entry in the page menu\n\(safari.debugDescription)")
         item.tap()
-
-        // First use may ask for website access; grant it for this run.
-        for label in ["Allow for One Day", "Allow", "Always Allow"]
-        where safari.buttons[label].waitForExistence(timeout: 1) {
-            safari.buttons[label].tap()
-            break
-        }
+        grantWebsiteAccess(in: safari)
 
         let popup = safari.webViews[extensionName]
         XCTAssertTrue(popup.waitForExistence(timeout: 10), "popup didn't open\n\(safari.debugDescription)")
-        XCTAssertTrue(
-            popup.staticTexts["Example Domain"].waitForExistence(timeout: 10), "popup didn't show the tab title")
-        XCTAssertTrue(popup.buttons["Save link"].exists)
-        snapshot(safari, "popup")
+        return popup
     }
 
-    // MARK: - Helpers
+    /// First use may ask for website access; grant it for this run.
+    @MainActor
+    private func grantWebsiteAccess(in safari: XCUIApplication) {
+        for label in ["Allow for One Day", "Allow", "Always Allow"]
+        where safari.buttons[label].waitForExistence(timeout: 1) {
+            safari.buttons[label].tap()
+            return
+        }
+    }
+
+    @MainActor
+    private func waitForStatus(_ text: String, in popup: XCUIElement, safari: XCUIApplication) throws {
+        let status = popup.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", text)).firstMatch
+        if !status.waitForExistence(timeout: 20) {
+            snapshot(safari, "no-status-\(text)")
+            XCTFail("no “\(text)” status\n\(popup.debugDescription)")
+            throw XCTSkip("save failed")
+        }
+    }
 
     /// Taps the first element whose label (or identifier) matches one of `labels`, swiping up to find it.
     @MainActor
