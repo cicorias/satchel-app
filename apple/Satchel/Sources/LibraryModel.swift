@@ -50,9 +50,34 @@ final class LibraryModel {
     init(services: AppServices = .shared) {
         self.services = services
         error = services.openError
+        loadsRemoteImages = services.loadsRemoteImages
+        showingOnboarding = services.needsOnboarding
     }
 
-    var loadsRemoteImages: Bool { services.loadsRemoteImages }
+    /// "Load remote images", read by the rows and the detail view and set in Settings.
+    var loadsRemoteImages: Bool {
+        didSet { services.loadsRemoteImages = loadsRemoteImages }
+    }
+    var showingOnboarding: Bool
+
+    var siteURL: URL? { (try? AppEnvironment.current())?.siteURL }
+    var version: String {
+        (try? AppEnvironment.current()).map { "\($0.version) (\($0.build))" } ?? "—"
+    }
+
+    func finishOnboarding() {
+        services.finishOnboarding()
+        showingOnboarding = false
+    }
+
+    /// Erases this iPhone's library and syncs the iCloud account now signed in (for `SyncStatus.otherAccount`).
+    func startOver() async {
+        do {
+            try await services.sync?.startOver()
+        } catch {
+            self.error = "Couldn't start over: \(error)"
+        }
+    }
 
     /// Outbox state, tags, and sync status, for as long as the library is on screen.
     func observe() async {

@@ -14,7 +14,7 @@ final class LibraryUITests: XCTestCase {
     private func launch() -> XCUIApplication {
         let app = XCUIApplication()
         // Remote images off, so the detail view must load nothing from the network.
-        app.launchArguments = ["-SatchelSeedLibrary", "-SatchelRemoteImagesOff"]
+        app.launchArguments = ["-SatchelSeedLibrary", "-SatchelRemoteImagesOff", "-SatchelOnboardingDone"]
         app.launch()
         XCTAssertTrue(row(pageTitle, in: app).waitForExistence(timeout: 10), "no seeded page\n\(app.debugDescription)")
         return app

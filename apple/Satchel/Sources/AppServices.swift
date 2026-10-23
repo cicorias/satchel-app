@@ -16,7 +16,7 @@ final class AppServices {
     let openError: String?
     /// `<bundle ID>.sync`, listed in Info.plist's `BGTaskSchedulerPermittedIdentifiers`.
     let refreshTaskID: String
-    /// Settings shared with the extensions through the App Group (the toggles arrive in ticket 12).
+    /// Settings shared with the extensions through the App Group.
     let settings: UserDefaults
 
     private let log = Logger(subsystem: "com.cedarlogic.satchel", category: "app")
@@ -27,7 +27,10 @@ final class AppServices {
         settings = environment.flatMap { UserDefaults(suiteName: $0.appGroup) } ?? .standard
         // Spec §11: on by default in development builds; the store default is decided in Phase 7.
         #if DEBUG
-            settings.register(defaults: ["loadRemoteImages": true])
+            settings.register(defaults: [Self.remoteImagesKey: true])
+            if ProcessInfo.processInfo.arguments.contains("-SatchelResetOnboarding") {
+                settings.removeObject(forKey: Self.onboardingKey)
+            }
         #endif
         do {
             let environment = try AppEnvironment.current()
@@ -49,12 +52,32 @@ final class AppServices {
         }
     }
 
-    /// "Load remote images" (spec §11). UI tests turn it off with `-SatchelRemoteImagesOff`.
+    static let remoteImagesKey = "loadRemoteImages"
+    static let onboardingKey = "onboardingDone"
+
+    /// "Load remote images" (spec §11): off in store builds, on in Debug builds. UI tests turn it off with
+    /// `-SatchelRemoteImagesOff`.
     var loadsRemoteImages: Bool {
+        get {
+            #if DEBUG
+                if ProcessInfo.processInfo.arguments.contains("-SatchelRemoteImagesOff") { return false }
+            #endif
+            return settings.bool(forKey: Self.remoteImagesKey)
+        }
+        set { settings.set(newValue, forKey: Self.remoteImagesKey) }
+    }
+
+    /// The first-run page hasn't been dismissed yet. UI tests skip it with `-SatchelOnboardingDone` and bring it back
+    /// with `-SatchelResetOnboarding`.
+    var needsOnboarding: Bool {
         #if DEBUG
-            if ProcessInfo.processInfo.arguments.contains("-SatchelRemoteImagesOff") { return false }
+            if ProcessInfo.processInfo.arguments.contains("-SatchelOnboardingDone") { return false }
         #endif
-        return settings.bool(forKey: "loadRemoteImages")
+        return !settings.bool(forKey: Self.onboardingKey)
+    }
+
+    func finishOnboarding() {
+        settings.set(true, forKey: Self.onboardingKey)
     }
 
     /// Syncs, then enriches pending links, off the main actor (on foreground and from background refresh).

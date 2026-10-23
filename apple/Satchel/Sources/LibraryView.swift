@@ -42,7 +42,10 @@ struct LibraryView: View {
                 }
             }
             .sheet(isPresented: $showingSettings) {
-                SettingsView()
+                SettingsView(model: model)
+            }
+            .fullScreenCover(isPresented: $model.showingOnboarding) {
+                OnboardingView(status: model.syncStatus) { model.finishOnboarding() }
             }
         }
         .task { await model.observe() }
@@ -60,8 +63,8 @@ struct LibraryView: View {
                 let doomed = offsets.map { model.items[$0] }
                 Task { for item in doomed { await model.delete(item) } }
             }
-            if let note = SyncNote(model.syncStatus) {
-                Label(note.text, systemImage: note.symbol)
+            if !model.syncStatus.isHealthy {
+                Label(model.syncStatus.explanation.text, systemImage: model.syncStatus.explanation.symbol)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .accessibilityIdentifier("sync-status")
@@ -89,30 +92,6 @@ struct LibraryView: View {
                     ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
         }
         .accessibilityIdentifier("filter")
-    }
-}
-
-/// A one-line explanation when sync isn't working normally.
-private struct SyncNote {
-    let text: String
-    let symbol: String
-
-    init?(_ status: SyncStatus) {
-        switch status {
-        case .starting, .syncing, .upToDate:
-            return nil
-        case .noAccount:
-            (text, symbol) = ("Sign in to iCloud to sync. Saves are kept on this iPhone until then.", "icloud.slash")
-        case .temporarilyUnavailable:
-            (text, symbol) = ("iCloud isn't available right now. Saves will sync later.", "icloud.slash")
-        case .otherAccount:
-            (text, symbol) = (
-                "This library belongs to a different iCloud account, so sync is paused.",
-                "person.crop.circle.badge.exclamationmark"
-            )
-        case .failed(let reason):
-            (text, symbol) = ("Sync stopped: \(reason)", "exclamationmark.icloud")
-        }
     }
 }
 

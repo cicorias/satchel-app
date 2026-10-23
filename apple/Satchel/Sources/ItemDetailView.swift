@@ -13,7 +13,7 @@ struct ItemDetailView: View {
     @State private var exportFile: URL?
     @State private var markdown: String?
     @State private var loadImages = false
-    @State private var report = MarkdownWebView.Report()
+    @State private var report: MarkdownWebView.Report?
     @State private var confirmingDelete = false
     @State private var copied = false
 
@@ -48,7 +48,7 @@ struct ItemDetailView: View {
                     Color.clear.frame(width: 1, height: 1)
                     .accessibilityElement()
                     .accessibilityIdentifier("render-report")
-                    .accessibilityValue(report.summary)
+                    .accessibilityValue(report?.summary ?? "rendering")
                 }
             #endif
         } else {
@@ -105,8 +105,8 @@ struct ItemDetailView: View {
                     copied = true
                 }
                 .disabled(markdown == nil)
-                if report.blockedImages > 0 && !loadImages {
-                    Button("Load Images (\(report.blockedImages))", systemImage: "photo") { loadImages = true }
+                if let blocked = report?.blockedImages, blocked > 0, !loadImages {
+                    Button("Load Images (\(blocked))", systemImage: "photo") { loadImages = true }
                 }
                 Button("Delete", systemImage: "trash", role: .destructive) { confirmingDelete = true }
             } label: {
