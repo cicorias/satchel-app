@@ -20,11 +20,11 @@ SatchelShare / SatchelSafari handler      host app (Satchel)
 
 ## Acceptance criteria (from §14 Phase 3, iPhone scope)
 
-- [ ] On iPhone, sharing from Safari saves both links and pages.
-- [ ] Sharing a URL from another app saves a pending link, which the host app later enriches.
-- [ ] The Safari extension saves links and pages on iOS.
-- [ ] Saves made with no network sync once the device is back online.
-- [ ] The library lists, searches, renders, exports, and deletes saved Items (FR-7).
+- [x] On iPhone, sharing from Safari saves both links and pages.
+- [x] Sharing a URL from another app saves a pending link, which the host app later enriches.
+- [x] The Safari extension saves links and pages on iOS.
+- [x] Saves made with no network sync once the device is back online.
+- [x] The library lists, searches, renders, exports, and deletes saved Items (FR-7).
 
 ## Tickets
 
