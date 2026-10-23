@@ -60,3 +60,8 @@ ADR-0007 and §9.1, Safari part only. Chrome and Edge get their platform adapter
 - Results: `mise run verify` passes (133 Swift tests); the UI suite passes 4/4.
 
 **Also:** `.gitleaks.toml` now skips SwiftPM `.build/` directories. GRDB's checkout vendors SQLite test keys, which the working-tree scan flagged.
+
+**Device check (2026-10-23, iPhone 18 Pro Max, Debug build):**
+- **Popup saves:** a link save, then a page save, then a re-save with Keep and then Replace, all of one article. The result is one page item from `safari-ios`, with its `createdAt` kept from the link save and a 1,668-character body that starts at `# title` with no frontmatter. Its outbox entry was `sent` after 1 attempt, about 0.5 s after the last save.
+- **Tags:** `great tools` became a single tag. The user then chose to split tags on commas or periods (ticket 09).
+- **Open question:** the body shows one image twice in a row. It could be a lazy-load duplicate or the page itself, and a capture fix would need a fixture.
