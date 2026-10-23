@@ -981,7 +981,7 @@ Dropbox, Google Drive, and OneDrive adapters in TypeScript and Swift; OAuth flow
 1. ~~Final product name, bundle prefix, and iCloud container ID.~~ **Resolved** by ADR-0010: Satchel, `com.cedarlogic.satchel`, `iCloud.com.cedarlogic.satchel`.
 2. CloudKit Web Services sign-in mechanics inside an extension (Spike A).
 3. Native messaging payload limits in Safari (Spike D).
-4. Default for loading remote images in store builds.
+4. ~~Default for loading remote images in store builds.~~ **Resolved** 2026-10-23: off in store builds, on in development builds (`.scratch/release-1/spec.md`).
 5. How much library UI the macOS host app needs in v1 beyond the minimum.
 6. When to add Firefox (inexpensive with WXT; it would also use CloudKit Web Services).
 
