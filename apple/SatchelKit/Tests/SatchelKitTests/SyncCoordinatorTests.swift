@@ -201,10 +201,14 @@ final class FakeQueue: SyncChangeQueue {
         try await f.store.save(item: makeItem("a", tags: ["keep", "drop"]))
         try await f.store.markSent(try #require(try await f.store.unsentOutboxEntry(for: "u_a")).id)
 
-        let server = try f.serverRecord(makeItem("a", tags: ["keep"], updatedAt: "2026-10-02T10:00:00.000Z"))
+        var remote = makeItem("a", tags: ["keep"], updatedAt: "2026-10-02T10:00:00.000Z")
+        remote.url = "https://other.example/edited?ref=console"
+        let server = try f.serverRecord(remote)
         try await f.coordinator.handleFetched(modifications: [server], deletions: [], queue: f.queue)
-        // No merge: a tag removed on another device stays removed.
-        #expect(try await f.store.item(id: "u_a")?.tags == ["keep"])
+        // No merge: a tag removed on another device stays removed, and every field takes the server's value.
+        let stored = try #require(try await f.store.item(id: "u_a"))
+        #expect(stored.tags == ["keep"])
+        #expect(stored.url == "https://other.example/edited?ref=console")
         #expect(f.queue.pendingRecordZoneChanges.isEmpty)
         #expect(try await f.outbox("u_a") == .sent)
     }
