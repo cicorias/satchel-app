@@ -95,3 +95,7 @@ Add a `OneShotSaver` for the extensions (§9.2.2–9.2.3):
 - the `OneShotSaver` against an in-memory fake: success, zone creation and retry, every error mapping, a partial failure, a timeout, asset cleanup, and delete
 
 **Still to check by hand:** the device check (a record arriving in Development) is in `docs/setup/manual-test-plan.md` §4. It runs once ticket 06 wires the Share Extension to `OneShotSaver`.
+
+## Comments
+
+2026-10-22: the user chose to sync `selection`. `selection INT64` (0/1) is added to `apple/CloudKit/Satchel.ckdb` and spec §8.2, imported into Development (`deploy:cloudkit-schema diff` shows no differences), and mapped by `ItemRecordMapper`. Only `Item.extra` is still local-only.

@@ -10,8 +10,8 @@ import Foundation
 ///   unknown fields survive. `tags` is a string list.
 /// - **Body:** at most `maxInlineBodyBytes` of UTF-8 goes in `body`; anything larger goes in `bodyAsset`, a file the
 ///   mapper writes into `assetDirectory`. A writer sets one and clears the other.
-/// - **Not in the record:** CloudKit has no column for `Item.selection` or for `Item.extra` (fields from a newer
-///   client). They stay in the local store, and `item(from:existing:)` carries them over from the local copy.
+/// - **Not in the record:** CloudKit has no column for `Item.extra` (fields from a newer client). They stay in the
+///   local store, and `item(from:existing:)` carries them over from the local copy. `selection` is an INT64 0/1.
 public struct ItemRecordMapper: Sendable {
     public static let recordType: CKRecord.RecordType = "Item"
     /// 512 KB. A body this size or smaller is stored inline; CloudKit records are limited to 1 MB in all.
@@ -21,7 +21,7 @@ public struct ItemRecordMapper: Sendable {
     public static let fieldNames: Set<String> = [
         "author", "body", "bodyAsset", "canonicalUrl", "capturedAt", "createdAt", "description", "faviconUrl",
         "imageUrl", "kind", "lang", "metadataStatus", "normalizedUrl", "note", "page", "publishedAt", "schemaVersion",
-        "siteName", "source", "tags", "title", "updatedAt", "url",
+        "selection", "siteName", "source", "tags", "title", "updatedAt", "url",
     ]
 
     public let zoneID: CKRecordZone.ID
@@ -106,6 +106,7 @@ public struct ItemRecordMapper: Sendable {
         // CloudKit reads an empty list back as no value, so an empty tag list is written as an absent field.
         set("tags", item.tags.isEmpty ? nil : item.tags)
         set("note", item.note)
+        set("selection", item.selection.map { Int64($0 ? 1 : 0) })
         try setDate("createdAt", item.createdAt)
         try setDate("updatedAt", item.updatedAt)
         try setDate("capturedAt", item.capturedAt)
@@ -130,8 +131,8 @@ public struct ItemRecordMapper: Sendable {
 
     /// The item `record` holds.
     ///
-    /// - Parameter existing: the local copy, if any. When its ID matches, its `extra` fields and `selection` (which
-    ///   CloudKit has no column for) are carried over, and each of its timestamp strings is kept when it names the
+    /// - Parameter existing: the local copy, if any. When its ID matches, its `extra` fields (which CloudKit has no
+    ///   column for) are carried over, and each of its timestamp strings is kept when it names the
     ///   same millisecond as the record's date, so a local `+02:00` or no-fraction string isn't rewritten.
     public func item(from record: CKRecord, existing: Item? = nil) throws(ItemRecordMappingError) -> Item {
         guard record.recordType == Self.recordType else { throw .wrongRecordType(record.recordType) }
@@ -195,7 +196,10 @@ public struct ItemRecordMapper: Sendable {
         if let page = try optionalString("page") {
             item.page = try decode(PageInfo.self, from: page, field: "page")
         }
-        item.selection = existing?.selection
+        if let value = record["selection"] {
+            guard let flag = value as? Int else { throw .invalidField("selection") }
+            item.selection = flag != 0
+        }
         item.extra = existing?.extra ?? [:]
         return item
     }
