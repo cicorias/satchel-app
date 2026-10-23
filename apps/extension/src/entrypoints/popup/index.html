@@ -9,12 +9,25 @@
   <body>
     <main>
       <header><img src="/icon/48.png" width="24" height="24" alt="" /> <h1>Satchel</h1></header>
-      <p id="tab-title" class="muted">…</p>
-      <div class="actions">
-        <button id="save-link" type="button" class="primary" disabled>Save link</button>
-        <button id="save-page" type="button" disabled>Save page</button>
-      </div>
-      <p class="muted small">Saving arrives in Phase 2 (Chrome/Edge) and Phase 3 (Safari).</p>
+      <p id="tab-title" class="title">…</p>
+      <p id="tab-url" class="muted small url"></p>
+      <form id="save-form">
+        <label>Tags <input id="tags" name="tags" list="tag-options" autocomplete="off" placeholder="comma, separated" /></label>
+        <datalist id="tag-options"></datalist>
+        <label>Note <textarea id="note" name="note" rows="2"></textarea></label>
+        <div class="actions">
+          <button id="save-link" type="submit" class="primary" disabled>Save link</button>
+          <button id="save-page" type="button" disabled>Save page</button>
+        </div>
+      </form>
+      <section id="confirm" hidden>
+        <p>This page is already saved. Replace saved copy?</p>
+        <div class="actions">
+          <button id="replace" type="button" class="primary">Replace</button>
+          <button id="keep" type="button">Keep saved copy</button>
+        </div>
+      </section>
+      <p id="status" class="small" role="status" aria-live="polite"></p>
     </main>
     <script type="module" src="./main.ts"></script>
   </body>

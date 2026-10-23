@@ -55,11 +55,13 @@ public struct ItemSaver: Sendable {
         return try await save(item, body: nil)
     }
 
-    /// Stores `item` (merging with any saved copy), then tries CloudKit.
+    /// Stores `item` (merging with any saved copy), then tries CloudKit with the merged item and, when `body` was
+    /// given, the body the merge kept.
     public func save(_ item: Item, body: String?) async throws -> Outcome {
         let stored = try await store.save(item: item, body: body)
         let entry = try await store.unsentOutboxEntry(for: stored.id)
-        let result = await cloud.save(stored, body: body)
+        let keptBody = body == nil ? nil : try await store.body(for: stored.id)
+        let result = await cloud.save(stored, body: keptBody)
         switch result {
         case .success:
             if let entry { try await store.markSent(entry.id) }
