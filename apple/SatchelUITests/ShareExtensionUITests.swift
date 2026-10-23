@@ -22,6 +22,7 @@ final class ShareExtensionUITests: XCTestCase {
 
         let app = XCUIApplication(bundleIdentifier: "com.cedarlogic.satchel")
         app.terminate()
+        app.launchArguments = ["-SatchelOnboardingDone"]
         app.launch()
         let row = app.descendants(matching: .any)
             .matching(NSPredicate(format: "label CONTAINS 'Example Domain' OR label CONTAINS %@", marker)).firstMatch
@@ -58,6 +59,7 @@ final class ShareExtensionUITests: XCTestCase {
         let digest = SHA256.hash(data: Data(url.utf8)).map { String(format: "%02x", $0) }.joined()
         let app = XCUIApplication(bundleIdentifier: "com.cedarlogic.satchel")
         app.terminate()
+        app.launchArguments = ["-SatchelOnboardingDone"]
         app.launch()
         let row = app.descendants(matching: .any).matching(identifier: "item-u_\(digest.prefix(32))").firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 10), "saved page not in the library\n\(app.debugDescription)")

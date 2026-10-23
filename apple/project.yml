@@ -88,6 +88,8 @@ targets:
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         UIBackgroundModes: [fetch, remote-notification]
         BGTaskSchedulerPermittedIdentifiers: [$(SATCHEL_BUNDLE_ID).sync]
+        # The privacy policy and support pages (site/ on GitHub Pages), linked from Settings.
+        SatchelSiteURL: https://$(SATCHEL_SITE)/
         ITSAppUsesNonExemptEncryption: false
         SatchelAppGroup: $(SATCHEL_APP_GROUP)
         SatchelICloudContainer: $(SATCHEL_ICLOUD_CONTAINER)

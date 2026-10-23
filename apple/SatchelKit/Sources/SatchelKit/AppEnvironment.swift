@@ -10,13 +10,19 @@ public struct AppEnvironment: Sendable, Equatable {
     public var cloudKitZone: String
     public var version: String
     public var build: String
+    /// The project site (`siteUrl`), whose `privacy.html` and `support.html` Settings links to. Only the app has it.
+    public var siteURL: URL?
 
-    public init(appGroup: String, iCloudContainer: String, cloudKitZone: String, version: String, build: String) {
+    public init(
+        appGroup: String, iCloudContainer: String, cloudKitZone: String, version: String, build: String,
+        siteURL: URL? = nil
+    ) {
         self.appGroup = appGroup
         self.iCloudContainer = iCloudContainer
         self.cloudKitZone = cloudKitZone
         self.version = version
         self.build = build
+        self.siteURL = siteURL
     }
 
     /// Reads the `Satchel*` keys from an Info.plist dictionary.
@@ -30,7 +36,8 @@ public struct AppEnvironment: Sendable, Equatable {
             iCloudContainer: try value("SatchelICloudContainer"),
             cloudKitZone: try value("SatchelCloudKitZone"),
             version: try value("CFBundleShortVersionString"),
-            build: try value("CFBundleVersion")
+            build: try value("CFBundleVersion"),
+            siteURL: (info["SatchelSiteURL"] as? String).flatMap(URL.init(string:))
         )
     }
 
