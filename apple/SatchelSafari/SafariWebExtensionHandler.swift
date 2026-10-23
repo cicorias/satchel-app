@@ -15,8 +15,13 @@ final class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         let item = context.inputItems.first as? NSExtensionItem
         // Only Sendable values cross into the task: the message as JSON data, and the context in a box.
         let message = ExtensionMessageHandler.json(item?.userInfo?[SFExtensionMessageKey])
-        let request = Request(context: context)
-        Task.detached { await Self.answer(message, request) }
+        Self.start(message, Request(context: context))
+    }
+
+    /// Starts the task outside `beginRequest`, so its closure captures only Sendable values. (Xcode 26.6's
+    /// region-based isolation checker crashes on a task created next to the non-Sendable context.)
+    private static func start(_ message: Data?, _ request: Request) {
+        Task { await answer(message, request) }
     }
 
     private static func answer(_ message: Data?, _ request: Request) async {
