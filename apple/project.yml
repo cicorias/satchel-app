@@ -53,6 +53,10 @@ targets:
       - path: Staged/web/model.jsc.iife.js
         buildPhase: resources
         optional: true
+      # The Markdown renderer for the detail view's WKWebView (spec §9.1.4).
+      - path: Staged/web/render.iife.js
+        buildPhase: resources
+        optional: true
     dependencies:
       - target: WebAssets
       - target: SatchelShare

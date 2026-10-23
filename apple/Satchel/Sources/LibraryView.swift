@@ -1,8 +1,9 @@
 import SatchelKit
 import SwiftUI
 
-/// The saved items, newest first, with their sync state; swipe to delete, pull to sync. Search, filters, and the
-/// detail view arrive in ticket 10, and the full sync status in settings in ticket 12 (spec §9.2.4).
+/// The library (FR-7, spec §9.2.4): saved items, newest first, with search (FTS5 over title, description, site, tags,
+/// and body), filters by kind and tag, and each item's sync state (FR-8). Swipe to delete, pull to sync, tap for the
+/// detail view.
 struct LibraryView: View {
     @State private var model = LibraryModel()
     @State private var showingSettings = false
@@ -13,36 +14,31 @@ struct LibraryView: View {
                 if let error = model.error {
                     ContentUnavailableView(
                         "Library unavailable", systemImage: "exclamationmark.triangle", description: Text(error))
-                } else if model.items.isEmpty {
+                } else if model.items.isEmpty && model.query == .init() {
                     ContentUnavailableView {
                         Label("Nothing saved yet", systemImage: "bookmark")
                     } description: {
                         Text("Share a link from any app to save it here.")
                     }
+                } else if model.items.isEmpty {
+                    ContentUnavailableView.search(text: model.query.text)
                 } else {
-                    List {
-                        ForEach(model.items) { item in
-                            ItemRow(item: item, state: model.unsent[item.id])
-                        }
-                        .onDelete { offsets in
-                            let doomed = offsets.map { model.items[$0] }
-                            Task { for item in doomed { await model.delete(item) } }
-                        }
-                        if let note = SyncNote(model.syncStatus) {
-                            Label(note.text, systemImage: note.symbol)
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                                .accessibilityIdentifier("sync-status")
-                        }
-                    }
-                    .refreshable { await model.refresh() }
-                    .accessibilityIdentifier("library-list")
+                    list
                 }
             }
             .navigationTitle("Library")
+            .searchable(text: $model.query.text, prompt: "Search titles, tags, and text")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) { filterMenu }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Settings", systemImage: "gearshape") { showingSettings = true }
+                }
+            }
+            .navigationDestination(for: String.self) { id in
+                if let item = model.items.first(where: { $0.id == id }) {
+                    ItemDetailView(item: item, state: model.unsent[id], library: model)
+                } else {
+                    ContentUnavailableView("Item not found", systemImage: "questionmark")
                 }
             }
             .sheet(isPresented: $showingSettings) {
@@ -50,6 +46,49 @@ struct LibraryView: View {
             }
         }
         .task { await model.observe() }
+        .task(id: model.query) { await model.observeItems() }
+    }
+
+    private var list: some View {
+        List {
+            ForEach(model.items) { item in
+                NavigationLink(value: item.id) {
+                    ItemRow(item: item, state: model.unsent[item.id])
+                }
+            }
+            .onDelete { offsets in
+                let doomed = offsets.map { model.items[$0] }
+                Task { for item in doomed { await model.delete(item) } }
+            }
+            if let note = SyncNote(model.syncStatus) {
+                Label(note.text, systemImage: note.symbol)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .accessibilityIdentifier("sync-status")
+            }
+        }
+        .refreshable { await model.refresh() }
+        .accessibilityIdentifier("library-list")
+    }
+
+    private var filterMenu: some View {
+        Menu {
+            Picker("Kind", selection: $model.query.kind) {
+                ForEach(LibraryModel.KindFilter.allCases) { Text($0.title).tag($0) }
+            }
+            if !model.tags.isEmpty {
+                Picker("Tag", selection: $model.query.tag) {
+                    Text("Any tag").tag(String?.none)
+                    ForEach(model.tags, id: \.self) { Text($0).tag(Optional($0)) }
+                }
+            }
+        } label: {
+            Label(
+                "Filter",
+                systemImage: model.query.isFiltered
+                    ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+        }
+        .accessibilityIdentifier("filter")
     }
 }
 

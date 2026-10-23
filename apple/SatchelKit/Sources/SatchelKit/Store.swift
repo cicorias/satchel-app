@@ -151,20 +151,29 @@ public final class Store: Sendable {
 
     /// Tags in use, most used first (then alphabetically), for autocomplete. `prefix` is matched after lowercasing.
     public func tags(prefix: String? = nil, limit: Int? = nil) async throws -> [String] {
-        try await pool.read { db in
-            var sql = "SELECT tag FROM itemTags"
-            var arguments = StatementArguments()
-            if let prefix = prefix.map(Self.normalizeTag), !prefix.isEmpty {
-                sql += " WHERE substr(tag, 1, ?) = ?"
-                arguments += [prefix.unicodeScalars.count, prefix]
-            }
-            sql += " GROUP BY tag ORDER BY COUNT(*) DESC, tag"
-            if let limit {
-                sql += " LIMIT ?"
-                arguments += [limit]
-            }
-            return try String.fetchAll(db, sql: sql, arguments: arguments)
+        try await pool.read { db in try Self.fetchTags(db, prefix: prefix, limit: limit) }
+    }
+
+    /// Every tag in use, most used first, then fresh values after every change, including other processes'.
+    public func observeTags() -> some AsyncSequence<[String], any Error> & Sendable {
+        ValueObservation.tracking { db in try Self.fetchTags(db, prefix: nil, limit: nil) }
+            .removeDuplicates()
+            .values(in: pool)
+    }
+
+    private static func fetchTags(_ db: Database, prefix: String?, limit: Int?) throws -> [String] {
+        var sql = "SELECT tag FROM itemTags"
+        var arguments = StatementArguments()
+        if let prefix = prefix.map(Self.normalizeTag), !prefix.isEmpty {
+            sql += " WHERE substr(tag, 1, ?) = ?"
+            arguments += [prefix.unicodeScalars.count, prefix]
         }
+        sql += " GROUP BY tag ORDER BY COUNT(*) DESC, tag"
+        if let limit {
+            sql += " LIMIT ?"
+            arguments += [limit]
+        }
+        return try String.fetchAll(db, sql: sql, arguments: arguments)
     }
 
     // MARK: - Outbox

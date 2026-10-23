@@ -1,51 +1,126 @@
 import Foundation
 import SatchelKit
 
-/// The library's live data: every item, newest first, which ones haven't reached CloudKit yet (FR-8), and where sync
-/// stands. The lists update when sync or either extension writes to the shared store.
+/// The library's live data: the items matching the search and filters, which ones haven't reached CloudKit yet
+/// (FR-8), and where sync stands. The lists update when sync or either extension writes to the shared store.
 @MainActor @Observable
 final class LibraryModel {
+    enum KindFilter: String, CaseIterable, Identifiable {
+        case all, pages, links
+        var id: Self { self }
+        var kind: ItemKind? {
+            switch self {
+            case .all: nil
+            case .pages: .page
+            case .links: .link
+            }
+        }
+        var title: String {
+            switch self {
+            case .all: "All"
+            case .pages: "Pages"
+            case .links: "Links"
+            }
+        }
+    }
+
+    /// What the list shows; changing it restarts the items observation.
+    struct Query: Hashable {
+        var text = ""
+        var kind = KindFilter.all
+        var tag: String?
+
+        var isFiltered: Bool { kind != .all || tag != nil }
+
+        var filter: ItemFilter {
+            let searching = !text.trimmingCharacters(in: .whitespaces).isEmpty
+            return ItemFilter(kind: kind.kind, tag: tag, order: searching ? .relevance : .recentlyCreated)
+        }
+    }
+
     private(set) var items: [Item] = []
     private(set) var unsent: [String: OutboxState] = [:]
+    private(set) var tags: [String] = []
     private(set) var syncStatus = SyncStatus.starting
     private(set) var error: String?
+    var query = Query()
 
-    private let store: Store?
-    private let sync: LibrarySync?
+    private let services: AppServices
 
     init(services: AppServices = .shared) {
-        store = services.store
-        sync = services.sync
+        self.services = services
         error = services.openError
     }
 
+    var loadsRemoteImages: Bool { services.loadsRemoteImages }
+
+    /// Outbox state, tags, and sync status, for as long as the library is on screen.
     func observe() async {
-        guard let store else { return }
-        async let items: Void = observeItems(store)
+        guard let store = services.store else { return }
+        #if DEBUG
+            if UITestSeed.isRequested, let model = services.model {
+                try? await UITestSeed.seed(store: store, model: model)
+            }
+        #endif
         async let outbox: Void = observeOutbox(store)
+        async let tags: Void = observeTags(store)
         async let status: Void = observeSync()
-        _ = await (items, outbox, status)
+        _ = await (outbox, tags, status)
+    }
+
+    /// The items for the current query; restarted by the view whenever `query` changes.
+    func observeItems() async {
+        guard let store = services.store else { return }
+        do {
+            for try await items in store.observeItems(matching: query.text, filter: query.filter) { self.items = items }
+        } catch is CancellationError {
+        } catch {
+            self.error = "\(error)"
+        }
     }
 
     /// Deletes locally and queues the delete; sync sends it.
     func delete(_ item: Item) async {
         do {
-            try await store?.delete(id: item.id)
+            try await services.store?.delete(id: item.id)
         } catch {
             self.error = "Couldn't delete: \(error)"
         }
     }
 
     func refresh() async {
-        await sync?.syncNow()
+        await services.sync?.syncNow()
     }
 
-    private func observeItems(_ store: Store) async {
+    func body(for item: Item) async -> String? {
+        try? await services.store?.body(for: item.id)
+    }
+
+    /// The `.md` export (spec §5): frontmatter from the item, then the body or, for a link, the description.
+    func markdownFile(for item: Item, body: String?) -> String? {
+        try? services.model?.markdownFile(for: item, body: body)
+    }
+
+    /// Writes the export to a temporary `<title>.md` for the share sheet.
+    func exportFile(for item: Item, markdown: String) -> URL? {
+        let directory = FileManager.default.temporaryDirectory.appending(path: "Export", directoryHint: .isDirectory)
+        let url = directory.appending(path: "\(Self.fileName(for: item)).md")
         do {
-            for try await items in store.observeItems() { self.items = items }
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            try Data(markdown.utf8).write(to: url, options: .atomic)
+            return url
         } catch {
-            self.error = "\(error)"
+            return nil
         }
+    }
+
+    /// The title, kept to characters that are safe in a file name, at most 80 of them.
+    static func fileName(for item: Item) -> String {
+        let allowed = CharacterSet.alphanumerics.union(.whitespaces).union(CharacterSet(charactersIn: "-_.,()"))
+        let cleaned = String(String.UnicodeScalarView(item.title.unicodeScalars.filter(allowed.contains)))
+            .split(whereSeparator: \.isWhitespace).joined(separator: " ")
+        let name = String(cleaned.prefix(80)).trimmingCharacters(in: CharacterSet(charactersIn: " ."))
+        return name.isEmpty ? item.id : name
     }
 
     private func observeOutbox(_ store: Store) async {
@@ -56,8 +131,16 @@ final class LibraryModel {
         }
     }
 
+    private func observeTags(_ store: Store) async {
+        do {
+            for try await tags in store.observeTags() { self.tags = tags }
+        } catch {
+            self.error = "\(error)"
+        }
+    }
+
     private func observeSync() async {
-        guard let sync else { return }
+        guard let sync = services.sync else { return }
         for await status in sync.statusUpdates() { syncStatus = status }
     }
 }
