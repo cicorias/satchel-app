@@ -53,7 +53,7 @@ struct LibraryView: View {
         List {
             ForEach(model.items) { item in
                 NavigationLink(value: item.id) {
-                    ItemRow(item: item, state: model.unsent[item.id])
+                    ItemRow(item: item, state: model.unsent[item.id], showsImage: model.loadsRemoteImages)
                 }
             }
             .onDelete { offsets in
@@ -119,14 +119,36 @@ private struct SyncNote {
 private struct ItemRow: View {
     let item: Item
     let state: OutboxState?
+    /// Remote images are on (spec §11), so the item's preview image may be fetched from its site.
+    let showsImage: Bool
 
     var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            details
+            Spacer(minLength: 0)
+            if showsImage, let url = item.imageURL.flatMap(URL.init(string:)) {
+                AsyncImage(url: url) { image in
+                    image.resizable().scaledToFill()
+                } placeholder: {
+                    Color.secondary.opacity(0.15)
+                }
+                .frame(width: 56, height: 56)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .accessibilityHidden(true)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("item-\(item.id)")
+    }
+
+    private var details: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(item.title).font(.headline).lineLimit(2)
             HStack(spacing: 6) {
                 Text(item.siteName ?? URL(string: item.url)?.host() ?? item.url)
                 if let page = item.page { Text("· page, \(page.readingMinutes) min") }
                 if item.metadataStatus == .pending { Text("· details pending") }
+                if item.metadataStatus == .failed { Text("· details unavailable") }
             }
             .font(.subheadline)
             .foregroundStyle(.secondary)
@@ -139,8 +161,6 @@ private struct ItemRow: View {
                 .foregroundStyle(.orange)
             }
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityIdentifier("item-\(item.id)")
     }
 }
 

@@ -57,6 +57,10 @@ targets:
       - path: Staged/web/render.iife.js
         buildPhase: resources
         optional: true
+      # The capture engine, for enriching links shared from other apps (spec §9.2.4).
+      - path: Staged/web/capture.iife.js
+        buildPhase: resources
+        optional: true
     dependencies:
       - target: WebAssets
       - target: SatchelShare

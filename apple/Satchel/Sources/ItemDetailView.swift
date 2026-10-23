@@ -54,6 +54,16 @@ struct ItemDetailView: View {
         } else {
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
+                    if library.loadsRemoteImages, let url = item.imageURL.flatMap(URL.init(string:)) {
+                        AsyncImage(url: url) { image in
+                            image.resizable().scaledToFit()
+                        } placeholder: {
+                            Color.secondary.opacity(0.15).frame(height: 160)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .accessibilityHidden(true)
+                    }
                     Text(item.title).font(.title.bold())
                     Text(header.byline).font(.subheadline).foregroundStyle(.secondary)
                     if !item.tags.isEmpty {

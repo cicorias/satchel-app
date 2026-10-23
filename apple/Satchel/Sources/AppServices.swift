@@ -11,6 +11,8 @@ final class AppServices {
     let store: Store?
     let model: SatchelModel?
     let sync: LibrarySync?
+    /// Fills in links shared from other apps (spec §9.2.4).
+    let enricher: Enricher?
     let openError: String?
     /// `<bundle ID>.sync`, listed in Info.plist's `BGTaskSchedulerPermittedIdentifiers`.
     let refreshTaskID: String
@@ -23,6 +25,10 @@ final class AppServices {
         refreshTaskID = "\(Bundle.main.bundleIdentifier ?? "com.cedarlogic.satchel").sync"
         let environment = try? AppEnvironment.current()
         settings = environment.flatMap { UserDefaults(suiteName: $0.appGroup) } ?? .standard
+        // Spec §11: on by default in development builds; the store default is decided in Phase 7.
+        #if DEBUG
+            settings.register(defaults: ["loadRemoteImages": true])
+        #endif
         do {
             let environment = try AppEnvironment.current()
             let model = try SatchelModel.bundled()
@@ -30,17 +36,35 @@ final class AppServices {
             self.store = store
             self.model = model
             sync = LibrarySync(store: store, environment: environment)
+            enricher = WebMetadataLoader.bundled().map {
+                Enricher(store: store, loader: $0, network: NetworkPath())
+            }
             openError = nil
         } catch {
             store = nil
             model = nil
             sync = nil
+            enricher = nil
             openError = "The library couldn't be opened: \(error)"
         }
     }
 
-    /// "Load remote images" (spec §11). Off unless the user turns it on.
-    var loadsRemoteImages: Bool { settings.bool(forKey: "loadRemoteImages") }
+    /// "Load remote images" (spec §11). UI tests turn it off with `-SatchelRemoteImagesOff`.
+    var loadsRemoteImages: Bool {
+        #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-SatchelRemoteImagesOff") { return false }
+        #endif
+        return settings.bool(forKey: "loadRemoteImages")
+    }
+
+    /// Syncs, then enriches pending links, off the main actor (on foreground and from background refresh).
+    nonisolated func syncAndEnrich() async {
+        let (sync, enricher) = await MainActor.run { (self.sync, self.enricher) }
+        await sync?.syncNow()
+        if let enricher {
+            await Task.detached(priority: .utility) { await enricher.run() }.value
+        }
+    }
 
     /// Asks for a background refresh in about 15 minutes; iOS decides when it actually runs.
     func scheduleRefresh() {
