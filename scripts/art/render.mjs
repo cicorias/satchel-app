@@ -5,9 +5,10 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
 import { background, badge, bag, palette, svg, tintedPalette } from '../../art/src/satchel.mjs';
+import { FONT, FRAMES, screenshotFrame } from './frames.mjs';
 
 const root = join(import.meta.dirname, '../..');
-const FONT = "'Avenir Next', 'Helvetica Neue', Helvetica, Arial, sans-serif";
+
 const TAGLINE = 'Save the web as Markdown, into your own iCloud.';
 
 function write(rel, data) {
@@ -120,25 +121,6 @@ function smallPromo(w, h) {
   );
 }
 
-function screenshotFrame(headline, sub) {
-  const w = 1320;
-  const h = 2868;
-  return svg(
-    w,
-    h,
-    `
-  <defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="${palette.cedarTop}"/><stop offset="1" stop-color="${palette.cedarBottom}"/>
-  </linearGradient></defs>
-  <rect width="${w}" height="${h}" fill="url(#f)"/>
-  <text x="${w / 2}" y="300" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="104" fill="${palette.cream}">${headline}</text>
-  <text x="${w / 2}" y="400" text-anchor="middle" font-family="${FONT}" font-weight="500" font-size="52" fill="${palette.brass}">${sub}</text>
-  <!-- Screenshot drop zone: composite a 6.9" capture scaled to 1080 wide here. -->
-  <rect x="120" y="520" width="1080" height="2348" rx="120" fill="${palette.ink}" opacity="0.55"/>
-  <rect x="120" y="520" width="1080" height="2348" rx="120" fill="none" stroke="${palette.leatherDark}" stroke-width="6" stroke-dasharray="28 20"/>`,
-  );
-}
-
 console.log('stores');
 png(
   svg(1024, 1024, `<g transform="translate(128 128) scale(0.75)">${badge({ id: 'c' })}</g>`),
@@ -150,12 +132,7 @@ png(promo(1400, 560), 1400, 'store/chrome/promo-marquee-1400x560.png');
 png(masters.badge, 300, 'store/edge/logo-300.png');
 png(smallPromo(440, 280), 440, 'store/edge/promo-small-440x280.png');
 png(promo(1400, 560), 1400, 'store/edge/promo-large-1400x560.png');
-const frames = [
-  ['Save any page in one tap', 'From Safari or the share sheet'],
-  ['Clean Markdown you own', 'Obsidian-friendly, with frontmatter'],
-  ['Your iCloud, your library', 'No accounts, no servers, no tracking'],
-];
-frames.forEach(([headline, sub], i) => {
+FRAMES.forEach(({ headline, sub }, i) => {
   png(screenshotFrame(headline, sub), 1320, `store/app-store/frame-${i + 1}-1320x2868.png`);
 });
 png(promo(1280, 640), 1280, 'store/github/social-preview-1280x640.png');

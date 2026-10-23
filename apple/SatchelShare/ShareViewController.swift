@@ -193,6 +193,7 @@ enum SharedContent {
 private struct ShareSheet: View {
     @Bindable var model: ShareModel
     let onDone: () -> Void
+    @FocusState private var editingTags: Bool
 
     var body: some View {
         NavigationStack {
@@ -247,6 +248,9 @@ private struct ShareSheet: View {
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .textFieldStyle(.roundedBorder)
+                        .submitLabel(.done)
+                        .focused($editingTags)
+                        .onSubmit { editingTags = false }
                         .accessibilityIdentifier("tags")
                     if !model.suggestions.isEmpty {
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -290,5 +294,6 @@ private struct ShareSheet: View {
             }
             .disabled(model.phase == .saving)
         }
+        .scrollDismissesKeyboard(.interactively)
     }
 }

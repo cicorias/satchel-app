@@ -63,7 +63,7 @@ struct LibraryView: View {
                 let doomed = offsets.map { model.items[$0] }
                 Task { for item in doomed { await model.delete(item) } }
             }
-            if !model.syncStatus.isHealthy {
+            if model.showsSyncNote {
                 Label(model.syncStatus.explanation.text, systemImage: model.syncStatus.explanation.symbol)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
