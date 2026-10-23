@@ -13,8 +13,7 @@ import Foundation
 ///
 /// Every reply has `ok`; a failed one has `error` (for the user) and `code`.
 public struct ExtensionMessageHandler: Sendable {
-    /// A page's Markdown may be at most 10 MB of UTF-8 (spec §4.4).
-    public static let maxBodyBytes = 10 * 1024 * 1024
+    public static let maxBodyBytes = ItemSaver.maxBodyBytes
 
     public let saver: ItemSaver
 
@@ -22,14 +21,7 @@ public struct ExtensionMessageHandler: Sendable {
         self.saver = saver
     }
 
-    /// What to do when a page is saved over a saved page (FR-6).
-    public enum ExistingPage: String, Codable, Sendable {
-        /// Don't save; reply `confirm: "replace"` so the popup can ask "Replace saved copy?".
-        case ask
-        case replace
-        /// Keep the saved copy's body; still apply the new tags, note, and metadata.
-        case keep
-    }
+    public typealias ExistingPage = ItemSaver.ExistingPage
 
     public struct Request: Codable, Sendable {
         public var type: String
@@ -116,55 +108,27 @@ public struct ExtensionMessageHandler: Sendable {
     }
 
     private func save(_ request: Request) async -> Reply {
-        guard var item = request.item else { return .failure(.invalid, "The save has no item.") }
-        var body = request.body
-        if let problem = validate(item, body: body) { return problem }
+        guard let item = request.item else { return .failure(.invalid, "The save has no item.") }
         do {
-            if item.kind == .page, let stored = try await saver.store.item(id: item.id), stored.kind == .page {
-                switch request.existingPage ?? .ask {
-                case .ask:
-                    if try saver.model.merge(stored, item).replacesBody { return Reply(ok: false, confirm: "replace") }
-                case .replace:
-                    break
-                case .keep:
-                    item.page = stored.page
-                    item.capturedAt = stored.capturedAt
-                    item.selection = stored.selection
-                    body = nil
+            switch try await saver.saveCapture(item, body: request.body, existingPage: request.existingPage ?? .ask) {
+            case .confirmReplace:
+                return Reply(ok: false, confirm: "replace")
+            case .saved(let outcome):
+                switch outcome.cloud {
+                case .saved:
+                    return Reply(ok: true, item: outcome.item, synced: true)
+                case .queued(let failure):
+                    return Reply(ok: true, item: outcome.item, synced: false, syncError: failure.description)
                 }
             }
-            let outcome = try await saver.save(item, body: body)
-            switch outcome.cloud {
-            case .saved:
-                return Reply(ok: true, item: outcome.item, synced: true)
-            case .queued(let failure):
-                return Reply(ok: true, item: outcome.item, synced: false, syncError: failure.description)
+        } catch let problem as ItemSaver.CaptureProblem {
+            switch problem {
+            case .invalid: return .failure(.invalid, problem.description)
+            case .tooLarge: return .failure(.tooLarge, problem.description)
             }
         } catch {
             return .failure(.failed, "Couldn't save: \(error)")
         }
-    }
-
-    /// Checks that the item is what `itemFromCapture` builds: a web URL whose ID matches, and a body exactly when
-    /// it's a page, within the size limit.
-    private func validate(_ item: Item, body: String?) -> Reply? {
-        let normalized: String
-        do {
-            normalized = try saver.model.normalizedURL(pageURL: item.url, canonicalURL: item.canonicalURL)
-        } catch {
-            return .failure(.invalid, "Only web pages (http and https) can be saved.")
-        }
-        guard normalized == item.normalizedURL, (try? saver.model.itemID(forNormalizedURL: normalized)) == item.id
-        else { return .failure(.invalid, "The item's ID doesn't match its URL.") }
-        switch (item.kind, body) {
-        case (.page, nil): return .failure(.invalid, "A page save has no Markdown.")
-        case (.link, .some): return .failure(.invalid, "A link save can't have Markdown.")
-        default: break
-        }
-        if let body, body.utf8.count > Self.maxBodyBytes {
-            return .failure(.tooLarge, "This page is larger than 10 MB as Markdown. Save it as a link instead.")
-        }
-        return nil
     }
 
     private func status(_ url: String?) async -> Reply {

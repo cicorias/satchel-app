@@ -72,6 +72,82 @@ public struct ItemSaver: Sendable {
         }
     }
 
+    // MARK: Captures
+
+    /// A page's Markdown may be at most 10 MB of UTF-8 (spec §4.4).
+    public static let maxBodyBytes = 10 * 1024 * 1024
+
+    /// What to do when a page is saved over a saved page (FR-6).
+    public enum ExistingPage: String, Codable, Sendable {
+        /// Don't save; return `.confirmReplace` so the user can be asked "Replace saved copy?".
+        case ask
+        case replace
+        /// Keep the saved copy's body; still apply the new tags, note, and metadata.
+        case keep
+    }
+
+    public enum CaptureSave: Sendable, Equatable {
+        case saved(Outcome)
+        /// A page is already saved for this URL, and `existingPage` was `.ask`. Nothing was saved.
+        case confirmReplace
+    }
+
+    /// Why a captured item can't be saved.
+    public enum CaptureProblem: Error, Equatable, Sendable, CustomStringConvertible {
+        case invalid(String)
+        case tooLarge
+
+        public var description: String {
+            switch self {
+            case .invalid(let reason): reason
+            case .tooLarge: "This page is larger than 10 MB as Markdown. Save it as a link instead."
+            }
+        }
+    }
+
+    /// Checks that an item built in JavaScript (`itemFromCapture`) is consistent: a web URL whose normalized form and
+    /// ID match, and a body exactly when it's a page, within the size limit.
+    public func problem(with item: Item, body: String?) -> CaptureProblem? {
+        guard let normalized = try? model.normalizedURL(pageURL: item.url, canonicalURL: item.canonicalURL) else {
+            return .invalid("Only web pages (http and https) can be saved.")
+        }
+        guard normalized == item.normalizedURL, (try? model.itemID(forNormalizedURL: normalized)) == item.id else {
+            return .invalid("The item's ID doesn't match its URL.")
+        }
+        switch (item.kind, body) {
+        case (.page, nil): return .invalid("A page save has no Markdown.")
+        case (.link, .some): return .invalid("A link save can't have Markdown.")
+        default: break
+        }
+        if let body, body.utf8.count > Self.maxBodyBytes { return .tooLarge }
+        return nil
+    }
+
+    /// Saves an item built from a capture (the Safari extension, or the Share Extension from Safari), following
+    /// FR-6: a link → page upgrade just saves, and a page over a saved page does what `existingPage` says. Throws a
+    /// `CaptureProblem` for an item `problem(with:body:)` rejects.
+    public func saveCapture(_ item: Item, body: String?, existingPage: ExistingPage = .ask) async throws
+        -> CaptureSave
+    {
+        if let problem = problem(with: item, body: body) { throw problem }
+        var item = item
+        var body = body
+        if item.kind == .page, let stored = try await store.item(id: item.id), stored.kind == .page {
+            switch existingPage {
+            case .ask:
+                if try model.merge(stored, item).replacesBody { return .confirmReplace }
+            case .replace:
+                break
+            case .keep:
+                item.page = stored.page
+                item.capturedAt = stored.capturedAt
+                item.selection = stored.selection
+                body = nil
+            }
+        }
+        return .saved(try await save(item, body: body))
+    }
+
     /// The model's timestamp format: ISO 8601 in UTC with milliseconds, as JavaScript's `toISOString()` writes.
     public static func timestamp(_ date: Date) -> String {
         date.formatted(
