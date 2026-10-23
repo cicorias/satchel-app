@@ -104,6 +104,10 @@ run = "scripts/verify/format.sh"
 description = "Render all icons and store artwork from art/*.svg"
 run = "scripts/art/render.sh"
 
+[tasks."art:screenshots"]
+description = "Capture App Store screenshots on a fresh simulator and composite them into the frames"
+run = "scripts/art/screenshots.sh"
+
 # --- deploy ------------------------------------------------------------------
 [tasks."deploy:ios-archive"]
 description = "Archive and export a signed iOS build (App Store Connect)"

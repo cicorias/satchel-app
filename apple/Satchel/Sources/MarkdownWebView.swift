@@ -156,7 +156,11 @@ struct MarkdownWebView: UIViewRepresentable {
             globalThis.__violations = 0;
             document.addEventListener('securitypolicyviolation', () => { globalThis.__violations += 1; });
             const result = SatchelRender.render(markdown, { remoteImages, linkTarget: null });
-            document.getElementById('content').innerHTML = result.html;
+            const content = document.getElementById('content');
+            content.innerHTML = result.html;
+            // A page body starts with "# title"; the header already shows it.
+            const first = content.firstElementChild;
+            if (first?.tagName === 'H1' && first.textContent.trim() === title.trim()) first.remove();
             return { blocked: result.blockedImages, ...(\(countBody)) };
             """
 

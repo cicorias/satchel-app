@@ -56,6 +56,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run apple:project` | regenerate `apple/Satchel.xcodeproj` (skipped when nothing changed; `FORCE=1` always regenerates), then open it in Xcode. Add files on disk and put settings in `project.yml`, because edits made in Xcode's project editor are lost on regenerate |
 | `mise run format` | Biome and swift-format, applied in place |
 | `mise run art` | re-render every icon and store asset |
+| `mise run art:screenshots` | App Store screenshots: erase the simulator, seed a demo library, capture, and composite into `store/app-store/screenshot-*.png` (`KEEP=1` skips the erase) |
 | `mise run deploy:ios-archive` / `deploy:ios-upload` | signed archive, then TestFlight upload (see docs/setup/apple.md) |
 | `mise run deploy:cloudkit-schema [validate\|import\|export\|diff]` | check, push (Development only), pull, or diff the CloudKit schema in `apple/CloudKit/Satchel.ckdb` with `xcrun cktool` |
 | `mise run deploy:extension-zips` | Chrome and Edge store zips |

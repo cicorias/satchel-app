@@ -60,6 +60,15 @@ final class LibraryModel {
     }
     var showingOnboarding: Bool
 
+    /// The sync note under the list, shown when sync isn't working (hidden in the screenshot demo, which runs signed
+    /// out on the simulator).
+    var showsSyncNote: Bool {
+        #if DEBUG
+            if DemoLibrary.isRequested { return false }
+        #endif
+        return !syncStatus.isHealthy
+    }
+
     var siteURL: URL? { (try? AppEnvironment.current())?.siteURL }
     var version: String {
         (try? AppEnvironment.current()).map { "\($0.version) (\($0.build))" } ?? "—"
@@ -85,6 +94,9 @@ final class LibraryModel {
         #if DEBUG
             if UITestSeed.isRequested, let model = services.model {
                 try? await UITestSeed.seed(store: store, model: model)
+            }
+            if DemoLibrary.isRequested, let model = services.model {
+                try? await DemoLibrary.seed(store: store, model: model)
             }
         #endif
         async let outbox: Void = observeOutbox(store)
