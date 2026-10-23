@@ -21,7 +21,9 @@ mkdir -p apple/build
 : >"${log}"
 
 common=(-project apple/Satchel.xcodeproj -scheme Satchel -destination "id=${udid}"
-  -derivedDataPath apple/build/DerivedData CODE_SIGNING_ALLOWED=NO)
+  -derivedDataPath apple/build/DerivedData
+  # Ad-hoc signing embeds the entitlements, so the app and its extensions share the App Group store.
+  CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=- DEVELOPMENT_TEAM=)
 quiet=(-quiet)
 if [ "${VERBOSE:-0}" = "1" ]; then quiet=(); fi
 

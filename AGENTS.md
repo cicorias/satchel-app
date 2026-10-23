@@ -45,7 +45,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run verify:web` / `verify:apple` / `verify:shell` | one part only (shell: ShellCheck + bash 3.2 checks) |
 | `mise run build` | all web packages and all three extension targets |
 | `mise run build:extension [chrome\|edge\|safari]` | one extension target |
-| `mise run build:ios` | XcodeGen, then an unsigned simulator build (`SIGNED=1` for automatic signing) |
+| `mise run build:ios` | XcodeGen, then an ad-hoc signed simulator build (no certificate needed; entitlements still apply). `SIGNED=1` for automatic signing |
 | `mise run run:ios` | build, install, and launch on a simulator (`SIM="iPhone 18 Pro Max"` by default, `LOGS=1` to stream output) |
 | `mise run test:golden [-u]` | golden capture tests over `fixtures/pages/` (`-u` rewrites every `expected.md`; review the diff before committing) |
 | `mise run report:capture-timing` | informational `captureLink`/`capturePage` timing over the fixtures (CI prints it; never fails) |
