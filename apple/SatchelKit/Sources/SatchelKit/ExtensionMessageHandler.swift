@@ -71,11 +71,20 @@ public struct ExtensionMessageHandler: Sendable {
 
     /// The reply to a message given as a JSON object (`[String: Any]` from Safari).
     public func reply(toJSONObject message: Any?) async -> [String: Any] {
+        await reply(toJSON: Self.json(message))
+    }
+
+    /// A message as JSON data, or `nil` if it isn't a JSON object. Lets a caller hand the message to a task as a
+    /// `Sendable` value.
+    public static func json(_ message: Any?) -> Data? {
+        guard let message, JSONSerialization.isValidJSONObject(message) else { return nil }
+        return try? JSONSerialization.data(withJSONObject: message)
+    }
+
+    /// The reply, as a JSON object, to a message given as JSON data.
+    public func reply(toJSON message: Data?) async -> [String: Any] {
         let reply: Reply
-        if let message, JSONSerialization.isValidJSONObject(message),
-            let data = try? JSONSerialization.data(withJSONObject: message),
-            let request = try? JSONDecoder().decode(Request.self, from: data)
-        {
+        if let message, let request = try? JSONDecoder().decode(Request.self, from: message) {
             reply = await self.reply(to: request)
         } else {
             reply = .failure(.invalid, "The message isn't valid.")

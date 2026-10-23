@@ -12,18 +12,19 @@ final class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
     private static let log = Logger(subsystem: Bundle.main.bundleIdentifier ?? "satchel", category: "safari")
 
     func beginRequest(with context: NSExtensionContext) {
-        let request = context.inputItems.first as? NSExtensionItem
-        let message = request?.userInfo?[SFExtensionMessageKey]
-        let pending = Pending(context: context, message: message)
-        Task { await Self.answer(pending) }
+        let item = context.inputItems.first as? NSExtensionItem
+        // Only Sendable values cross into the task: the message as JSON data, and the context in a box.
+        let message = ExtensionMessageHandler.json(item?.userInfo?[SFExtensionMessageKey])
+        let request = Request(context: context)
+        Task.detached { await Self.answer(message, request) }
     }
 
-    private static func answer(_ pending: Pending) async {
+    private static func answer(_ message: Data?, _ request: Request) async {
         let reply: [String: Any]
         switch handler {
         case .success(let handler):
             Store.resume()
-            reply = await handler.reply(toJSONObject: pending.message)
+            reply = await handler.reply(toJSON: message)
             // Release the shared database's locks before this process is suspended (0xDEAD10CC).
             Store.suspend()
         case .failure(let error):
@@ -33,15 +34,21 @@ final class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         if reply["ok"] as? Bool != true {
             log.notice("reply error=\(reply["error"] as? String ?? "", privacy: .public)")
         }
-        let response = NSExtensionItem()
-        response.userInfo = [SFExtensionMessageKey: reply]
-        pending.context.completeRequest(returningItems: [response])
+        request.complete(with: reply)
     }
 }
 
-/// The request's context and message, carried into the task that answers it. Safari hands them over on one thread
-/// and only this task touches them afterwards.
-private struct Pending: @unchecked Sendable {
-    let context: NSExtensionContext
-    let message: Any?
+/// The request's context, carried into the task that answers it. Only that task touches it after `beginRequest`.
+private final class Request: @unchecked Sendable {
+    private let context: NSExtensionContext
+
+    init(context: NSExtensionContext) {
+        self.context = context
+    }
+
+    func complete(with reply: [String: Any]) {
+        let response = NSExtensionItem()
+        response.userInfo = [SFExtensionMessageKey: reply]
+        context.completeRequest(returningItems: [response])
+    }
 }
