@@ -42,3 +42,6 @@ apple/*/Info.plist
 apple/*/*.entitlements
 .envrc
 resume.sh
+
+# Agent worktrees (Claude Code): separate checkouts, never part of this repo.
+.claude/worktrees/
