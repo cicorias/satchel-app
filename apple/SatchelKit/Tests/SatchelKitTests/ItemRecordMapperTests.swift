@@ -179,7 +179,6 @@ func fixtureItem(_ name: String) throws -> Item {
         let item = try fixtureItem(name)
         var expected = item
         expected.extra = [:]
-        expected.selection = nil
         let decoded = try test.mapper.item(from: try test.mapper.record(for: item, body: nil))
         #expect(decoded == expected)
         // The fixtures' timestamps are toISOString() strings, so they come back unchanged.
@@ -213,6 +212,17 @@ func fixtureItem(_ name: String) throws -> Item {
         let decoded = try test.mapper.item(from: try test.mapper.record(for: item, body: nil), existing: other)
         #expect(decoded.extra.isEmpty)
         #expect(decoded.selection == nil)
+    }
+
+    @Test(arguments: [true, false])
+    func selectionRoundTrips(flag: Bool) throws {
+        let test = TestMapper()
+        defer { test.cleanUp() }
+        var item = try fixtureItem("page-full.json")
+        item.selection = flag
+        let record = try test.mapper.record(for: item, body: nil)
+        #expect(record["selection"] as? Int64 == (flag ? 1 : 0))
+        #expect(try test.mapper.item(from: record).selection == flag)
     }
 
     @Test func emptyTagsComeBackEmpty() throws {

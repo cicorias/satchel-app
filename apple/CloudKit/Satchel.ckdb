@@ -6,8 +6,8 @@
 // so `mise run deploy:cloudkit-schema diff` shows only real changes.
 //
 // Item: record name = Item.id ("u_" + 32 hex of SHA-256(normalizedUrl), spec §7.1). `source` and `page`
-// are JSON-encoded objects. Markdown goes in `body` when its UTF-8 size is ≤ 512 KB, otherwise in
-// `bodyAsset`; writers set exactly one. Phase 5 adds RECORD TYPE ImageAsset.
+// are JSON-encoded objects, and `selection` is a boolean stored as 0/1 (FR-10). Markdown goes in `body` when its
+// UTF-8 size is ≤ 512 KB, otherwise in `bodyAsset`; writers set exactly one. Phase 5 adds RECORD TYPE ImageAsset.
 
 DEFINE SCHEMA
 
@@ -35,6 +35,7 @@ DEFINE SCHEMA
         page            STRING,
         publishedAt     TIMESTAMP,
         schemaVersion   INT64,
+        selection       INT64,
         siteName        STRING,
         source          STRING,
         tags            LIST<STRING> QUERYABLE,

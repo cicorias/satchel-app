@@ -415,6 +415,7 @@ The Swift `ItemStore` protocol mirrors this contract. In v1, only `CloudKitItemS
 | `createdAt` | Date/Time | sortable | |
 | `publishedAt`, `updatedAt`, `capturedAt` | Date/Time | | |
 | `imageUrl`, `faviconUrl`, `note`, `metadataStatus` | String | | |
+| `selection` | Int64 | | 0/1; the capture was a selection (FR-10) |
 | `tags` | String List | queryable | |
 | `source` | String (JSON) | | |
 | `page` | String (JSON) | | wordCount, readingMinutes, engine, images |
