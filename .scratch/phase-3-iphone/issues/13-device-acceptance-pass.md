@@ -1,6 +1,6 @@
 # Device acceptance pass on iPhone
 
-Status: ready-for-human
+Status: resolved
 Type: task
 Blocked by: 07, 08, 09, 10, 11, 12
 
@@ -15,3 +15,7 @@ Check:
 - a second device on the same iCloud account
 
 **Done when** every acceptance box in `../spec.md` is ticked, and anything that failed is a new ticket under `## Comments` here.
+
+## Answer
+
+Passed on TestFlight build 61 (2026-10-23); see `../../release-1/issues/07-testflight-acceptance.md`. No failures, so no new tickets.
