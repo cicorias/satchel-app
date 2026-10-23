@@ -37,7 +37,7 @@ Provisioning profiles: leave them to Xcode. The project uses automatic signing, 
 
 ## 2. Signing certificates
 
-The login keychain currently has no code-signing identities. That's fine for simulator builds, which `mise run build:ios` runs unsigned. For device builds and archives:
+The login keychain currently has no code-signing identities. That's fine for simulator builds, which `mise run build:ios` signs ad-hoc (no certificate needed). For device builds and archives:
 
 1. Open Xcode → **Settings → Accounts**, select the Apple ID, then **CedarLogic LLC → Manage Certificates…**
 2. Click **+** and add **Apple Development**. Later, add **Apple Distribution** for archives. Xcode can also use cloud-managed certificates, but local ones make CLI archives more predictable.

@@ -197,6 +197,16 @@ public final class Store: Sendable {
         }
     }
 
+    /// The item's unsent outbox entry, if it has one (an item has at most one entry).
+    public func unsentOutboxEntry(for itemID: String) async throws -> OutboxEntry? {
+        try await pool.read { db in
+            try Row.fetchOne(
+                db, sql: "SELECT * FROM outbox WHERE itemID = ? AND state != ? ORDER BY id DESC LIMIT 1",
+                arguments: [itemID, OutboxState.sent.rawValue]
+            ).map(Self.outboxEntry)
+        }
+    }
+
     /// Marks an entry sent. Does nothing if a newer save or delete has replaced it.
     public func markSent(_ id: OutboxEntry.ID) async throws {
         try await updateOutbox(id, state: .sent, error: nil)
@@ -220,6 +230,19 @@ public final class Store: Sendable {
     /// after every change, including changes made by other processes.
     public func observeUnsentOutbox() -> some AsyncSequence<[String: OutboxState], any Error> & Sendable {
         ValueObservation.tracking(Self.fetchUnsentStates).removeDuplicates().values(in: pool)
+    }
+
+    // MARK: - Suspension
+
+    /// Call when the app or extension is about to be suspended. iOS kills a suspended process that holds a lock on a
+    /// database in a shared container (0xDEAD10CC); every `Store` releases its locks when this is posted.
+    public static func suspend() {
+        NotificationCenter.default.post(name: Database.suspendNotification, object: nil)
+    }
+
+    /// Call when the process becomes active again, after `suspend()`.
+    public static func resume() {
+        NotificationCenter.default.post(name: Database.resumeNotification, object: nil)
     }
 
     // MARK: - Sync state
