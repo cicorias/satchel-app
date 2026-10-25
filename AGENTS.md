@@ -55,7 +55,8 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run clean` | remove build outputs (`DEPS=1` also removes node_modules) |
 | `mise run apple:project` | regenerate `apple/Satchel.xcodeproj` (skipped when nothing changed; `FORCE=1` always regenerates), then open it in Xcode. Add files on disk and put settings in `project.yml`, because edits made in Xcode's project editor are lost on regenerate |
 | `mise run format` | Biome and swift-format, applied in place |
-| `mise run art` | re-render every icon and store asset |
+| `mise run art` | re-render every icon and store asset, including the Liquid Glass `AppIcon.icon` |
+| `mise run art:icon-preview` | render the Liquid Glass icon (default, dark, tinted) with Icon Composer's `ictool` into `apple/build/icon-preview/` |
 | `mise run art:preview` | App Store app preview video (886×1920, ≤ 30 s) recorded on a fresh simulator, to `apple/build/preview/` |
 | `mise run art:screenshots` | App Store screenshots: erase the simulator, seed a demo library, capture, and composite into `store/app-store/screenshot-*.png` (`KEEP=1` skips the erase) |
 | `mise run deploy:ios-archive` / `deploy:ios-upload` | signed archive, then TestFlight upload (see docs/setup/apple.md) |
