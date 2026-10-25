@@ -1,6 +1,6 @@
 # Phase 0: Foundations and spikes
 
-Source: `docs/spec.md` §14 Phase 0, as amended by ADR-0011 (Spike A moves to the Chrome/Edge phase).
+Source: `docs/spec.md` §14 Phase 0, as amended by ADR-0011 (Spike A moves to the Chrome/Edge phase: [`../phase-2-chrome-edge/issues/02-spike-a-cloudkit-web-sign-in.md`](../phase-2-chrome-edge/issues/02-spike-a-cloudkit-web-sign-in.md)).
 
 **Done** (scaffold commits on `main`): repo layout, mise and scripts, config, ADRs 0001–0018, setup docs, CI (web, apple, pages), artwork, and the GitHub Pages site.
 
