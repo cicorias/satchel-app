@@ -57,6 +57,7 @@ Tools are pinned in `mise.toml`. Every task is a one-line wrapper around a scrip
 | `mise run format` | Biome and swift-format, applied in place |
 | `mise run art` | re-render every icon and store asset, including the Liquid Glass `AppIcon.icon` |
 | `mise run art:icon-preview` | render the Liquid Glass icon (default, dark, tinted) with Icon Composer's `ictool` into `apple/build/icon-preview/` |
+| `mise run art:preview` | App Store app preview video (886×1920, ≤ 30 s) recorded on a fresh simulator, to `apple/build/preview/` |
 | `mise run art:screenshots` | App Store screenshots: erase the simulator, seed a demo library, capture, and composite into `store/app-store/screenshot-*.png` (`KEEP=1` skips the erase) |
 | `mise run deploy:ios-archive` / `deploy:ios-upload` | signed archive, then TestFlight upload (see docs/setup/apple.md) |
 | `mise run deploy:cloudkit-schema [validate\|import\|export\|diff]` | check, push (Development only), pull, or diff the CloudKit schema in `apple/CloudKit/Satchel.ckdb` with `xcrun cktool` |

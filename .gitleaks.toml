@@ -13,6 +13,8 @@ paths = [
   # SwiftPM build products and package checkouts (GRDB vendors SQLite's sources and test keys).
   '''(^|/)\.build/''',
   '''^apple/build/''',
+  # Agent worktrees (gitignored): other checkouts with their own build products.
+  '''^\.claude/worktrees/''',
   '''^apple/Staged/''',
   '''^apple/Satchel\.xcodeproj/''',
 ]

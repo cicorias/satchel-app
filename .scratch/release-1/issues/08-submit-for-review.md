@@ -1,6 +1,6 @@
 # Submit for App Review
 
-Status: ready-for-human
+Status: claimed
 Type: task
 Blocked by: 03, 04, 05, 06, 07
 
@@ -10,3 +10,7 @@ In App Store Connect, under the app (`Satchel - Web Clipper`):
 - **Submit**, with the review notes from 04.
 
 After approval, tick spec §14 Phase 7's iPhone boxes and resolve the Phase 3 acceptance criteria.
+
+## Comments
+
+2026-10-23: the user submitted version 2026.10.0, build 61, for App Review. It is waiting for review. Resolve this when the app is approved and released.

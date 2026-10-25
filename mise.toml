@@ -108,6 +108,10 @@ run = "scripts/art/render.sh"
 description = "Render the Liquid Glass app icon (default, dark, tinted) with Icon Composer's ictool"
 run = "scripts/art/icon-preview.sh"
 
+[tasks."art:preview"]
+description = "Record the App Store app preview video (886x1920, at most 30 s) on a fresh simulator"
+run = "scripts/art/preview.sh"
+
 [tasks."art:screenshots"]
 description = "Capture App Store screenshots on a fresh simulator and composite them into the frames"
 run = "scripts/art/screenshots.sh"

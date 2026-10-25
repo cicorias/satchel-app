@@ -1,6 +1,6 @@
 # TestFlight build and acceptance pass
 
-Status: ready-for-human
+Status: resolved
 Type: task
 Blocked by: 01, 02
 
@@ -11,3 +11,14 @@ Blocked by: 01, 02
 3. Check the Release defaults: remote images are off, so saved pages show "Image not loaded" placeholders, and onboarding appears on first launch.
 
 Anything that fails becomes a new issue here.
+
+## Answer
+
+2026-10-23: the user ran build 61 (version 2026.10.0, Release) from TestFlight on the iPhone 18 Pro Max. Everything passed:
+- onboarding on first launch;
+- remote images off by default;
+- a Safari page share landing in the **Production** CloudKit database;
+- a Notes link getting its details;
+- Safari extension link and page saves;
+- an offline save syncing after reconnecting;
+- library search, detail, export, and delete.
