@@ -9,7 +9,7 @@ Source: `docs/spec.md` §14 Phase 7 (store readiness), iPhone scope only (ADR-00
 - **Phase 1:** ticket 10 (the Defuddle 0.19.5 bump) waits until the release is eligible under pnpm's minimum release age (after 2026-10-24).
 - **Open findings:** a page saved from the popup showed one image twice in a row. It needs a look, and a capture fix would need a fixture (Phase 3 ticket 08's notes).
 
-**After this release:** Phase 2 (Chrome and Edge, `.scratch/phase-2-…`, not created yet), then the Mac app.
+**After this release:** Phase 2 (Chrome and Edge, [`.scratch/phase-2-chrome-edge/`](../phase-2-chrome-edge/spec.md), opened 2026-10-25; ticket 01 first), then the Mac app.
 
 ## Decisions
 
