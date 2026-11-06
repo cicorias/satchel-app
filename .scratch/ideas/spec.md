@@ -16,3 +16,4 @@ Intake for feature ideas (ADR-0018). Nothing here is planned work, and nothing h
 5. **Smart collections** — save a filter (tags, text, and facets) as a named view in the library. *(Builds on idea 2.)* → [expanded](issues/05-smart-collections.md)
 6. **Bulk actions in the manager** — multi-select items to add or remove tags, delete, or export. *(Builds on idea 3.)* → [expanded](issues/06-bulk-actions.md)
 7. **Duplicate and dead-link check** — find near-duplicate URLs and saved links that now fail (404, gone), with fix or remove actions. → [expanded](issues/07-duplicates-and-dead-links.md)
+8. **Send saves to email or a notification** — deliver saved links to the user's email or as a notification, as well as to the library. *(No developer servers (spec §1.1, §11), so delivery has to run on the device or through the user's own accounts.)*
